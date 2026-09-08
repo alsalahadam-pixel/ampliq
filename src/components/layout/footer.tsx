@@ -52,6 +52,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    prefetch={false}
                     className="link-underline text-[0.9375rem] text-paper/80 transition-colors duration-200 hover:text-paper"
                   >
                     {item.label}
@@ -112,6 +113,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 <li key={item.label}>
                   <Link
                     href={item.href}
+                    prefetch={false}
                     className="link-underline text-[0.9375rem] text-paper/80 transition-colors duration-200 hover:text-paper"
                   >
                     {item.label}

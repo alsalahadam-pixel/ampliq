@@ -44,6 +44,10 @@ export function LanguageSwitcher({
             <Link
               href={swapLocale(pathname, code)}
               hrefLang={code}
+              // Switching language is a deliberate, infrequent action, and the
+              // payload is a whole translated page. Prefetching both entries
+              // downloads the current page a second time for nothing.
+              prefetch={false}
               onClick={() => rememberLocale(code)}
               aria-current={isActive ? "true" : undefined}
               className={cn(

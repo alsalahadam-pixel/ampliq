@@ -93,8 +93,9 @@ export default async function ServicePage({
         }
       />
 
-      {/* Problem / approach, side by side. */}
-      <Section tone="paper">
+      {/* Problem / approach, side by side. A bridge between the hero and the
+          detail below, so it carries less vertical space than a full section. */}
+      <Section tone="paper" bleed className="py-16 sm:py-20 lg:py-24">
         <div className="shell">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div data-reveal>
@@ -194,24 +195,41 @@ export default async function ServicePage({
             </div>
           </div>
 
-          {related.length > 0 ? (
-            <div className="mt-20">
-              <h2 className="eyebrow text-graphite">{dict.services.relatedTitle}</h2>
-              <ul className="mt-6 flex flex-wrap gap-3">
-                {related.map((entry) => (
-                  <li key={entry.slug}>
-                    <Link
-                      href={serviceHref(lang, entry.slug)}
-                      className="group inline-flex items-center gap-2 border border-rule-strong px-4 py-2.5 text-[0.9375rem] transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-paper"
-                    >
-                      {entry.title[lang]}
-                      <Arrow />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          <div className="mt-16 flex flex-col gap-10 border-t border-rule pt-10 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
+            {related.length > 0 ? (
+              <div>
+                <h2 className="eyebrow text-graphite">{dict.services.relatedTitle}</h2>
+                <ul className="mt-6 flex flex-wrap gap-3">
+                  {related.map((entry) => (
+                    <li key={entry.slug}>
+                      <Link
+                        href={serviceHref(lang, entry.slug)}
+                        className="group inline-flex items-center gap-2 border border-rule-strong px-4 py-2.5 text-[0.9375rem] transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-paper"
+                      >
+                        {entry.title[lang]}
+                        <Arrow />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {/* Connects a discipline to a price without forcing an enquiry. */}
+            <div className="lg:max-w-[34ch]">
+              <h2 className="eyebrow text-graphite">{dict.packages.title}</h2>
+              <p className="mt-6 text-[0.9375rem] leading-relaxed text-graphite">
+                {dict.home.packages.body}
+              </p>
+              <Link
+                href={route(lang, "packages")}
+                className="group mt-4 inline-flex items-center gap-2 text-[0.9375rem] font-medium tracking-[-0.01em]"
+              >
+                <span className="link-underline">{dict.packages.title}</span>
+                <Arrow />
+              </Link>
             </div>
-          ) : null}
+          </div>
         </div>
       </Section>
 
