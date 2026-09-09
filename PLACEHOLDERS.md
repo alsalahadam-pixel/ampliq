@@ -13,6 +13,8 @@ or shows a visible placeholder.
 | Contact email | `.env.local` → `NEXT_PUBLIC_CONTACT_EMAIL` | Defaults to `hello@ampliq.de`, which is a **guess** — confirm or change it. |
 | Legal review of Impressum and Datenschutz | `/legal/imprint`, `/legal/privacy` | Both pages carry a visible draft notice until a lawyer has reviewed them. The technical descriptions in the privacy policy are accurate for this build; the legal framing is not reviewed. |
 | Contact form delivery | `.env.local` → `NEXT_PUBLIC_CONTACT_ENDPOINT` | Until set, the form validates and then states plainly that nothing was sent. It does not pretend to deliver. |
+| Booking confirmation emails | `.env.local` → `RESEND_API_KEY` or `BOOKING_EMAIL_ENDPOINT`, plus `BOOKING_OWNER_EMAIL` | Until set, a booking is recorded but **no email is sent to anyone** — including you. The confirmation screen says so. See `docs/booking.md`. |
+| Booking persistence | `src/lib/booking/store.ts` | The default store keeps bookings in the Node process: a restart forgets them, and two instances do not share a list. Connecting a calendar with write access is usually enough, since the calendar then becomes the source of truth. |
 
 ## Should be supplied
 
@@ -22,6 +24,7 @@ or shows a visible placeholder.
 | Case study detail for IHMS Global | `src/content/projects.ts` | The current text describes the scope of work only. Add background and results once the client has approved what may be published. |
 | Measurable results | `src/content/projects.ts` | Deliberately absent. The case study says so on the page. Do not add estimated figures. |
 | Social profiles | `.env.local` → `NEXT_PUBLIC_INSTAGRAM_URL`, `NEXT_PUBLIC_LINKEDIN_URL` | Links are hidden entirely while unset. |
+| Calendar connection for `/start` | `.env.local` → Google or Microsoft credentials | Until set, the booking calendar shows the published working hours and states, on the page, that no calendar was consulted. Confirm the working hours in `BOOKING_WORKING_HOURS` are the real ones — the defaults are a reasonable schedule, not your schedule. Only busy times are ever read; no event details. See `docs/booking.md`. |
 | Analytics | `.env.local` → `NEXT_PUBLIC_GTM_ID` etc. | No script loads and no tracking cookie is set while unset. **Add a consent banner before enabling any of these** — the privacy policy currently states truthfully that the site sets no tracking cookies, and that statement stops being true the moment a tag is added. |
 
 ## Deliberately absent

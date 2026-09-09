@@ -57,7 +57,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               style={{ "--reveal-delay": "360ms" } as React.CSSProperties}
               className="mt-11 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             >
-              <ButtonLink href={route(locale, "contact")} tone="dark" size="lg">
+              <ButtonLink href={route(locale, "start")} tone="dark" size="lg">
                 {dict.cta.start}
               </ButtonLink>
               <ButtonLink

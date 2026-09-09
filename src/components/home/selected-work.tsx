@@ -68,7 +68,7 @@ export function SelectedWork({
               </p>
             </div>
             <Link
-              href={route(locale, "contact")}
+              href={route(locale, "start")}
               className="group inline-flex items-center gap-2 text-[0.9375rem] font-medium tracking-[-0.01em]"
             >
               <span className="link-underline">{dict.cta.start}</span>

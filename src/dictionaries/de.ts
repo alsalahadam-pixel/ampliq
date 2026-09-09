@@ -28,6 +28,7 @@ export const de: Dictionary = {
   cta: {
     start: "Projekt starten",
     consultation: "Kostenlose Beratung",
+    enquiry: "Anfrage senden",
     work: "Arbeiten ansehen",
     allWork: "Alle Arbeiten ansehen",
     allServices: "Leistungen entdecken",
@@ -344,6 +345,136 @@ export const de: Dictionary = {
         "Komplettes Marketing",
         "Sonstiges",
       ],
+    },
+  },
+
+  booking: {
+    title: "Projekt starten.",
+    lead: "Wählen Sie einen Termin, der Ihnen passt. Dreißig Minuten, ohne Verkaufspräsentation — wir hören zu, fragen nach und sagen Ihnen ehrlich, ob wir die Richtigen dafür sind.",
+    metaTitle: "Termin buchen",
+    metaDescription:
+      "Buchen Sie ein 30-minütiges Gespräch mit AMPLIQ. Termin wählen, Projekt kurz beschreiben — wir kommen vorbereitet.",
+
+    steps: {
+      date: "Datum",
+      time: "Uhrzeit",
+      details: "Angaben",
+      done: "Bestätigt",
+      stepOf: "Schritt {current} von {total}",
+    },
+
+    calendar: {
+      heading: "Datum wählen",
+      previousMonth: "Vorheriger Monat",
+      nextMonth: "Nächster Monat",
+      loading: "Verfügbarkeit wird geprüft…",
+      weekdays: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+      dayAvailableOne: "{date} — 1 Termin frei",
+      dayAvailableMany: "{date} — {count} Termine frei",
+      dayFull: "{date} — ausgebucht",
+      dayTooSoon: "{date} — zu kurzfristig",
+      dayPast: "{date} — bereits vorbei",
+      dayClosed: "{date} — an diesem Tag keine Gespräche",
+      legendAvailable: "Frei",
+      legendFull: "Ausgebucht",
+      legendClosed: "Geschlossen oder zu kurzfristig",
+      empty: "Diesen Monat sind keine Termine mehr frei.",
+      emptyBody:
+        "Versuchen Sie den nächsten Monat oder schreiben Sie uns — wir finden einen Termin.",
+    },
+
+    slots: {
+      heading: "Uhrzeit wählen",
+      backToDates: "Datum ändern",
+      none: "An diesem Tag sind keine Termine frei.",
+      noneBody:
+        "Wählen Sie ein anderes Datum oder senden Sie uns stattdessen eine Anfrage.",
+      taken: "Vergeben",
+      tooSoon: "Zu kurzfristig",
+      past: "Vorbei",
+      durationNote: "{minutes} Minuten",
+      shownIn: "Zeiten in Ihrer Zeitzone ({zone})",
+      alsoIn: "{time} unserer Zeit ({zone})",
+      changeZone: "Nicht Ihre Zeitzone?",
+      zoneLabel: "Zeiten anzeigen in",
+    },
+
+    availability: {
+      liveTitle: "Verfügbarkeit in Echtzeit",
+      liveBody: "Diese Zeiten sind gerade mit unserem Kalender abgeglichen.",
+      provisionalTitle: "Verfügbarkeit ohne Kalenderabgleich",
+      provisionalBody:
+        "Mit dieser Website ist noch kein Kalender verbunden. Sie sehen unsere veröffentlichten Arbeitszeiten abzüglich der hier bereits gebuchten Termine — keinen Live-Abgleich. Jede Buchung bestätigen wir per E-Mail.",
+      offlineTitle: "Verfügbarkeit wird nicht geprüft",
+      offlineBody:
+        "Hinter dieser Vorschau läuft kein Server. Die Zeiten unten stammen ausschließlich aus unseren veröffentlichten Arbeitszeiten, sind mit keinem Kalender abgeglichen, und eine Buchung kann hier nicht abgeschlossen werden.",
+      errorTitle: "Unser Kalender war nicht erreichbar",
+      errorBody:
+        "Die Zeiten unten sind unsere Arbeitszeiten, kein Live-Abgleich. Senden Sie uns stattdessen eine Anfrage — wir bestätigen einen Termin per E-Mail.",
+    },
+
+    details: {
+      heading: "Ihre Angaben",
+      back: "Uhrzeit ändern",
+      name: "Ihr Name",
+      email: "E-Mail",
+      company: "Unternehmen",
+      companyOptional: "optional",
+      phone: "Telefon",
+      phoneOptional: "optional",
+      message: "Worüber möchten Sie sprechen?",
+      messagePlaceholder:
+        "Das Unternehmen, was gerade nicht funktioniert, und wie ein gutes Ergebnis aussähe. Ein paar Zeilen genügen.",
+      privacyNote:
+        "Wir verwenden Ihre Angaben für diesen Termin und die Beantwortung Ihrer Anfrage. Sonst nichts, und nichts wird weitergegeben.",
+      privacyLink: "Datenschutzerklärung",
+      submit: "Termin bestätigen",
+      submitting: "Wird bestätigt…",
+      summaryTitle: "Sie buchen",
+      summaryEmpty: "Noch kein Termin gewählt",
+      errors: {
+        summary: "Bitte prüfen Sie die markierten Felder.",
+        name: "Bitte geben Sie Ihren Namen ein.",
+        email: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        emailFormat: "Diese E-Mail-Adresse sieht nicht richtig aus.",
+        message: "Bitte schreiben Sie uns kurz etwas zum Projekt.",
+        tooLong: "Das ist länger, als wir annehmen können.",
+      },
+    },
+
+    confirmation: {
+      title: "Ihr Termin steht.",
+      body: "Wir haben die Zeit reserviert und Ihnen eine Bestätigung geschickt. Wenn sich etwas ändert, antworten Sie einfach auf diese E-Mail — dann verschieben wir.",
+      emailSent: "Bestätigung an {email} gesendet.",
+      emailNotSent:
+        "Es wurde keine Bestätigungs-E-Mail versendet — mit dieser Website ist noch kein Mailanbieter verbunden. Ihre Buchung ist gespeichert und für uns sichtbar.",
+      calendarNote:
+        "Tragen Sie den Termin am besten direkt in Ihren eigenen Kalender ein.",
+      addToCalendar: "Zum Kalender hinzufügen",
+      whatNext: "Wie es weitergeht",
+      whatNextBody:
+        "Wir lesen Ihre Angaben vor dem Gespräch, damit wir mit Ihrer Situation anfangen können und nicht mit einer Vorstellungsrunde.",
+      bookAnother: "Weiteren Termin buchen",
+      backHome: "Zurück zur Startseite",
+    },
+
+    problems: {
+      takenTitle: "Dieser Termin ist gerade vergeben worden.",
+      takenBody:
+        "Jemand hat ihn gebucht, während Sie das Formular ausgefüllt haben. Bitte wählen Sie eine andere Zeit — die Liste unten ist aktuell.",
+      failedTitle: "Das hat nicht geklappt.",
+      failedBody:
+        "Unterwegs ist etwas schiefgegangen. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt — wir finden einen Termin.",
+      noServerTitle: "Diese Vorschau kann keine Buchungen annehmen.",
+      noServerBody:
+        "Hinter diesem Build läuft kein Server. Es wurde nichts übermittelt und keine Zeit reserviert. Auf der Live-Website schließt dieser Schritt die Buchung ab. Schreiben Sie uns bis dahin einfach — wir vereinbaren einen Termin.",
+      emailUs: "Stattdessen E-Mail schreiben",
+    },
+
+    fallback: {
+      title: "Lieber schreiben als sprechen?",
+      body: "Schicken Sie uns die Eckdaten — wir antworten innerhalb von zwei Werktagen.",
+      cta: "Anfrage senden",
     },
   },
 

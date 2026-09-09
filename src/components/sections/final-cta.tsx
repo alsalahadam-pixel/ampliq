@@ -61,15 +61,15 @@ export function FinalCta({
             style={{ "--reveal-delay": "210ms" } as React.CSSProperties}
             className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
           >
-            <ButtonLink href={route(locale, "contact")} tone="dark">
+            <ButtonLink href={route(locale, "start")} tone="dark">
               {dict.cta.start}
             </ButtonLink>
             <ButtonLink
-              href={`${route(locale, "contact")}#consultation`}
+              href={route(locale, "contact")}
               variant="outline"
               tone="dark"
             >
-              {dict.cta.consultation}
+              {dict.cta.enquiry}
             </ButtonLink>
           </div>
 

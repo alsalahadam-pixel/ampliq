@@ -27,6 +27,7 @@ export const en = {
   cta: {
     start: "Start a project",
     consultation: "Free consultation",
+    enquiry: "Send an enquiry",
     work: "View our work",
     allWork: "View all work",
     allServices: "Explore services",
@@ -343,6 +344,134 @@ export const en = {
         "Full marketing",
         "Other",
       ],
+    },
+  },
+
+  booking: {
+    title: "Start a project.",
+    lead: "Pick a time that works for you. Thirty minutes, no pitch deck — we listen, ask what we need to ask, and tell you honestly whether we're the right people for it.",
+    metaTitle: "Book a call",
+    metaDescription:
+      "Book a 30-minute call with AMPLIQ. Choose a time, tell us about the project, and we'll come prepared.",
+
+    steps: {
+      date: "Date",
+      time: "Time",
+      details: "Details",
+      done: "Confirmed",
+      stepOf: "Step {current} of {total}",
+    },
+
+    calendar: {
+      heading: "Choose a date",
+      previousMonth: "Previous month",
+      nextMonth: "Next month",
+      loading: "Checking availability…",
+      weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      /** Read out to screen readers in place of the bare number. */
+      dayAvailableOne: "{date} — 1 time available",
+      dayAvailableMany: "{date} — {count} times available",
+      dayFull: "{date} — fully booked",
+      dayTooSoon: "{date} — too soon to book",
+      dayPast: "{date} — already past",
+      dayClosed: "{date} — no calls this day",
+      legendAvailable: "Available",
+      legendFull: "Fully booked",
+      legendClosed: "Closed or too soon",
+      empty: "No times left this month.",
+      emptyBody: "Try the next month, or write to us and we'll find something.",
+    },
+
+    slots: {
+      heading: "Choose a time",
+      backToDates: "Change date",
+      none: "No times available on this day.",
+      noneBody: "Pick another date, or send an enquiry instead.",
+      taken: "Taken",
+      tooSoon: "Too soon",
+      past: "Past",
+      durationNote: "{minutes} minutes",
+      shownIn: "Times shown in your timezone ({zone})",
+      alsoIn: "{time} our time ({zone})",
+      changeZone: "Not your timezone?",
+      zoneLabel: "Show times in",
+    },
+
+    availability: {
+      liveTitle: "Live availability",
+      liveBody: "These times are checked against our calendar right now.",
+      provisionalTitle: "Availability is provisional",
+      provisionalBody:
+        "No calendar is connected to this site yet, so these are our published working hours minus bookings already made here — not a live calendar check. We confirm every booking by email.",
+      offlineTitle: "Availability is not being checked",
+      offlineBody:
+        "This preview has no server behind it, so the times below come from our published working hours only. Nothing here has been checked against a calendar and no booking can be completed.",
+      errorTitle: "We couldn't reach our calendar",
+      errorBody:
+        "The times below are our working hours, not a live check. Send an enquiry instead and we'll confirm a time by email.",
+    },
+
+    details: {
+      heading: "Your details",
+      back: "Change time",
+      name: "Your name",
+      email: "Email",
+      company: "Company",
+      companyOptional: "optional",
+      phone: "Phone",
+      phoneOptional: "optional",
+      message: "What would you like to talk about?",
+      messagePlaceholder:
+        "The business, what isn't working, and what a good outcome looks like. A few lines is plenty.",
+      privacyNote:
+        "We use your details to hold this call and answer your enquiry. Nothing else, and nothing passed on.",
+      privacyLink: "Privacy policy",
+      submit: "Confirm booking",
+      submitting: "Confirming…",
+      summaryTitle: "You're booking",
+      summaryEmpty: "No time chosen yet",
+      errors: {
+        summary: "Please check the highlighted fields.",
+        name: "Please enter your name.",
+        email: "Please enter a valid email address.",
+        emailFormat: "That email address doesn't look right.",
+        message: "Please tell us a little about the project.",
+        tooLong: "That's longer than we can accept.",
+      },
+    },
+
+    confirmation: {
+      title: "Your call is confirmed.",
+      body: "We've held the time and sent you a confirmation. If anything changes, reply to that email and we'll move it.",
+      emailSent: "Confirmation sent to {email}.",
+      emailNotSent:
+        "No confirmation email was sent — this site has no mail provider connected yet. Your booking is recorded and we can see it.",
+      calendarNote: "Add it to your own calendar so it doesn't get lost.",
+      addToCalendar: "Add to calendar",
+      whatNext: "What happens next",
+      whatNextBody:
+        "We read what you sent before the call, so we can start with your situation rather than a round of introductions.",
+      bookAnother: "Book another time",
+      backHome: "Back to home page",
+    },
+
+    problems: {
+      takenTitle: "That time has just gone.",
+      takenBody:
+        "Someone booked it while you were filling this in. Pick another time — the list below is up to date.",
+      failedTitle: "That didn't go through.",
+      failedBody:
+        "Something went wrong on the way. Please try again, or email us directly and we'll sort out a time.",
+      noServerTitle: "This preview can't take bookings.",
+      noServerBody:
+        "There's no server behind this build, so nothing was submitted and no time has been held. On the live site this step completes the booking. For now, email us and we'll arrange a time.",
+      emailUs: "Email us instead",
+    },
+
+    fallback: {
+      title: "Rather write than talk?",
+      body: "Send the details and we'll reply within two working days.",
+      cta: "Send an enquiry",
     },
   },
 

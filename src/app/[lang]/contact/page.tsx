@@ -4,10 +4,12 @@ import { notFound } from "next/navigation";
 import { ContactForm } from "@/components/contact/contact-form";
 import { PageHero } from "@/components/layout/page-hero";
 import { JsonLd } from "@/components/seo/json-ld";
+import { ButtonLink } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import { processSteps } from "@/content/process";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
+import { route } from "@/lib/routes";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import { contactEndpoint, site } from "@/lib/site";
 import { pad } from "@/lib/utils";
@@ -84,6 +86,14 @@ export default async function ContactPage({
                 <p className="mt-3 text-[0.9375rem] leading-relaxed text-graphite">
                   {dict.contact.consultationBody}
                 </p>
+                <ButtonLink
+                  href={route(lang, "start")}
+                  variant="outline"
+                  size="sm"
+                  className="mt-5 w-full"
+                >
+                  {dict.cta.talk}
+                </ButtonLink>
               </div>
 
               {/* What happens next — removes the main hesitation before sending. */}

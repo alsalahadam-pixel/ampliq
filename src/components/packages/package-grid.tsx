@@ -174,7 +174,7 @@ export function PackageGrid({
 
             <div className="mt-10 flex flex-1 items-end">
               <ButtonLink
-                href={route(locale, "contact")}
+                href={route(locale, "start")}
                 variant={dark ? "primary" : "outline"}
                 tone={dark ? "dark" : "light"}
                 className="w-full"

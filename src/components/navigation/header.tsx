@@ -107,7 +107,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               className={cn("h-5 w-px", solid ? "bg-rule-strong" : "bg-white/25")}
             />
             <ButtonLink
-              href={route(locale, "contact")}
+              href={route(locale, "start")}
               variant={solid ? "primary" : "outline"}
               tone={solid ? "light" : "dark"}
               size="sm"
@@ -261,7 +261,7 @@ function MobileMenu({
 
         <div className="flex flex-col gap-8 pt-10">
           <ButtonLink
-            href={route(locale, "contact")}
+            href={route(locale, "start")}
             variant="primary"
             tone="dark"
             className="w-full"

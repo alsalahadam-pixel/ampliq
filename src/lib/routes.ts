@@ -13,6 +13,8 @@ export const routes = {
   about: "/about",
   insights: "/insights",
   contact: "/contact",
+  /** The booking flow. Every "start a project" CTA leads here. */
+  start: "/start",
   imprint: "/legal/imprint",
   privacy: "/legal/privacy",
   cookies: "/legal/privacy#cookies",

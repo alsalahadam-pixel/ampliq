@@ -133,6 +133,14 @@ export function ContactForm({
     }
   }
 
+  /**
+   * Re-checks the form as it is typed in, once a submit has already failed.
+   *
+   * On `change` rather than `blur`: clicking Send blurs whichever field has
+   * focus, so blur-triggered validation removes the error summary between
+   * mousedown and mouseup — the page reflows, the button moves out from under
+   * the pointer, and the first click is swallowed.
+   */
   function revalidate() {
     if (!attempted || !formRef.current) return;
     setErrors(validate(new FormData(formRef.current)));
@@ -216,7 +224,7 @@ export function ContactForm({
               type="text"
               autoComplete="given-name"
               required
-              onBlur={revalidate}
+              onChange={revalidate}
               aria-invalid={Boolean(errors.firstName)}
               aria-describedby={errors.firstName ? `${fieldId("firstName")}-error` : undefined}
               className={cn(controlBase, errors.firstName ? "border-danger" : "border-rule-strong")}
@@ -230,7 +238,7 @@ export function ContactForm({
               type="text"
               autoComplete="family-name"
               required
-              onBlur={revalidate}
+              onChange={revalidate}
               aria-invalid={Boolean(errors.lastName)}
               aria-describedby={errors.lastName ? `${fieldId("lastName")}-error` : undefined}
               className={cn(controlBase, errors.lastName ? "border-danger" : "border-rule-strong")}
@@ -254,7 +262,7 @@ export function ContactForm({
               type="email"
               autoComplete="email"
               required
-              onBlur={revalidate}
+              onChange={revalidate}
               aria-invalid={Boolean(errors.email)}
               aria-describedby={errors.email ? `${fieldId("email")}-error` : undefined}
               className={cn(controlBase, errors.email ? "border-danger" : "border-rule-strong")}
@@ -379,7 +387,7 @@ export function ContactForm({
             name="message"
             rows={5}
             required
-            onBlur={revalidate}
+            onChange={revalidate}
             placeholder={form.messagePlaceholder}
             aria-invalid={Boolean(errors.message)}
             aria-describedby={errors.message ? `${fieldId("message")}-error` : undefined}

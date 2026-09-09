@@ -173,7 +173,7 @@ export default async function InsightPage({
                     {dict.insights.ctaBody}
                   </p>
                   <Link
-                    href={route(lang, "contact")}
+                    href={route(lang, "start")}
                     className="mt-6 inline-flex h-13 items-center justify-center rounded-[2px] bg-ink px-6 text-[0.9375rem] font-medium text-paper transition-colors duration-300 hover:bg-accent"
                   >
                     {dict.cta.start}

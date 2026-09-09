@@ -26,6 +26,7 @@ const entries: Entry[] = [
   { path: "/packages", changeFrequency: "monthly", priority: 0.9 },
   { path: "/about", changeFrequency: "yearly", priority: 0.6 },
   { path: "/insights", changeFrequency: "weekly", priority: 0.7 },
+  { path: "/start", changeFrequency: "yearly", priority: 0.9 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.8 },
   ...projects.map((project) => ({
     path: `/work/${project.slug}`,

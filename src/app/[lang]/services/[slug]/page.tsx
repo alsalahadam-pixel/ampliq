@@ -70,15 +70,15 @@ export default async function ServicePage({
         lead={service.summary[lang]}
         actions={
           <>
-            <ButtonLink href={route(lang, "contact")} tone="dark">
+            <ButtonLink href={route(lang, "start")} tone="dark">
               {dict.cta.start}
             </ButtonLink>
             <ButtonLink
-              href={`${route(lang, "contact")}#consultation`}
+              href={route(lang, "contact")}
               variant="outline"
               tone="dark"
             >
-              {dict.cta.consultation}
+              {dict.cta.enquiry}
             </ButtonLink>
           </>
         }
