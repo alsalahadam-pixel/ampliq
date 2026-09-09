@@ -170,12 +170,26 @@ export function BookingFlow({
     return () => controller.abort();
   }, [requestKey, month, selectedDate, config]);
 
-  // Moving between steps puts focus on the new heading, so a keyboard or
-  // screen-reader user is not left at the bottom of the previous step.
+  /**
+   * Moving between steps takes focus to the new step, so a keyboard or
+   * screen-reader user is not left at the bottom of the previous one.
+   *
+   * The scroll is done explicitly rather than left to `focus()`. A step taller
+   * than the viewport — the confirmation, most of all — gets bottom-aligned by
+   * the browser's default scrolling, which drops the visitor onto the buttons
+   * instead of the heading that tells them what just happened. `block: "start"`
+   * honours the container's `scroll-mt`, and the smoothness comes from the
+   * stylesheet, which already turns it off under `prefers-reduced-motion`.
+   */
   useEffect(() => {
     if (!moveFocus.current) return;
     moveFocus.current = false;
-    stepRef.current?.focus();
+
+    const node = stepRef.current;
+    if (!node) return;
+
+    node.focus({ preventScroll: true });
+    node.scrollIntoView({ block: "start" });
   }, [step]);
 
   const goTo = useCallback((next: Step) => {
