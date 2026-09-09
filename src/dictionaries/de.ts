@@ -29,14 +29,14 @@ export const de: Dictionary = {
     start: "Projekt starten",
     consultation: "Kostenlose Beratung",
     work: "Arbeiten ansehen",
-    allWork: "Alle Arbeiten",
-    allServices: "Alle Leistungen",
+    allWork: "Alle Arbeiten ansehen",
+    allServices: "Leistungen entdecken",
     allInsights: "Alle Insights",
     readMore: "Lesen",
     backToWork: "Zurück zu den Arbeiten",
     backToInsights: "Zurück zu den Insights",
     backHome: "Zurück zur Startseite",
-    talk: "Sprechen wir",
+    talk: "Beratung vereinbaren",
   },
 
   common: {
@@ -54,7 +54,7 @@ export const de: Dictionary = {
       eyebrow: "Marketing- & Kreativagentur — Deutschland",
       headlineTop: "Marketing,",
       headlineBottom: "verstärkt",
-      lead: "AMPLIQ verbindet Marke, Design und Marketing zu einem System. Damit Ihr Unternehmen so aussieht, wie es arbeitet — und von den Menschen gefunden wird, die zu Ihnen passen.",
+      lead: "Marke, Website und Kampagnen als ein System — damit jeder Euro im Marketing den nächsten wirksamer macht.",
       pillars: [
         { key: "build", label: "Build", note: "Websites, die funktionieren" },
         { key: "create", label: "Create", note: "Marke und Content" },
@@ -64,8 +64,8 @@ export const de: Dictionary = {
 
     positioning: {
       eyebrow: "Für wen wir arbeiten",
-      headline: "Für Unternehmen, die mehr aus ihrer Marke machen wollen.",
-      body: "Wir arbeiten mit Unternehmen, die etwas Substanzielles anbieten — und wissen, dass ihr Marketing das noch nicht zeigt. B2B und SaaS, Dienstleister, Gastronomie und Handel, Immobilien und lokale Unternehmen mit regionalem Anspruch.",
+      headline: "Für Unternehmen, die mehr von ihrem Marketing erwarten.",
+      body: "B2B und SaaS, Dienstleister, Handel und Gastronomie, Immobilien — wachsende und mittelständische Unternehmen in Deutschland und Europa, bei denen das Geschäft stark ist und das Marketing noch nicht nachgezogen hat.",
       marquee: [
         "Markensysteme",
         "Websites",
@@ -107,9 +107,9 @@ export const de: Dictionary = {
     work: {
       eyebrow: "Ausgewählte Arbeiten",
       headline: "Arbeiten, die eine Aufgabe haben.",
-      body: "Ein bewusst kleines Portfolio. Jedes Projekt hier ist so beschrieben, wie es tatsächlich war — ohne erfundene Ergebnisse und ohne geliehene Referenzen.",
-      openTitle: "Das nächste Projekt könnte Ihres sein",
-      openBody: "Wir stehen am Anfang und zeigen lieber drei ehrliche Arbeiten als zwanzig erfundene. Wenn Sie ein Projekt richtig gemacht haben wollen, sprechen wir darüber.",
+      body: "Ausgewählte Projekte, vollständig dokumentiert: die Aufgabe, der Gedanke dahinter und das, was tatsächlich entstanden ist.",
+      openTitle: "Das nächste Projekt beginnen",
+      openBody: "Sagen Sie uns, was das Unternehmen erreichen soll. Umfang, Zeitrahmen und Budget stehen fest, bevor die Arbeit beginnt.",
     },
 
     services: {
@@ -121,7 +121,7 @@ export const de: Dictionary = {
     packages: {
       eyebrow: "Pakete",
       headline: "Klare Einstiegspunkte.",
-      body: "Jedes Unternehmen startet an einem anderen Punkt. Deshalb sind das Einstiege und keine festen Menüs. Umfang und Festpreis halten wir nach dem ersten Gespräch schriftlich fest.",
+      body: "Drei Einstiege. Jede Zahl ist ein Startpunkt für einen definierten Umfang — was dazugehört, stimmen wir ab und halten es schriftlich fest.",
       unsureTitle: "Nicht sicher, was Sie brauchen?",
       unsureBody: "Sagen Sie uns, wo das Unternehmen heute steht. Wir sagen Ihnen ehrlich, was zuerst den Unterschied macht — auch wenn das weniger Aufwand ist als gedacht.",
     },
@@ -166,8 +166,8 @@ export const de: Dictionary = {
 
     about: {
       eyebrow: "Über uns",
-      headline: "Ein unabhängiges Studio — so aufgestellt, wie wir selbst beauftragen würden.",
-      body: "Die Menschen, die Sie briefen, sind die Menschen, die arbeiten. Keine Account-Ebene, keine Übergabe an ein Junior-Team, keine sechzig Folien, bevor etwas entsteht.",
+      headline: "Für Unternehmen, denen ihr Auftritt nicht gleichgültig ist.",
+      body: "Strategie, Design und Marketing aus einer Hand — damit Marke, Website und Kampagnen sich gegenseitig verstärken, statt um Budget zu konkurrieren.",
       link: "Mehr über AMPLIQ",
     },
 
@@ -186,7 +186,7 @@ export const de: Dictionary = {
 
   work: {
     title: "Arbeiten",
-    lead: "Ein kleines Portfolio, ehrlich dargestellt. Jedes Projekt beschreibt die Arbeit, die tatsächlich gemacht wurde.",
+    lead: "Ausgewählte Projekte, jedes vollständig dokumentiert — Aufgabe, Herangehensweise und Ergebnis.",
     metaClient: "Kunde",
     metaYear: "Jahr",
     metaCategory: "Disziplin",
@@ -201,7 +201,7 @@ export const de: Dictionary = {
     delivered: "Was entstanden ist",
     learnings: "Was wir mitgenommen haben",
     resultsPending:
-      "Leistungsdaten zu diesem Projekt veröffentlichen wir hier nicht. Sobald belastbare Ergebnisse vorliegen und mit dem Kunden abgestimmt sind, ergänzen wir sie — geschätzte Zahlen gibt es bei uns nicht.",
+      "Leistungsdaten zu diesem Projekt veröffentlichen wir hier nicht. Wo Ergebnisse gemessen und mit dem Kunden abgestimmt sind, stehen sie auf der Seite — geschätzte Zahlen gibt es bei uns nicht.",
     imagePlaceholder: "Projektbilder folgen",
     related: "Weitere Arbeiten",
     conceptNotice:
@@ -223,7 +223,7 @@ export const de: Dictionary = {
 
   packages: {
     title: "Pakete",
-    lead: "Drei Einstiegspunkte und ein individueller Weg. Die Preise sind Startpunkte — Umfang und Festpreis halten wir nach dem ersten Gespräch fest.",
+    lead: "Drei Einstiege und ein individueller Weg. Jede Zahl ist ein Startpunkt für einen definierten Umfang — individuell kalkuliert, bevor die Arbeit beginnt.",
     from: "Ab",
     custom: "Individuelles Angebot",
     forWho: "Für wen",
@@ -234,13 +234,14 @@ export const de: Dictionary = {
     customTitle: "Etwas dazwischen?",
     customBody:
       "Die meisten Projekte passen nicht sauber in ein Paket. Beschreiben Sie die Situation, wir schnüren es passend — manchmal heißt das weniger als ein Paket, nicht mehr.",
+    scopeNote: "Der Umfang hängt von Ihrem Projekt ab.",
     priceNote:
-      "Alle Preise netto zzgl. USt. und als Startpunkt zu verstehen, nicht als fester Projektpreis.",
+      "Alle Preise netto zzgl. USt. und als Startpunkt für einen definierten Umfang zu verstehen — kein fester Projektpreis. Jedes Projekt wird individuell kalkuliert.",
   },
 
   about: {
     title: "Über uns",
-    lead: "AMPLIQ ist ein unabhängiges Studio für Marketing und Kreation und arbeitet mit Unternehmen in Deutschland.",
+    lead: "Eine Marketing- und Kreativagentur, die Strategie, Design, Content und digitales Wachstum verbindet.",
   },
 
   insights: {

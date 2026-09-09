@@ -28,7 +28,11 @@ export function PackagesSection({
             headline={packages.headline}
             lead={packages.body}
           />
-        ) : null}
+        ) : (
+          /* The page hero carries the h1; the grid still needs a heading of its
+             own so the outline does not jump from h1 straight to the card h3s. */
+          <h2 className="sr-only">{dict.packages.title}</h2>
+        )}
 
         <div className={withHeader ? "mt-14 lg:mt-20" : ""}>
           <PackageGrid locale={locale} dict={dict} detailed={detailed} />

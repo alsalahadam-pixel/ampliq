@@ -175,59 +175,96 @@
 }
 
 /* ------------------------------------------------------------------
-   Scroll reveal — progressive enhancement.
-   Elements start hidden only once JS confirms it can reveal them,
-   so no-JS and reduced-motion users always see full content.
+   Motion — pure CSS, no JavaScript.
+
+   Two families:
+     [data-enter]  plays once on load  (above the fold)
+     [data-reveal] plays on scroll     (below the fold)
+
+   Scroll reveals use scroll-driven animations, so nothing observes the DOM and
+   nothing mutates it. That matters beyond elegance: the previous version added
+   classes before React hydrated, which produced hydration mismatches on every
+   animated element. CSS cannot desynchronise from the server-rendered markup.
+
+   Everything is opt-in behind @supports and prefers-reduced-motion, so where
+   scroll-driven animations are unavailable the content simply renders — it is
+   never left hidden by a feature the browser does not have.
 ------------------------------------------------------------------ */
 
-[data-reveal] {
-  opacity: 1;
+@keyframes ampliq-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-html.js [data-reveal] {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.85s var(--ease-out-expo),
-    transform 0.85s var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
+@keyframes ampliq-mask {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
 }
 
 /*
- * Masked line reveal, used for display headlines.
- *
- * The mask lives on the parent and the movement on the child. Clipping the
- * observed element itself (clip-path, or a zero-height box) would drop its
- * intersection ratio to zero, so IntersectionObserver could never fire and the
- * text would stay hidden forever. Padding plus a matching negative margin keeps
- * descenders from being cut by `overflow: hidden`.
+ * Masked line reveal for display headlines: the mask sits on the parent, the
+ * movement on the child. Padding plus a matching negative margin keeps
+ * descenders from being clipped by `overflow: hidden`.
  */
-html.js [data-reveal="mask"] {
-  opacity: 1;
-  transform: none;
+[data-enter="mask"],
+[data-reveal="mask"] {
   overflow: hidden;
   padding-bottom: 0.2em;
   margin-bottom: -0.2em;
 }
 
-html.js [data-reveal="mask"] > * {
+[data-enter="mask"] > *,
+[data-reveal="mask"] > * {
   display: block;
-  transform: translateY(105%);
-  transition: transform 0.95s var(--ease-out-expo);
-  transition-delay: var(--reveal-delay, 0ms);
-  will-change: transform;
 }
 
-html.js [data-reveal="mask"].is-revealed > * {
-  transform: none;
-  will-change: auto;
-}
+@media (prefers-reduced-motion: no-preference) {
+  /* On-load entrance. */
+  [data-enter] {
+    animation: ampliq-rise 0.9s var(--ease-out-expo) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
 
-html.js [data-reveal].is-revealed {
-  opacity: 1;
-  transform: none;
-  will-change: auto;
+  [data-enter="mask"] {
+    animation: none;
+  }
+
+  [data-enter="mask"] > * {
+    animation: ampliq-mask 1s var(--ease-out-expo) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* Scroll-driven reveal, where the browser supports it. */
+  @supports (animation-timeline: view()) {
+    [data-reveal] {
+      animation: ampliq-rise linear both;
+      animation-timeline: view();
+      /* Completes while the element is still entering, so an element at the
+         very bottom of the document — which can never be scrolled past — still
+         finishes its reveal. */
+      animation-range: entry 0% entry 55%;
+    }
+
+    [data-reveal="mask"] {
+      animation: none;
+    }
+
+    [data-reveal="mask"] > * {
+      animation: ampliq-mask linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 65%;
+    }
+  }
 }
 
 @keyframes ampliq-marquee {
@@ -269,11 +306,13 @@ html.js [data-reveal].is-revealed {
     scroll-behavior: auto;
   }
 
-  html.js [data-reveal],
-  html.js [data-reveal="mask"] > * {
+  [data-enter],
+  [data-enter="mask"] > *,
+  [data-reveal],
+  [data-reveal="mask"] > * {
+    animation: none !important;
     opacity: 1;
     transform: none;
-    transition: none;
   }
 
   .marquee-track,

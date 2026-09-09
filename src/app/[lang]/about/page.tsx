@@ -27,12 +27,12 @@ export async function generateMetadata({
     en: {
       title: "About",
       description:
-        "AMPLIQ is an independent marketing and creative studio working with companies in Germany — small on purpose, and clear about how it works.",
+        "AMPLIQ is a marketing and creative agency combining strategy, design, content and digital growth for companies in Germany and across Europe.",
     },
     de: {
       title: "Über uns",
       description:
-        "AMPLIQ ist ein unabhängiges Studio für Marketing und Kreation für Unternehmen in Deutschland — bewusst klein und transparent in der Zusammenarbeit.",
+        "AMPLIQ ist eine Marketing- und Kreativagentur für Unternehmen in Deutschland und Europa: Strategie, Design, Content und digitales Wachstum aus einer Hand.",
     },
   }[lang];
 
@@ -43,17 +43,17 @@ export async function generateMetadata({
  * Page copy lives here rather than in the shared dictionary: it is long-form,
  * used once, and easier to edit next to the page it belongs to.
  *
- * Nothing in this copy claims a team size, a founding year, an office, an
- * award or a client count. The studio is new and the page says so.
+ * Nothing here claims a team size, a founding year, an office, an award or a
+ * client count. The page earns its credibility from how the work is described,
+ * not from numbers that cannot be backed up.
  */
 const about = {
   en: {
-    statement:
-      "Small on purpose. The people you brief are the people who do the work.",
+    statement: "One team for the brand, the website and the growth.",
     paragraphs: [
-      "AMPLIQ is an independent marketing and creative studio working with companies in Germany. There is no account layer between you and the work, no handover to a junior team once the contract is signed, and no sixty-slide deck before anything gets made.",
-      "We are early. The studio is new and the portfolio is deliberately short — we would rather show a few honest things than twenty invented ones. What we bring is a way of working: brand, website and campaigns treated as one system, built to a standard that holds up next to companies considerably larger than the ones we build them for.",
-      "In practice that means telling you when a smaller project would serve you better, saying no to work we would do badly, and putting the scope and the price in writing before anything starts.",
+      "AMPLIQ is a marketing and creative agency working with companies in Germany and across Europe. Strategy, design, content and digital growth sit in one place — because the brand, the website and the campaigns answer the same question, and they stop working when they are bought separately.",
+      "Every engagement opens with the commercial question rather than the creative one: what does this business need to happen next? The answer sets the priorities, the scope and the order the work runs in, before anything is designed.",
+      "You work directly with the people doing the work. Scope and price are agreed in writing before we start, and everything produced is handed over in editable formats and belongs to you.",
     ],
     notTitle: "What AMPLIQ is not",
     notLead:
@@ -101,12 +101,11 @@ const about = {
     ],
   },
   de: {
-    statement:
-      "Bewusst klein. Die Menschen, die Sie briefen, sind die Menschen, die arbeiten.",
+    statement: "Ein Team für Marke, Website und Wachstum.",
     paragraphs: [
-      "AMPLIQ ist ein unabhängiges Studio für Marketing und Kreation und arbeitet mit Unternehmen in Deutschland. Zwischen Ihnen und der Arbeit steht keine Account-Ebene, nach Vertragsabschluss gibt es keine Übergabe an ein Junior-Team, und bevor etwas entsteht, gibt es keine sechzig Folien.",
-      "Wir stehen am Anfang. Das Studio ist neu und das Portfolio bewusst kurz — wir zeigen lieber wenige ehrliche Arbeiten als zwanzig erfundene. Was wir mitbringen, ist eine Arbeitsweise: Marke, Website und Kampagnen als ein System, in einer Qualität, die neben deutlich größeren Unternehmen besteht.",
-      "Praktisch heißt das: Wir sagen Ihnen, wenn ein kleineres Projekt mehr bringt, wir sagen Aufträge ab, die wir schlecht machen würden, und wir halten Umfang und Preis schriftlich fest, bevor etwas beginnt.",
+      "AMPLIQ ist eine Marketing- und Kreativagentur für Unternehmen in Deutschland und Europa. Strategie, Design, Content und digitales Wachstum kommen aus einer Hand — weil Marke, Website und Kampagnen dieselbe Frage beantworten und getrennt eingekauft aufhören zu wirken.",
+      "Am Anfang steht die geschäftliche Frage, nicht die kreative: Was muss als Nächstes passieren? Die Antwort bestimmt Prioritäten, Umfang und Reihenfolge der Arbeit — bevor gestaltet wird.",
+      "Sie arbeiten direkt mit den Menschen, die die Arbeit machen. Umfang und Preis stehen vor Projektbeginn schriftlich fest, und alles, was entsteht, wird in bearbeitbaren Formaten übergeben und gehört Ihnen.",
     ],
     notTitle: "Was AMPLIQ nicht ist",
     notLead:
@@ -253,7 +252,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </div>
       </Section>
 
-      <Principles dict={dict} />
+      <Principles dict={dict} tone="paper" />
 
       <ProcessRail locale={lang} dict={dict} />
 

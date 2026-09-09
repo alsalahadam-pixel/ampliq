@@ -72,17 +72,6 @@ export async function generateMetadata({
   };
 }
 
-/**
- * Reveal runtime.
- *
- * Inline and framework-free: it runs before the page paints, so nothing
- * flashes, and it costs no hydration. If JavaScript never runs — or the
- * visitor prefers reduced motion — the `js` class is never added and every
- * element stays visible, which is why the CSS hides elements only under
- * `html.js`.
- */
-const revealRuntime = `(function(){var d=document,r=d.documentElement;try{if(!('IntersectionObserver' in window)||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;r.classList.add('js');var io=new IntersectionObserver(function(es){for(var i=0;i<es.length;i++){if(es[i].isIntersecting){es[i].target.classList.add('is-revealed');io.unobserve(es[i].target);}}},{rootMargin:'0px 0px -8% 0px',threshold:0.05});var watch=function(el){if(el.__r)return;el.__r=1;io.observe(el);};var scan=function(n){if(!n||n.nodeType!==1&&n.nodeType!==9)return;if(n.matches&&n.matches('[data-reveal]'))watch(n);if(!n.querySelectorAll)return;var els=n.querySelectorAll('[data-reveal]');for(var i=0;i<els.length;i++)watch(els[i]);};scan(d);new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var a=ms[i].addedNodes;for(var j=0;j<a.length;j++)scan(a[j]);}}).observe(d.documentElement,{childList:true,subtree:true});d.addEventListener('DOMContentLoaded',function(){scan(d);});window.addEventListener('load',function(){scan(d);});}catch(e){r.classList.remove('js');}})();`;
-
 export default async function LocaleLayout({
   children,
   params,
@@ -98,8 +87,6 @@ export default async function LocaleLayout({
       className={`${archivo.variable} ${inter.variable} ${mono.variable}`}
     >
       <body className="flex min-h-dvh flex-col overflow-x-hidden">
-        <script dangerouslySetInnerHTML={{ __html: revealRuntime }} />
-
         <a
           href="#main"
           className="sr-only rounded-[2px] focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:text-paper"

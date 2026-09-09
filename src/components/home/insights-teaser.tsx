@@ -21,7 +21,7 @@ export function InsightsTeaser({
   if (latest.length === 0) return null;
 
   return (
-    <Section tone="paper" labelledBy="insights-heading">
+    <Section tone="paper-soft" labelledBy="insights-heading">
       <div className="shell">
         <SectionHeader
           id="insights-heading"

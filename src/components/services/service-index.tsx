@@ -45,9 +45,15 @@ export function ServiceIndex({ locale }: { locale: Locale }) {
                 >
                   <Link
                     href={serviceHref(locale, service.slug)}
-                    className="group flex flex-col gap-1.5 border-b border-rule py-6 transition-colors duration-300 hover:border-ink sm:flex-row sm:items-center sm:justify-between sm:gap-10"
+                    className="group relative flex flex-col gap-1.5 border-b border-rule py-6 transition-colors duration-300 hover:border-ink sm:flex-row sm:items-center sm:justify-between sm:gap-10"
                   >
-                    <span className="font-display text-[1.375rem] leading-tight font-bold tracking-[-0.03em] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:text-[1.75rem] sm:group-hover:translate-x-2">
+                    {/* The accent rule draws in from the left on hover — the row
+                        reacts as one object rather than as a hovered link. */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute bottom-[-1px] left-0 h-px w-0 bg-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"
+                    />
+                    <span className="font-display text-[1.375rem] leading-tight font-bold tracking-[-0.03em] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:text-[1.75rem] sm:group-hover:translate-x-3">
                       {service.title[locale]}
                     </span>
                     <span className="flex items-center gap-6 sm:shrink-0">

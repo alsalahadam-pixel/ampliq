@@ -110,7 +110,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               href={route(locale, "contact")}
               variant={solid ? "primary" : "outline"}
               tone={solid ? "light" : "dark"}
-              className="h-11 px-5 text-sm"
+              size="sm"
             >
               {dict.cta.start}
             </ButtonLink>

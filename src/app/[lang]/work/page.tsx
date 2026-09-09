@@ -30,12 +30,12 @@ export async function generateMetadata({
     en: {
       title: "Work",
       description:
-        "Selected projects from AMPLIQ — website design and development, described as what the work actually was, with no invented results.",
+        "Selected projects from AMPLIQ — website design and development, documented in full: the brief, the approach and what was delivered.",
     },
     de: {
       title: "Arbeiten",
       description:
-        "Ausgewählte Projekte von AMPLIQ — Webdesign und Entwicklung, beschrieben wie die Arbeit tatsächlich war, ohne erfundene Ergebnisse.",
+        "Ausgewählte Projekte von AMPLIQ — Webdesign und Entwicklung, vollständig dokumentiert: Aufgabe, Herangehensweise und Ergebnis.",
     },
   }[lang];
 
@@ -43,40 +43,42 @@ export async function generateMetadata({
 }
 
 /**
- * How the portfolio is presented. States the editorial rules of this page
- * rather than padding it out with placeholder projects — a short portfolio
- * presented deliberately reads better than a long one presented dishonestly.
+ * The standard every case study on this site is held to. It gives the page
+ * substance beyond the project tiles and sets the expectation for what a
+ * reader will find inside each write-up.
  */
 const editorial = {
   en: {
-    eyebrow: "Editorial standard",
-    title: "How we present work here",
+    eyebrow: "How we document work",
+    title: "Case studies you can actually read.",
+    lead: "Every project is written up the same way: the brief, the decisions behind it, and what shipped. Enough to judge the thinking, not just the pictures.",
     items: [
       {
         title: "Scope, not spin",
         body: "Each case study describes the work that was actually carried out, in the words we would use in a scoping call.",
       },
       {
-        title: "No borrowed numbers",
-        body: "Where performance data hasn't been measured and confirmed with the client, the page says so instead of estimating.",
+        title: "Measured, or not claimed",
+        body: "Where results are measured and confirmed with the client, they are on the page. Where they are not, we say so rather than estimate.",
       },
       {
         title: "Concepts are labelled",
-        body: "Self-initiated studies are marked as concepts everywhere they appear, so nothing implies a client relationship that doesn't exist.",
+        body: "Self-initiated studies are marked as concepts wherever they appear, so nothing implies a client relationship that does not exist.",
       },
     ],
   },
   de: {
-    eyebrow: "Redaktioneller Maßstab",
-    title: "Wie wir Arbeiten hier darstellen",
+    eyebrow: "Wie wir Arbeiten dokumentieren",
+    title: "Case Studies, die man wirklich lesen kann.",
+    lead: "Jedes Projekt ist gleich aufgebaut: die Aufgabe, die Entscheidungen dahinter und das Ergebnis. Genug, um die Denkweise zu beurteilen — nicht nur die Bilder.",
     items: [
       {
         title: "Umfang statt Inszenierung",
         body: "Jede Case Study beschreibt die tatsächlich geleistete Arbeit — in denselben Worten, die wir im Scoping-Gespräch verwenden.",
       },
       {
-        title: "Keine geliehenen Zahlen",
-        body: "Wo Ergebnisse nicht gemessen und mit dem Kunden abgestimmt sind, steht das dort — statt einer Schätzung.",
+        title: "Gemessen oder nicht behauptet",
+        body: "Wo Ergebnisse gemessen und mit dem Kunden abgestimmt sind, stehen sie auf der Seite. Wo nicht, sagen wir das — statt zu schätzen.",
       },
       {
         title: "Konzepte sind gekennzeichnet",
@@ -175,7 +177,7 @@ export default async function WorkPage({ params }: PageProps<"/[lang]/work">) {
             id="editorial-heading"
             eyebrow={copy.eyebrow}
             headline={copy.title}
-            lead={dict.home.work.openBody}
+            lead={copy.lead}
             tone="dark"
           />
           <ul className="mt-14 grid gap-10 lg:mt-16 lg:grid-cols-3 lg:gap-8">

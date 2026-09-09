@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { DiscField } from "@/components/brand/disc-field";
 import { Eyebrow } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 
@@ -29,12 +28,12 @@ export function PageHero({
 }) {
   return (
     <section className="on-dark relative isolate overflow-hidden bg-ink text-paper">
-      <div
+      {/* A single hairline rather than another large mark — the DISC is kept
+          for the home hero and the closing CTA so it stays a signature. */}
+      <span
         aria-hidden="true"
-        className="pointer-events-none absolute -top-1/3 -right-24 w-[62vw] max-w-[460px] text-accent/45 lg:-top-1/4 lg:-right-16 lg:w-[34vw] lg:max-w-[560px]"
-      >
-        <DiscField markClassName="text-paper/[0.07]" />
-      </div>
+        className="pointer-events-none absolute top-0 right-0 hidden h-px w-[38%] bg-gradient-to-r from-transparent to-accent/60 lg:block"
+      />
 
       <div
         className={cn(
@@ -57,7 +56,7 @@ export function PageHero({
         ) : null}
 
         <h1
-          data-reveal="mask"
+          data-enter="mask"
           className={cn(
             "mt-7 block max-w-[19ch]",
             size === "large" ? "text-display-xl" : "text-display-lg",
@@ -68,7 +67,7 @@ export function PageHero({
 
         {lead ? (
           <p
-            data-reveal
+            data-enter
             style={{ "--reveal-delay": "120ms" } as React.CSSProperties}
             className="text-lead mt-7 max-w-[52ch] text-fog"
           >
@@ -78,7 +77,7 @@ export function PageHero({
 
         {actions ? (
           <div
-            data-reveal
+            data-enter
             style={{ "--reveal-delay": "200ms" } as React.CSSProperties}
             className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
           >

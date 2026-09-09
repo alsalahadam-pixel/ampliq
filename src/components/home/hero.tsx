@@ -21,17 +21,17 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
       <div className="shell relative flex min-h-[92svh] flex-col justify-between pt-32 pb-10 lg:min-h-[94svh] lg:pt-44 lg:pb-12">
         <div className="grid flex-1 items-center gap-12 lg:grid-cols-12">
           <div className="lg:col-span-8 xl:col-span-7">
-            <div data-reveal>
+            <div data-enter>
               <Eyebrow tone="dark">{hero.eyebrow}</Eyebrow>
             </div>
 
-            <h1 className="text-display-2xl mt-8 lg:mt-10">
-              <span data-reveal="mask" className="block">
+            <h1 className="text-display-2xl mt-7 lg:mt-9">
+              <span data-enter="mask" className="block">
                 <span style={{ "--reveal-delay": "60ms" } as React.CSSProperties}>
                   {hero.headlineTop}
                 </span>
               </span>
-              <span data-reveal="mask" className="block">
+              <span data-enter="mask" className="block">
                 <span style={{ "--reveal-delay": "180ms" } as React.CSSProperties}>
                   {hero.headlineBottom}
                   {/* The full stop is the DISC's centre dot, in the accent. */}
@@ -45,22 +45,27 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </h1>
 
             <p
-              data-reveal
+              data-enter
               style={{ "--reveal-delay": "280ms" } as React.CSSProperties}
-              className="text-lead mt-8 max-w-[52ch] text-fog lg:mt-10"
+              className="text-lead mt-7 max-w-[54ch] text-paper/75 lg:mt-8"
             >
               {hero.lead}
             </p>
 
             <div
-              data-reveal
+              data-enter
               style={{ "--reveal-delay": "360ms" } as React.CSSProperties}
-              className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
+              className="mt-11 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             >
-              <ButtonLink href={route(locale, "contact")} tone="dark">
+              <ButtonLink href={route(locale, "contact")} tone="dark" size="lg">
                 {dict.cta.start}
               </ButtonLink>
-              <ButtonLink href={route(locale, "work")} variant="outline" tone="dark">
+              <ButtonLink
+                href={route(locale, "work")}
+                variant="outline"
+                tone="dark"
+                size="lg"
+              >
                 {dict.cta.work}
               </ButtonLink>
             </div>
@@ -69,7 +74,7 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
         {/* System preview: the three layers, stated before the visitor scrolls. */}
         <div
-          data-reveal
+          data-enter
           style={{ "--reveal-delay": "460ms" } as React.CSSProperties}
           className="mt-16 border-t border-white/12 pt-6 lg:mt-10 lg:pt-8"
         >

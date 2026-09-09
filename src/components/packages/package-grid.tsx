@@ -86,6 +86,14 @@ export function PackageGrid({
               )}
               <p
                 className={cn(
+                  "mt-2 text-xs",
+                  dark ? "text-fog" : "text-graphite",
+                )}
+              >
+                {dict.packages.scopeNote}
+              </p>
+              <p
+                className={cn(
                   "font-display mt-5 text-lg leading-snug font-semibold tracking-[-0.02em]",
                   dark ? "text-paper" : "text-ink",
                 )}
@@ -95,12 +103,7 @@ export function PackageGrid({
             </div>
 
             <div className="mt-8">
-              <h4
-                className={cn(
-                  "eyebrow",
-                  dark ? "text-fog" : "text-graphite",
-                )}
-              >
+              <h4 className={cn("eyebrow", dark ? "text-fog" : "text-graphite")}>
                 {dict.packages.forWho}
               </h4>
               <p
@@ -131,7 +134,7 @@ export function PackageGrid({
 
             <div className="mt-8">
               <h4 className={cn("eyebrow", dark ? "text-fog" : "text-graphite")}>
-                {dict.packages.includes}
+                {tier.includesLabel?.[locale] ?? dict.packages.includes}
               </h4>
               <ul className="mt-4 flex flex-col gap-2.5">
                 {tier.includes[locale].map((item) => (

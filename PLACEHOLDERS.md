@@ -42,15 +42,29 @@ and the design is built to work without them:
 
 ## Brand assets
 
-The DISC mark and lockup in `public/brand/` are vector reconstructions of the
-supplied AMPLIQ artwork, generated from a single geometry source
-(`src/components/brand/disc-geometry.ts`) so every instance on the site is
-identical. To swap in official vector files, either replace the constants in
-that module or overwrite the generated SVGs — the component, the favicon and the
-Open Graph card all read from the same source.
+The DISC mark and lockup in `public/brand/` are a **vector reconstruction traced
+by eye from the supplied raster reference** — the ring proportions, the counter,
+the interruption at the lower right and the outboard tail all follow the
+artwork, but this is not the original vector file.
 
-Regenerate the static files after any geometry change:
+Everything derives from one geometry module
+(`src/components/brand/disc-geometry.ts`), so the React `<Logo />`, the favicon,
+the `/public/brand` SVGs and the Open Graph card are guaranteed identical.
+
+**To drop in the official artwork**, do one of:
+
+1. Replace the constants in `disc-geometry.ts` with path data exported from the
+   original file — everything downstream updates automatically; or
+2. Overwrite the generated files in `public/brand/` and point the `<Disc />`
+   component at the official path data.
+
+Either way it is a single-place change. Regenerate the static files after any
+geometry edit:
 
 ```bash
 npm run brand
 ```
+
+The wordmark in the lockup SVGs is set as live text in the brand display face.
+If the lockup has to render where that font is unavailable, replace those files
+with an outlined export.

@@ -2,11 +2,18 @@ import { Section, SectionHeader } from "@/components/ui/section";
 import type { Dictionary } from "@/lib/dictionary";
 import { pad } from "@/lib/utils";
 
-export function Principles({ dict }: { dict: Dictionary }) {
+export function Principles({
+  dict,
+  tone = "paper-soft",
+}: {
+  dict: Dictionary;
+  /** Set by the page so two light sections never sit back to back. */
+  tone?: "paper" | "paper-soft";
+}) {
   const { principles } = dict.home;
 
   return (
-    <Section tone="paper-soft" labelledBy="principles-heading">
+    <Section tone={tone} labelledBy="principles-heading">
       <div className="shell">
         <SectionHeader
           id="principles-heading"

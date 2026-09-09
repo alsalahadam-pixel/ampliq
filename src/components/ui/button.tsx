@@ -7,7 +7,15 @@ type Variant = "primary" | "outline" | "ghost";
 type Tone = "light" | "dark";
 
 const base =
-  "group inline-flex items-center justify-center gap-2.5 rounded-[2px] px-6 text-[0.9375rem] font-medium tracking-[-0.01em] leading-none h-13 transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50";
+  "group inline-flex items-center justify-center gap-2.5 rounded-[2px] font-medium tracking-[-0.01em] leading-none transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-50";
+
+const sizes = {
+  sm: "h-11 px-5 text-sm",
+  md: "h-13 px-6 text-[0.9375rem]",
+  lg: "h-15 px-8 text-base",
+} as const;
+
+type Size = keyof typeof sizes;
 
 /** `tone` describes the surface the button sits on, not the button itself. */
 const variants: Record<Variant, Record<Tone, string>> = {
@@ -49,6 +57,7 @@ type ButtonLinkProps = {
   children: ReactNode;
   variant?: Variant;
   tone?: Tone;
+  size?: Size;
   withArrow?: boolean;
   className?: string;
 } & Omit<ComponentProps<typeof Link>, "href" | "className" | "children">;
@@ -58,12 +67,17 @@ export function ButtonLink({
   children,
   variant = "primary",
   tone = "light",
+  size = "md",
   withArrow = true,
   className,
   ...rest
 }: ButtonLinkProps) {
   return (
-    <Link href={href} className={cn(base, variants[variant][tone], className)} {...rest}>
+    <Link
+      href={href}
+      className={cn(base, sizes[size], variants[variant][tone], className)}
+      {...rest}
+    >
       {children}
       {withArrow ? <Arrow /> : null}
     </Link>
@@ -74,6 +88,7 @@ export function Button({
   children,
   variant = "primary",
   tone = "light",
+  size = "md",
   withArrow = false,
   className,
   ...rest
@@ -81,10 +96,14 @@ export function Button({
   children: ReactNode;
   variant?: Variant;
   tone?: Tone;
+  size?: Size;
   withArrow?: boolean;
 } & ComponentProps<"button">) {
   return (
-    <button className={cn(base, variants[variant][tone], className)} {...rest}>
+    <button
+      className={cn(base, sizes[size], variants[variant][tone], className)}
+      {...rest}
+    >
       {children}
       {withArrow ? <Arrow /> : null}
     </button>

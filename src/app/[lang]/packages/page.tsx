@@ -49,7 +49,7 @@ const packageFaqs = {
     {
       question: "What does a €500 project actually get me?",
       answer:
-        "A focused, well-built foundation — typically a single-page site or a small site with your own content, set up properly for search. It does not include original photography, a full brand system or ongoing marketing. If your situation needs more than that, we will say so rather than sell you a package that cannot do the job.",
+        "One defined deliverable, built to the same standard as everything else we produce — a landing page, a focused improvement to an existing site, a brand starter, or a campaign creative set. It is deliberately one thing rather than a bundle. A full website, a complete brand system, photography and ongoing marketing are separate scopes; quoting all of them at that figure would mean cutting corners somewhere, and we would rather tell you what the work actually costs.",
     },
     {
       question: "Can we start small and grow later?",
@@ -76,7 +76,7 @@ const packageFaqs = {
     {
       question: "Was bekomme ich für 500 € tatsächlich?",
       answer:
-        "Ein fokussiertes, sauber gebautes Fundament — meist eine Onepage-Website oder eine kleine Seite mit Ihren Inhalten, technisch korrekt für die Suche aufgesetzt. Nicht enthalten sind eigene Fotografie, ein vollständiges Markensystem oder laufendes Marketing. Wenn Ihre Situation mehr braucht, sagen wir das — statt Ihnen ein Paket zu verkaufen, das die Aufgabe nicht lösen kann.",
+        "Ein definiertes Ergebnis, in derselben Qualität wie alles andere — eine Landingpage, eine gezielte Verbesserung an der bestehenden Seite, eine Marken-Basis oder ein Creative-Set für einen Kanal. Bewusst eine Sache und kein Bündel. Eine vollständige Website, ein komplettes Markensystem, Fotografie und laufendes Marketing sind eigene Umfänge; alles zu diesem Preis anzubieten hieße, an irgendeiner Stelle zu sparen. Wir sagen Ihnen lieber, was die Arbeit wirklich kostet.",
     },
     {
       question: "Können wir klein starten und später ausbauen?",

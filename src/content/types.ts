@@ -52,6 +52,8 @@ export type PackageTier = {
   positioning: Localized<string>;
   forWho: Localized<string>;
   solves: Localized<string>;
+  /** Overrides the generic "typically includes" label — START lists alternatives, not a bundle. */
+  includesLabel?: Localized<string>;
   includes: Localized<string[]>;
   scope: Localized<string>;
   engagement: Localized<string>;

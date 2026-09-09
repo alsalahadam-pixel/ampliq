@@ -18,7 +18,7 @@ import {
   DISC_DOT,
   DISC_RING_PATH,
   DISC_TAIL_PATH,
-  DISC_VIEWBOX,
+  buildDiscSvg,
 } from "../src/components/brand/disc-geometry.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -28,24 +28,28 @@ const INK = "#1D1D1B";
 const WHITE = "#FFFFFF";
 const BLACK = "#000000";
 
-function discSvg(color: string, label = "AMPLIQ"): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${DISC_VIEWBOX}" width="100" height="100" role="img" aria-label="${label}">
-  <title>${label}</title>
-  <path d="${DISC_RING_PATH}" fill="${color}"/>
-  <path d="${DISC_TAIL_PATH}" fill="${color}"/>
-  <circle cx="${DISC_DOT.cx}" cy="${DISC_DOT.cy}" r="${DISC_DOT.r}" fill="${color}"/>
-</svg>
-`;
-}
+const discSvg = buildDiscSvg;
 
+/**
+ * The lockup: the generated mark plus the wordmark, spaced from the mark's own
+ * geometry so the proportions hold at any export size. The wordmark is set as
+ * live text here — replace this file with an outlined export if the lockup has
+ * to render somewhere the brand face is unavailable.
+ */
 function lockupSvg(color: string): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 100" width="500" height="100" role="img" aria-label="AMPLIQ">
+  const mark = 100; // the DISC viewBox is 0 0 100 100
+  const capHeight = 72;
+  const gap = 34;
+  const baseline = mark / 2 + capHeight / 2;
+  const width = mark + gap + capHeight * 4.35;
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${Math.round(width)} ${mark}" role="img" aria-label="AMPLIQ">
   <title>AMPLIQ</title>
   <g fill="${color}">
     <path d="${DISC_RING_PATH}"/>
     <path d="${DISC_TAIL_PATH}"/>
     <circle cx="${DISC_DOT.cx}" cy="${DISC_DOT.cy}" r="${DISC_DOT.r}"/>
-    <text x="130" y="85" font-family="Archivo, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="98" font-weight="800" letter-spacing="-2">AMPLIQ</text>
+    <text x="${mark + gap}" y="${baseline}" font-family="Archivo, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${Math.round(capHeight / 0.72)}" font-weight="800" letter-spacing="-2">AMPLIQ</text>
   </g>
 </svg>
 `;

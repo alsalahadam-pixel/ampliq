@@ -27,15 +27,15 @@ export const en = {
   cta: {
     start: "Start a project",
     consultation: "Free consultation",
-    work: "See our work",
-    allWork: "All work",
-    allServices: "All services",
+    work: "View our work",
+    allWork: "View all work",
+    allServices: "Explore services",
     allInsights: "All insights",
     readMore: "Read",
     backToWork: "Back to work",
     backToInsights: "Back to insights",
     backHome: "Back to home page",
-    talk: "Talk to us",
+    talk: "Book a consultation",
   },
 
   common: {
@@ -53,7 +53,7 @@ export const en = {
       eyebrow: "Marketing & creative agency — Germany",
       headlineTop: "Marketing,",
       headlineBottom: "amplified",
-      lead: "AMPLIQ connects brand, design and marketing into one system — so your company looks the way it actually performs, and gets found by the people who should be finding it.",
+      lead: "Brand, website and campaigns, built as one system — so every euro you put into marketing makes the next one work harder.",
       pillars: [
         { key: "build", label: "Build", note: "Websites that work" },
         { key: "create", label: "Create", note: "Brand and content" },
@@ -63,8 +63,8 @@ export const en = {
 
     positioning: {
       eyebrow: "Who this is for",
-      headline: "For companies ready to look the part.",
-      body: "We work with businesses that have something real to sell and know their marketing doesn't show it yet — B2B and SaaS, professional services, hospitality and retail, real estate, and local companies with regional ambition.",
+      headline: "For companies that expect more from their marketing.",
+      body: "B2B and SaaS, professional services, retail and hospitality, real estate — mid-market and growing companies across Germany and Europe, where the business is strong and the marketing has yet to catch up.",
       marquee: [
         "Brand systems",
         "Websites",
@@ -106,9 +106,9 @@ export const en = {
     work: {
       eyebrow: "Selected work",
       headline: "Work that has to do a job.",
-      body: "A small, deliberate portfolio. Every project here is described as what it actually was — no invented results, no borrowed credentials.",
-      openTitle: "The next one could be yours",
-      openBody: "We're early, and we'd rather show three honest things than twenty invented ones. If you want a project made properly, that's the conversation to have.",
+      body: "Selected projects, documented in full: the brief, the thinking behind it, and what was actually shipped.",
+      openTitle: "Start the next one",
+      openBody: "Tell us what the business needs to achieve. You get a clear view of scope, timeline and budget before any work begins.",
     },
 
     services: {
@@ -120,7 +120,7 @@ export const en = {
     packages: {
       eyebrow: "Packages",
       headline: "Clear starting points.",
-      body: "Every business starts from a different place, so these are entry points rather than fixed menus. We confirm scope and a fixed price after the first conversation.",
+      body: "Three ways to start. Each figure is an entry point for a defined scope — what that scope covers is agreed with you, then fixed in writing.",
       unsureTitle: "Not sure what you need?",
       unsureBody: "Tell us where the business is today. We'll tell you honestly what would move the needle first — even when that's less work than you expected.",
     },
@@ -165,8 +165,8 @@ export const en = {
 
     about: {
       eyebrow: "About",
-      headline: "An independent studio, built the way we'd want to be hired.",
-      body: "The people you brief are the people who do the work. No account layer, no handover to a junior team, no sixty-slide deck before anything gets made.",
+      headline: "Built for businesses that care how they show up.",
+      body: "Strategy, design and marketing under one roof — so the brand, the site and the campaigns reinforce each other instead of competing for budget.",
       link: "More about AMPLIQ",
     },
 
@@ -185,7 +185,7 @@ export const en = {
 
   work: {
     title: "Work",
-    lead: "A small portfolio, honestly presented. Each project describes the work that was actually done.",
+    lead: "Selected projects, each documented in full — the brief, the approach, and what was delivered.",
     metaClient: "Client",
     metaYear: "Year",
     metaCategory: "Discipline",
@@ -200,7 +200,7 @@ export const en = {
     delivered: "What was delivered",
     learnings: "What we took from it",
     resultsPending:
-      "Performance data for this project isn't published here. When measurable results are available and confirmed with the client, they'll be added — we don't estimate numbers.",
+      "Performance data for this project is not published here. Where results are measured and confirmed with the client, they appear on the page — we do not estimate numbers.",
     imagePlaceholder: "Project imagery to be added",
     related: "More work",
     conceptNotice:
@@ -222,7 +222,7 @@ export const en = {
 
   packages: {
     title: "Packages",
-    lead: "Three starting points and a custom path. Prices are entry points — scope and a fixed quote are confirmed after the first conversation.",
+    lead: "Three ways to start, and a custom path. Each figure is an entry point for a defined scope, quoted individually before any work begins.",
     from: "From",
     custom: "Custom quote",
     forWho: "Who it's for",
@@ -233,13 +233,14 @@ export const en = {
     customTitle: "Something in between?",
     customBody:
       "Most projects don't fit neatly into a package. Tell us the situation and we'll scope it properly — sometimes that means less than a package, not more.",
+    scopeNote: "Scope depends on your project.",
     priceNote:
-      "Prices are net, excluding VAT, and represent a starting point rather than a fixed project price.",
+      "All prices are net of VAT and represent a starting point for a defined scope — not a fixed project price. Every engagement is quoted individually.",
   },
 
   about: {
     title: "About",
-    lead: "AMPLIQ is an independent marketing and creative studio working with companies in Germany.",
+    lead: "A marketing and creative agency combining strategy, design, content and digital growth.",
   },
 
   insights: {
