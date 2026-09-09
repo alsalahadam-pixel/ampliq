@@ -6,6 +6,9 @@ import { services } from "@/content/services";
 import { type Locale, localeTags, locales } from "@/lib/i18n";
 import { siteUrl } from "@/lib/site";
 
+/** Nothing here reads the request, so it is generated once at build time. */
+export const dynamic = "force-static";
+
 type Entry = {
   path: string;
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
