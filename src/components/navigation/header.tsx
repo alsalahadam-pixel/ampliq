@@ -16,7 +16,6 @@ type NavItem = { label: string; href: string };
 
 function useNavItems(locale: Locale, dict: Dictionary): NavItem[] {
   return [
-    { label: dict.nav.work, href: route(locale, "work") },
     { label: dict.nav.services, href: route(locale, "services") },
     { label: dict.nav.packages, href: route(locale, "packages") },
     { label: dict.nav.about, href: route(locale, "about") },

@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
 import { insights } from "@/content/insights";
-import { projects } from "@/content/projects";
 import { services } from "@/content/services";
 import { type Locale, localeTags, locales } from "@/lib/i18n";
 import { siteUrl } from "@/lib/site";
@@ -21,18 +20,12 @@ type Entry = {
  */
 const entries: Entry[] = [
   { path: "", changeFrequency: "monthly", priority: 1 },
-  { path: "/work", changeFrequency: "monthly", priority: 0.9 },
   { path: "/services", changeFrequency: "monthly", priority: 0.9 },
   { path: "/packages", changeFrequency: "monthly", priority: 0.9 },
   { path: "/about", changeFrequency: "yearly", priority: 0.6 },
   { path: "/insights", changeFrequency: "weekly", priority: 0.7 },
   { path: "/start", changeFrequency: "yearly", priority: 0.9 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.8 },
-  ...projects.map((project) => ({
-    path: `/work/${project.slug}`,
-    changeFrequency: "yearly" as const,
-    priority: 0.7,
-  })),
   ...services.map((service) => ({
     path: `/services/${service.slug}`,
     changeFrequency: "monthly" as const,

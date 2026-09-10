@@ -7,7 +7,6 @@ import { InsightsTeaser } from "@/components/home/insights-teaser";
 import { Positioning } from "@/components/home/positioning";
 import { Principles } from "@/components/home/principles";
 import { Problem } from "@/components/home/problem";
-import { SelectedWork } from "@/components/home/selected-work";
 import { ServicesSection } from "@/components/home/services-section";
 import { SystemSection } from "@/components/home/system";
 import { FinalCta } from "@/components/sections/final-cta";
@@ -55,7 +54,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
       <Positioning dict={dict} />
       <Problem dict={dict} />
       <SystemSection locale={lang} dict={dict} />
-      <SelectedWork locale={lang} dict={dict} />
       <ServicesSection locale={lang} dict={dict} />
       <PackagesSection locale={lang} dict={dict} />
       <ProcessRail locale={lang} dict={dict} />

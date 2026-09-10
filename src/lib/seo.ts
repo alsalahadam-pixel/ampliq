@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 import { type Locale, localeTags, locales } from "@/lib/i18n";
-import { activeSocials, site, siteUrl } from "@/lib/site";
+import { activeSocials, contact, site, siteUrl } from "@/lib/site";
 
 /**
  * Every page builds its metadata here, so canonical URLs, hreflang pairs and
  * Open Graph tags stay consistent and no route can quietly ship without them.
  *
- * `path` is the route *without* the locale prefix, e.g. `/work/ihms-global`.
+ * `path` is the route *without* the locale prefix, e.g. `/services/seo`.
  */
 export function buildMetadata({
   locale,
@@ -71,12 +71,32 @@ export function organizationSchema(locale: Locale) {
     slogan: site.tagline[locale],
     description:
       locale === "de"
-        ? "AMPLIQ ist ein unabhängiges Studio für Marketing und Kreation: Marke, Website und Kampagnen als ein System."
-        : "AMPLIQ is an independent marketing and creative studio: brand, website and campaigns built as one system.",
+        ? "AMPLIQ ist eine Marketing- und Kreativagentur, die Strategie, Design, Content und digitales Wachstum verbindet."
+        : "AMPLIQ is a marketing and creative agency combining strategy, design, content and digital growth.",
     logo: `${siteUrl}/brand/ampliq-logo.svg`,
     image: `${siteUrl}/opengraph-image`,
-    email: site.email,
-    areaServed: site.market,
+    email: contact.project,
+    // Two real addresses, each with the job it actually does. Nothing is
+    // claimed here that is not published on the site itself.
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: contact.project,
+        availableLanguage: ["en", "de"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: contact.help,
+        availableLanguage: ["en", "de"],
+      },
+    ],
+    areaServed: [
+      { "@type": "Country", name: site.market },
+      { "@type": "Place", name: "Europe" },
+    ],
+    knowsLanguage: ["en", "de"],
     ...(activeSocials.length > 0
       ? { sameAs: activeSocials.map((item) => item.href) }
       : {}),
@@ -115,6 +135,41 @@ export function serviceSchema({
     url: `${siteUrl}/${locale}${path}`,
     areaServed: { "@type": "Country", name: site.market },
     provider: { "@id": `${siteUrl}/#organization` },
+  };
+}
+
+/**
+ * The service catalogue as an ordered list.
+ *
+ * Describes what is genuinely published — one entry per service page — so the
+ * index is legible to a crawler without inventing offerings that have no page
+ * behind them.
+ */
+export function serviceListSchema({
+  locale,
+  name,
+  items,
+}: {
+  locale: Locale;
+  name: string;
+  items: { name: string; description: string; path: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Service",
+        name: item.name,
+        description: item.description,
+        url: `${siteUrl}/${locale}${item.path}`,
+        provider: { "@id": `${siteUrl}/#organization` },
+      },
+    })),
   };
 }
 

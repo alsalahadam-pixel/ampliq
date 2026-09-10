@@ -37,7 +37,7 @@ import type {
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { route } from "@/lib/routes";
-import { site } from "@/lib/site";
+import { contact } from "@/lib/site";
 import { cn, fill } from "@/lib/utils";
 
 const INTL_TAG: Record<Locale, string> = { en: "en-GB", de: "de-DE" };
@@ -375,7 +375,7 @@ export function BookingFlow({
                   body={dict.booking.problems.noServerBody}
                   action={
                     <a
-                      href={`mailto:${site.email}`}
+                      href={`mailto:${contact.project}`}
                       className="link-underline mt-3 inline-block text-[0.875rem] font-medium text-ink"
                     >
                       {dict.booking.problems.emailUs}

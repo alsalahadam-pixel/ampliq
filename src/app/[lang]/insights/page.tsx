@@ -44,6 +44,7 @@ export default async function InsightsPage({
   if (!isLocale(lang)) notFound();
 
   const dict = getDictionary(lang);
+  const [featured, ...rest] = sortedInsights;
 
   return (
     <>
@@ -53,19 +54,40 @@ export default async function InsightsPage({
         lead={dict.insights.lead}
       />
 
-      <Section tone="paper">
+      <Section tone="paper" labelledBy="insights-list">
         <div className="shell">
-          <div className="grid gap-12 lg:grid-cols-3 lg:gap-8">
-            {sortedInsights.map((insight, index) => (
-              <div
-                key={insight.slug}
-                data-reveal
-                style={{ "--reveal-delay": `${(index % 3) * 90}ms` } as React.CSSProperties}
-              >
-                <InsightCard insight={insight} locale={lang} dict={dict} />
-              </div>
-            ))}
-          </div>
+          {/* The hero carries the h1; the list still needs a heading of its own
+              so the outline does not jump straight to the card titles. */}
+          <h2 id="insights-list" className="sr-only">
+            {dict.insights.title}
+          </h2>
+
+          {/* The most recent piece leads at full width, the rest sit beside it.
+              With a small, deliberately un-padded archive this reads as an
+              edited page rather than a grid waiting to be filled. */}
+          {featured ? (
+            <div data-reveal className="border-t border-ink pt-8">
+              <InsightCard
+                insight={featured}
+                locale={lang}
+                dict={dict}
+                featured
+              />
+            </div>
+          ) : null}
+
+          {rest.length > 0 ? (
+            <div
+              data-reveal-stagger
+              className="mt-16 grid gap-12 sm:grid-cols-2 lg:mt-20 lg:gap-8"
+            >
+              {rest.map((insight) => (
+                <div key={insight.slug}>
+                  <InsightCard insight={insight} locale={lang} dict={dict} />
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
       </Section>
 

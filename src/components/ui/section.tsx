@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { SplitWords } from "@/components/ui/split-words";
 import { cn } from "@/lib/utils";
 
 export function Eyebrow({
@@ -100,6 +101,17 @@ export function SectionHeader({
         className,
       )}
     >
+      {/* The hairline draws itself in as the section arrives — the quietest
+          possible way to mark where one section ends and the next begins. */}
+      <span
+        aria-hidden="true"
+        data-reveal="rule"
+        className={cn(
+          "block h-px w-full origin-left",
+          tone === "dark" ? "bg-white/15" : "bg-rule",
+        )}
+      />
+
       {eyebrow ? <Eyebrow tone={tone === "dark" ? "dark" : "light"}>{eyebrow}</Eyebrow> : null}
       <div
         className={cn(
@@ -107,15 +119,17 @@ export function SectionHeader({
           align === "center" && "lg:flex-col lg:items-center",
         )}
       >
+        {/* A string headline reveals word by word; anything richer is left
+            alone, because splitting it would break its own markup. */}
         <h2
           id={id}
-          data-reveal
+          data-reveal={typeof headline === "string" ? undefined : ""}
           className={cn(
             "text-display-lg max-w-[16ch]",
             align === "center" && "max-w-[22ch]",
           )}
         >
-          {headline}
+          {typeof headline === "string" ? <SplitWords text={headline} /> : headline}
         </h2>
         {lead ? (
           <p

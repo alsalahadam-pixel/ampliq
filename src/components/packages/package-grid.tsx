@@ -46,10 +46,25 @@ export function PackageGrid({
             data-reveal
             style={{ "--reveal-delay": `${index * 100}ms` } as React.CSSProperties}
             className={cn(
-              "flex flex-col p-8 lg:p-10",
-              dark ? "on-dark bg-ink text-paper" : "bg-paper text-ink",
+              // The whole card lifts very slightly on hover and the accent
+              // rule above it draws across. Enough to feel responsive; far
+              // short of a card that floats.
+              "group relative flex flex-col p-8 transition-[transform,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:p-10",
+              dark
+                ? "on-dark bg-ink text-paper hover:bg-ink-soft"
+                : "bg-paper text-ink hover:bg-paper-soft",
+              "hover:lg:-translate-y-1",
             )}
           >
+            {/* Accent rule that draws across the top of the card on hover. */}
+            <span
+              aria-hidden="true"
+              className={cn(
+                "absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100",
+                dark ? "bg-accent-soft" : "bg-accent",
+              )}
+            />
+
             <div className="flex items-center justify-between">
               <span
                 className={cn(
@@ -179,7 +194,10 @@ export function PackageGrid({
                 tone={dark ? "dark" : "light"}
                 className="w-full"
               >
-                {tier.priceKind === "custom" ? dict.cta.talk : dict.cta.start}
+                {/* One CTA across all three tiers, SCALE included: every tier
+                    starts with the same conversation, so offering a different
+                    verb for the custom one only made it look less available. */}
+                {dict.cta.start}
               </ButtonLink>
             </div>
           </article>

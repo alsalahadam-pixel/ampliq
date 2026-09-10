@@ -25,8 +25,8 @@ export default function NotFound() {
           <ButtonLink href={route(defaultLocale, "home")} tone="dark">
             {dict.cta.backHome}
           </ButtonLink>
-          <ButtonLink href={route(defaultLocale, "work")} variant="outline" tone="dark">
-            {dict.cta.allWork}
+          <ButtonLink href={route(defaultLocale, "services")} variant="outline" tone="dark">
+            {dict.cta.allServices}
           </ButtonLink>
         </div>
       </div>

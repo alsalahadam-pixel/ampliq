@@ -211,6 +211,43 @@
   }
 }
 
+/* A hairline drawing itself in from the left. Used on section rules. */
+@keyframes ampliq-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Opacity only — for elements where movement would fight the layout. */
+@keyframes ampliq-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/*
+ * Scroll-linked drift for the DISC.
+ *
+ * Tied to the document scroll rather than a timer, so the mark answers the
+ * visitor instead of spinning on its own: it moves only while they move, and
+ * stops the moment they do. A quarter turn across the whole page is far below
+ * the threshold where rotation reads as an animation rather than as depth.
+ */
+@keyframes ampliq-drift {
+  from {
+    transform: rotate(-8deg) translateY(-1.5%);
+  }
+  to {
+    transform: rotate(8deg) translateY(1.5%);
+  }
+}
+
 /*
  * Masked line reveal for display headlines: the mask sits on the parent, the
  * movement on the child. Padding plus a matching negative margin keeps
@@ -264,6 +301,91 @@
       animation-timeline: view();
       animation-range: entry 0% entry 65%;
     }
+
+    /* A rule that draws itself as its section arrives. */
+    [data-reveal="rule"] {
+      animation: ampliq-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+      transform-origin: left center;
+    }
+
+    [data-reveal="fade"] {
+      animation: ampliq-fade linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    /*
+     * Stagger: children of a staggered container reveal in sequence.
+     *
+     * The delay is expressed as a share of the animation range rather than in
+     * milliseconds, because a scroll-driven animation has no wall-clock
+     * duration — it is scrubbed by the scroll position.
+     */
+    [data-reveal-stagger] > * {
+      animation: ampliq-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    [data-reveal-stagger] > *:nth-child(2) {
+      animation-range: entry 4% entry 64%;
+    }
+    [data-reveal-stagger] > *:nth-child(3) {
+      animation-range: entry 8% entry 68%;
+    }
+    [data-reveal-stagger] > *:nth-child(4) {
+      animation-range: entry 12% entry 72%;
+    }
+    [data-reveal-stagger] > *:nth-child(5) {
+      animation-range: entry 16% entry 76%;
+    }
+    [data-reveal-stagger] > *:nth-child(n + 6) {
+      animation-range: entry 20% entry 80%;
+    }
+
+    /* Per-word headline reveal. Each word carries its own mask. */
+    [data-words] > span {
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: bottom;
+      padding-bottom: 0.14em;
+      margin-bottom: -0.14em;
+    }
+
+    [data-words] > span > span {
+      display: inline-block;
+      animation: ampliq-mask linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    [data-words] > span:nth-child(2) > span {
+      animation-range: entry 3% entry 63%;
+    }
+    [data-words] > span:nth-child(3) > span {
+      animation-range: entry 6% entry 66%;
+    }
+    [data-words] > span:nth-child(4) > span {
+      animation-range: entry 9% entry 69%;
+    }
+    [data-words] > span:nth-child(n + 5) > span {
+      animation-range: entry 12% entry 72%;
+    }
+  }
+
+  /*
+   * The DISC drifts with the page scroll.
+   *
+   * `scroll()` rather than `view()`: the mark is a fixed part of its section's
+   * composition, so it should track the page as a whole, not its own entry.
+   */
+  @supports (animation-timeline: scroll()) {
+    [data-drift] {
+      animation: ampliq-drift linear both;
+      animation-timeline: scroll(root block);
+    }
   }
 }
 
@@ -309,7 +431,10 @@
   [data-enter],
   [data-enter="mask"] > *,
   [data-reveal],
-  [data-reveal="mask"] > * {
+  [data-reveal="mask"] > *,
+  [data-reveal-stagger] > *,
+  [data-words] > span > span,
+  [data-drift] {
     animation: none !important;
     opacity: 1;
     transform: none;

@@ -5,7 +5,7 @@ import { Section, SectionHeader } from "@/components/ui/section";
 import { Arrow } from "@/components/ui/button";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
-import { route } from "@/lib/routes";
+import { route, serviceHref } from "@/lib/routes";
 import { pad } from "@/lib/utils";
 
 /**
@@ -36,10 +36,13 @@ export function SystemSection({
         />
 
         <div className="relative mt-16 lg:mt-24">
-          {/* Horizontal connector (desktop). */}
+          {/* Horizontal connector (desktop). Draws itself in with the section,
+              so the three layers visibly become one system rather than
+              arriving as three finished columns. */}
           <span
             aria-hidden="true"
-            className="absolute top-[7px] right-0 left-0 hidden h-px bg-white/12 lg:block"
+            data-reveal="rule"
+            className="absolute top-[7px] right-0 left-0 hidden h-px origin-left bg-white/12 lg:block"
           />
           {/* Vertical connector (mobile / tablet). */}
           <span
@@ -79,13 +82,30 @@ export function SystemSection({
                   {pillar.body[locale]}
                 </p>
 
+                {/* Each discipline with a page is a link, so the system can
+                    actually be walked. The rest stay as text rather than
+                    linking to something that does not exist. */}
                 <ul className="mt-7 flex flex-col">
-                  {pillar.disciplines[locale].map((discipline) => (
+                  {pillar.disciplines.map((discipline) => (
                     <li
-                      key={discipline}
-                      className="border-t border-white/10 py-2.5 text-sm text-paper/75 last:border-b"
+                      key={discipline.label.en}
+                      className="border-t border-white/10 last:border-b"
                     >
-                      {discipline}
+                      {discipline.slug ? (
+                        <Link
+                          href={serviceHref(locale, discipline.slug)}
+                          className="group/item flex items-center justify-between gap-3 py-2.5 text-sm text-paper/75 transition-colors duration-300 hover:text-paper"
+                        >
+                          <span className="link-underline">
+                            {discipline.label[locale]}
+                          </span>
+                          <Arrow className="h-3 w-3 -translate-x-1 opacity-0 transition-all duration-300 group-hover/item:translate-x-0 group-hover/item:opacity-100" />
+                        </Link>
+                      ) : (
+                        <span className="block py-2.5 text-sm text-paper/75">
+                          {discipline.label[locale]}
+                        </span>
+                      )}
                     </li>
                   ))}
                 </ul>

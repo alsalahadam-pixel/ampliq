@@ -1,20 +1,26 @@
 /**
- * Email delivery.
+ * Email delivery — the one transport the whole site sends through.
  *
  * Two transports, both credential-driven, and one honest no-op:
  *
  * - **Resend** — set `RESEND_API_KEY`. An HTTP API, so no SMTP dependency.
- * - **A generic endpoint** — set `BOOKING_EMAIL_ENDPOINT` to anything that
- *   accepts `{ to, subject, html, text }` as JSON. Enough to sit in front of
- *   Postmark, SES, a serverless function, or an internal relay.
+ * - **A generic endpoint** — set `MAIL_ENDPOINT` to anything that accepts
+ *   `{ to, subject, html, text }` as JSON. Enough to sit in front of Postmark,
+ *   SES, a serverless function, or an internal relay.
  * - **Nothing configured** — `sendEmail` returns `{ sent: false }` and logs the
- *   mail it would have sent. It never reports success. The booking API passes
- *   that result to the browser, and the confirmation screen tells the visitor
- *   that no email went out, so the owner's inbox is the only thing missing
- *   rather than the visitor's trust.
+ *   mail it would have sent. It never reports success. Callers pass that
+ *   result to the browser, and the UI says plainly that nothing was delivered
+ *   rather than showing a success screen that isn't one.
  */
 
-import type { EmailContent } from "@/lib/booking/email/templates";
+import { contact } from "@/lib/site";
+
+/** A message, ready to send. Both HTML and text, always. */
+export type EmailContent = {
+  subject: string;
+  html: string;
+  text: string;
+};
 
 export type SendResult = {
   sent: boolean;
@@ -24,26 +30,29 @@ export type SendResult = {
 
 type Transport = {
   id: string;
-  send(to: string, content: EmailContent): Promise<boolean>;
+  send(to: string, content: EmailContent, replyTo?: string): Promise<boolean>;
 };
 
-/** `AMPLIQ <hello@ampliq.de>` — the address the mail comes from. */
+/** `AMPLIQ <project@ampliq.net>` — the address the mail comes from. */
 function fromAddress(): string {
   const address =
-    process.env.BOOKING_FROM_EMAIL ||
-    process.env.NEXT_PUBLIC_CONTACT_EMAIL ||
-    "hello@ampliq.de";
-  const name = process.env.BOOKING_FROM_NAME || "AMPLIQ";
+    process.env.MAIL_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || contact.project;
+  const name = process.env.MAIL_FROM_NAME || process.env.BOOKING_FROM_NAME || "AMPLIQ";
 
   return address.includes("<") ? address : `${name} <${address}>`;
 }
 
-/** Where booking notifications land. */
-export function ownerAddress(): string | null {
+/**
+ * Where enquiries and booking notifications land.
+ *
+ * Both are commercial, so both go to the project address unless the operator
+ * points them somewhere else.
+ */
+export function notificationAddress(): string {
   return (
+    process.env.MAIL_NOTIFICATION_EMAIL ||
     process.env.BOOKING_OWNER_EMAIL ||
-    process.env.NEXT_PUBLIC_CONTACT_EMAIL ||
-    null
+    contact.project
   );
 }
 
@@ -52,7 +61,7 @@ function getTransport(): Transport | null {
   if (resendKey) {
     return {
       id: "resend",
-      async send(to, content) {
+      async send(to, content, replyTo) {
         const response = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
@@ -65,13 +74,13 @@ function getTransport(): Transport | null {
             subject: content.subject,
             html: content.html,
             text: content.text,
-            reply_to: process.env.BOOKING_REPLY_TO || undefined,
+            reply_to: replyTo || process.env.MAIL_REPLY_TO || undefined,
           }),
         });
 
         if (!response.ok) {
           console.error(
-            `[booking] Resend rejected the message with ${response.status}`,
+            `[mail] Resend rejected the message with ${response.status}`,
           );
           return false;
         }
@@ -81,12 +90,12 @@ function getTransport(): Transport | null {
     };
   }
 
-  const endpoint = process.env.BOOKING_EMAIL_ENDPOINT;
+  const endpoint = process.env.MAIL_ENDPOINT || process.env.BOOKING_EMAIL_ENDPOINT;
   if (endpoint) {
-    const token = process.env.BOOKING_EMAIL_TOKEN;
+    const token = process.env.MAIL_ENDPOINT_TOKEN || process.env.BOOKING_EMAIL_TOKEN;
     return {
       id: "endpoint",
-      async send(to, content) {
+      async send(to, content, replyTo) {
         const response = await fetch(endpoint, {
           method: "POST",
           headers: {
@@ -96,6 +105,7 @@ function getTransport(): Transport | null {
           body: JSON.stringify({
             from: fromAddress(),
             to,
+            replyTo: replyTo || process.env.MAIL_REPLY_TO || undefined,
             subject: content.subject,
             html: content.html,
             text: content.text,
@@ -104,7 +114,7 @@ function getTransport(): Transport | null {
 
         if (!response.ok) {
           console.error(
-            `[booking] mail endpoint rejected the message with ${response.status}`,
+            `[mail] endpoint rejected the message with ${response.status}`,
           );
           return false;
         }
@@ -117,27 +127,29 @@ function getTransport(): Transport | null {
   return null;
 }
 
-export const emailIsConfigured = (): boolean => getTransport() !== null;
+export const mailIsConfigured = (): boolean => getTransport() !== null;
 
 export async function sendEmail(
   to: string,
   content: EmailContent,
+  /** Set so a reply goes straight back to the enquirer, not to the mailbox. */
+  replyTo?: string,
 ): Promise<SendResult> {
   const transport = getTransport();
 
   if (!transport) {
     // Deliberately loud, and deliberately not a success.
     console.info(
-      `[booking] no mail transport configured — not sending "${content.subject}" to ${to}`,
+      `[mail] no transport configured — not sending "${content.subject}" to ${to}`,
     );
     return { sent: false, reason: "not-configured" };
   }
 
   try {
-    const sent = await transport.send(to, content);
+    const sent = await transport.send(to, content, replyTo);
     return sent ? { sent: true } : { sent: false, reason: "failed" };
   } catch (error) {
-    console.error("[booking] sending mail threw:", error);
+    console.error("[mail] sending threw:", error);
     return { sent: false, reason: "failed" };
   }
 }

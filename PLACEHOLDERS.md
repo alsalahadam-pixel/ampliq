@@ -8,21 +8,17 @@ or shows a visible placeholder.
 
 | What | Where | Notes |
 | --- | --- | --- |
-| Company name, legal form, address, representative | `.env.local` → `NEXT_PUBLIC_LEGAL_*` | Renders in `/legal/imprint`. Unset fields show a red "to be supplied" marker. |
-| VAT ID / register details | `.env.local` → `NEXT_PUBLIC_LEGAL_VAT_ID`, `..._REGISTER_*` | Only required if applicable to the legal form. |
-| Contact email | `.env.local` → `NEXT_PUBLIC_CONTACT_EMAIL` | Defaults to `hello@ampliq.de`, which is a **guess** — confirm or change it. |
-| Legal review of Impressum and Datenschutz | `/legal/imprint`, `/legal/privacy` | Both pages carry a visible draft notice until a lawyer has reviewed them. The technical descriptions in the privacy policy are accurate for this build; the legal framing is not reviewed. |
-| Contact form delivery | `.env.local` → `NEXT_PUBLIC_CONTACT_ENDPOINT` | Until set, the form validates and then states plainly that nothing was sent. It does not pretend to deliver. |
-| Booking confirmation emails | `.env.local` → `RESEND_API_KEY` or `BOOKING_EMAIL_ENDPOINT`, plus `BOOKING_OWNER_EMAIL` | Until set, a booking is recorded but **no email is sent to anyone** — including you. The confirmation screen says so. See `docs/booking.md`. |
+| Legal entity: name, form, address, responsible person | `.env.local` → `NEXT_PUBLIC_LEGAL_*` | Every unset field renders as a highlighted `[PLACEHOLDER]` across all five legal pages, and is listed in the "required before launch" band at the top of each. **AMPLIQ is not a registered company** — do not enter a GmbH, UG, Handelsregister number or VAT ID that does not exist. |
+| VAT ID, tax number, register details | `.env.local` → `..._VAT_ID`, `..._TAX_NUMBER`, `..._REGISTER_*` | Only where they genuinely apply to the legal form. Shown as "if applicable" rather than as a gap. |
+| Legal review of all five documents | `/legal/*` | Impressum, privacy, terms, cancellation and cookies each carry a visible notice stating they are not yet legally reviewed. The structure follows German law and the technical descriptions match this build; the legal wording needs a qualified lawyer. |
+| Email delivery | `.env.local` → `RESEND_API_KEY` or `MAIL_ENDPOINT` | One transport serves both the enquiry form and the booking confirmations. Until it is set, the form answers `503` and says plainly that nothing was sent, and a booking is recorded but **no email reaches anyone — including you**. Neither pretends to deliver. See `docs/booking.md`. |
+| Hosting provider name, and the DPA with them | `/legal/privacy` → `[HOSTING PROVIDER]` | Named in the privacy policy once the host is chosen. An Art. 28 GDPR agreement is required before launch. |
 | Booking persistence | `src/lib/booking/store.ts` | The default store keeps bookings in the Node process: a restart forgets them, and two instances do not share a list. Connecting a calendar with write access is usually enough, since the calendar then becomes the source of truth. |
 
 ## Should be supplied
 
 | What | Where | Notes |
 | --- | --- | --- |
-| Project imagery for IHMS Global | `src/content/projects.ts` → `gallery[].src` | Put files in `public/work/ihms-global/` and set the paths. Until then a designed placeholder renders — no stock photography is used anywhere on the site. |
-| Case study detail for IHMS Global | `src/content/projects.ts` | The current text describes the scope of work only. Add background and results once the client has approved what may be published. |
-| Measurable results | `src/content/projects.ts` | Deliberately absent. The case study says so on the page. Do not add estimated figures. |
 | Social profiles | `.env.local` → `NEXT_PUBLIC_INSTAGRAM_URL`, `NEXT_PUBLIC_LINKEDIN_URL` | Links are hidden entirely while unset. |
 | Calendar connection for `/start` | `.env.local` → Google or Microsoft credentials | Until set, the booking calendar shows the published working hours and states, on the page, that no calendar was consulted. Confirm the working hours in `BOOKING_WORKING_HOURS` are the real ones — the defaults are a reasonable schedule, not your schedule. Only busy times are ever read; no event details. See `docs/booking.md`. |
 | Analytics | `.env.local` → `NEXT_PUBLIC_GTM_ID` etc. | No script loads and no tracking cookie is set while unset. **Add a consent banner before enabling any of these** — the privacy policy currently states truthfully that the site sets no tracking cookies, and that statement stops being true the moment a tag is added. |
@@ -32,16 +28,17 @@ or shows a visible placeholder.
 These are not oversights. The brief was explicit that nothing may be fabricated,
 and the design is built to work without them:
 
+- **A portfolio** — removed entirely rather than filled with invented case
+  studies. The site is built to stand without one: the system section, the
+  services index and the packages carry the proof instead.
 - **Client logos** — there is no logo wall. The band under the hero shows
   disciplines instead.
 - **Testimonials** — no quotes, invented or otherwise.
 - **Statistics** — no "200+ projects", no "10 years", no revenue figures.
 - **Team size, offices, awards, certifications, partnerships** — none claimed
-  anywhere. The About page says the studio is new and treats that as a position
-  rather than something to hide.
-- **Extra portfolio entries** — the portfolio holds one real project. Concept
-  projects can be added later; the data model has a `status: "concept"` flag
-  that labels them as such everywhere they appear.
+  anywhere.
+- **A phone number and a postal address** — neither is published until one is
+  supplied. The legal pages show them as outstanding placeholders.
 
 ## Brand assets
 

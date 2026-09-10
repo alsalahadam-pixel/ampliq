@@ -4,32 +4,33 @@ import type { PackageTier } from "@/content/types";
  * Entry points, not fixed menus.
  *
  * The headline figures are starting prices for a *scope*, never a promise of
- * everything below it. START in particular lists alternatives — one focused
- * engagement — rather than a bundle, so the entry price stays commercially
- * honest and the tier still reads as premium.
+ * everything below them — hence "From" on every priced tier. START in
+ * particular lists alternatives rather than a bundle: €599 buys one focused
+ * project with one defined outcome, not the AMPLIQ service offering, and the
+ * copy has to say so plainly wherever the figure appears.
  */
 export const packages: PackageTier[] = [
   {
     slug: "start",
     index: 1,
     name: "Start",
-    price: { en: "€500", de: "500 €" },
+    price: { en: "€599", de: "599 €" },
     priceKind: "from",
     positioning: {
-      en: "One thing, done properly.",
-      de: "Eine Sache, richtig gemacht.",
+      en: "One focused project. One defined outcome.",
+      de: "Ein fokussiertes Projekt. Ein definiertes Ergebnis.",
     },
     forWho: {
-      en: "Businesses that need one essential digital or creative upgrade — without committing to a longer programme.",
-      de: "Unternehmen, die einen konkreten digitalen oder kreativen Baustein brauchen — ohne sich langfristig zu binden.",
+      en: "Businesses that want one essential piece done to a professional standard — without committing to a longer programme.",
+      de: "Unternehmen, die einen konkreten Baustein professionell umgesetzt haben wollen — ohne sich langfristig zu binden.",
     },
     solves: {
       en: "Something specific is holding the business back and you want it fixed to a professional standard, not patched.",
       de: "Ein konkreter Punkt bremst das Unternehmen aus — und der soll professionell gelöst werden, nicht geflickt.",
     },
     includesLabel: {
-      en: "A START project is one of these",
-      de: "Ein START-Projekt ist eines davon",
+      en: "A START project is one of these — not all of them",
+      de: "Ein START-Projekt ist eines davon — nicht alle",
     },
     includes: {
       en: [
@@ -48,8 +49,8 @@ export const packages: PackageTier[] = [
       ],
     },
     scope: {
-      en: "One clearly defined deliverable, agreed in writing. Typically two to four weeks.",
-      de: "Ein klar definiertes Ergebnis, schriftlich vereinbart. In der Regel zwei bis vier Wochen.",
+      en: "One clearly defined deliverable, agreed in writing before anything starts. Typically two to four weeks.",
+      de: "Ein klar definiertes Ergebnis, schriftlich vereinbart, bevor irgendetwas beginnt. In der Regel zwei bis vier Wochen.",
     },
     engagement: {
       en: "A single project, quoted individually before anything starts.",
@@ -60,12 +61,12 @@ export const packages: PackageTier[] = [
     slug: "grow",
     index: 2,
     name: "Grow",
-    price: { en: "€1,000", de: "1.000 €" },
+    price: { en: "€1,199", de: "1.199 €" },
     priceKind: "from",
     emphasis: true,
     positioning: {
-      en: "Several areas, moving together.",
-      de: "Mehrere Bereiche, die zusammenwirken.",
+      en: "Several areas, connected and moving together.",
+      de: "Mehrere Bereiche, verbunden und in Bewegung.",
     },
     forWho: {
       en: "Companies ready to improve several connected areas at once, rather than one channel at a time.",
@@ -110,11 +111,11 @@ export const packages: PackageTier[] = [
     slug: "scale",
     index: 3,
     name: "Scale",
-    price: { en: "Custom", de: "Individuell" },
+    price: { en: "Custom quote", de: "Individuelles Angebot" },
     priceKind: "custom",
     positioning: {
-      en: "A marketing partner, not a series of projects.",
-      de: "Ein Marketingpartner statt einzelner Projekte.",
+      en: "An ongoing marketing partnership, not a series of projects.",
+      de: "Eine laufende Marketing-Partnerschaft statt einzelner Projekte.",
     },
     forWho: {
       en: "Established companies that want marketing run as one continuous programme with a partner accountable for it.",

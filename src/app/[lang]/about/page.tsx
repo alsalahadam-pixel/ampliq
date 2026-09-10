@@ -8,6 +8,7 @@ import { FinalCta } from "@/components/sections/final-cta";
 import { ProcessRail } from "@/components/sections/process-rail";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Section } from "@/components/ui/section";
+import { SplitWords } from "@/components/ui/split-words";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
@@ -55,31 +56,29 @@ const about = {
       "Every engagement opens with the commercial question rather than the creative one: what does this business need to happen next? The answer sets the priorities, the scope and the order the work runs in, before anything is designed.",
       "You work directly with the people doing the work. Scope and price are agreed in writing before we start, and everything produced is handed over in editable formats and belongs to you.",
     ],
-    notTitle: "What AMPLIQ is not",
-    notLead:
-      "Useful to say plainly, because each of these describes a real kind of agency you could hire instead — and sometimes should.",
-    not: [
+    disciplinesTitle: "Four disciplines, one team.",
+    disciplinesLead:
+      "Most companies buy these from four different suppliers and then spend their own time making the results agree with each other. Here they are one engagement.",
+    disciplines: [
       {
-        label: "Not the cheapest option",
-        body: "There is always someone cheaper. If price is the deciding factor, a template and a freelancer will serve you better than we will.",
+        label: "Strategy",
+        body: "Positioning, priorities and the commercial question the work has to answer — settled before anything is designed.",
       },
       {
-        label: "Not a single-channel shop",
-        body: "We are not an SEO agency or a social agency. Channels are treated as parts of one system, which is also why we will tell you when a channel is not worth running.",
+        label: "Design",
+        body: "Brand systems, visual identity and the website itself, built to hold up as the business grows into them.",
       },
       {
-        label: "Not a web studio in disguise",
-        body: "Websites are where a lot of projects start, but the site is a means to an end. If the brand underneath it is the actual problem, that is what we fix first.",
+        label: "Content",
+        body: "Photography, video, copy and social material, produced for your business rather than licensed from a library.",
       },
       {
-        label: "Not a consultancy",
-        body: "We produce the work. Strategy that ends in a document and an invoice is not what we are for.",
-      },
-      {
-        label: "Not a '360°' agency",
-        body: "Nobody is excellent at everything. We do brand, web, content and paid social properly, and bring in specialists where a project genuinely needs them.",
+        label: "Growth",
+        body: "SEO, paid social and campaigns that put the first three in front of the people who can actually buy.",
       },
     ],
+    disciplinesClose:
+      "The same team runs all four. That is the whole reason they line up.",
     workingTitle: "How working together actually goes",
     working: [
       {
@@ -107,31 +106,29 @@ const about = {
       "Am Anfang steht die geschäftliche Frage, nicht die kreative: Was muss als Nächstes passieren? Die Antwort bestimmt Prioritäten, Umfang und Reihenfolge der Arbeit — bevor gestaltet wird.",
       "Sie arbeiten direkt mit den Menschen, die die Arbeit machen. Umfang und Preis stehen vor Projektbeginn schriftlich fest, und alles, was entsteht, wird in bearbeitbaren Formaten übergeben und gehört Ihnen.",
     ],
-    notTitle: "Was AMPLIQ nicht ist",
-    notLead:
-      "Das gehört klar gesagt, denn jeder dieser Punkte beschreibt eine reale Alternative, die Sie beauftragen könnten — und manchmal sollten.",
-    not: [
+    disciplinesTitle: "Vier Disziplinen, ein Team.",
+    disciplinesLead:
+      "Die meisten Unternehmen kaufen das bei vier verschiedenen Dienstleistern ein und verbringen anschließend die eigene Zeit damit, die Ergebnisse in Einklang zu bringen. Hier ist es ein Projekt.",
+    disciplines: [
       {
-        label: "Nicht die günstigste Option",
-        body: "Es gibt immer jemanden, der günstiger ist. Wenn der Preis entscheidet, bringen Sie ein Template und ein Freelancer weiter als wir.",
+        label: "Strategie",
+        body: "Positionierung, Prioritäten und die geschäftliche Frage, die die Arbeit beantworten muss — geklärt, bevor gestaltet wird.",
       },
       {
-        label: "Keine Ein-Kanal-Agentur",
-        body: "Wir sind weder eine SEO- noch eine Social-Agentur. Kanäle sind Teile eines Systems — deshalb sagen wir auch, wenn sich ein Kanal nicht lohnt.",
+        label: "Design",
+        body: "Markensysteme, Visual Identity und die Website selbst — gebaut, um zu tragen, während das Unternehmen hineinwächst.",
       },
       {
-        label: "Kein getarntes Webstudio",
-        body: "Viele Projekte starten bei der Website, aber die Seite ist Mittel zum Zweck. Wenn die Marke darunter das eigentliche Problem ist, lösen wir zuerst das.",
+        label: "Content",
+        body: "Fotografie, Video, Text und Social-Material, produziert für Ihr Unternehmen statt aus einer Datenbank lizenziert.",
       },
       {
-        label: "Keine Beratung",
-        body: "Wir produzieren die Arbeit. Strategie, die in einem Dokument und einer Rechnung endet, ist nicht unsere Aufgabe.",
-      },
-      {
-        label: "Keine „360°“-Agentur",
-        body: "Niemand ist in allem exzellent. Wir machen Marke, Web, Content und Paid Social richtig — und holen Spezialisten dazu, wenn ein Projekt sie wirklich braucht.",
+        label: "Wachstum",
+        body: "SEO, Paid Social und Kampagnen, die die ersten drei vor die Menschen bringen, die tatsächlich kaufen können.",
       },
     ],
+    disciplinesClose:
+      "Dasselbe Team verantwortet alle vier. Genau deshalb greifen sie ineinander.",
     workingTitle: "Wie die Zusammenarbeit tatsächlich läuft",
     working: [
       {
@@ -190,30 +187,46 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
         </div>
       </Section>
 
-      <Section tone="ink" labelledBy="not-heading">
+      <Section tone="ink" labelledBy="disciplines-heading">
         <div className="shell">
           <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-5">
-              <h2 id="not-heading" data-reveal className="text-display-md max-w-[14ch]">
-                {copy.notTitle}
+            <div className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">
+              <h2
+                id="disciplines-heading"
+                data-reveal
+                className="text-display-md max-w-[14ch]"
+              >
+                <SplitWords text={copy.disciplinesTitle} />
               </h2>
-              <p data-reveal className="mt-6 max-w-[44ch] text-[0.9375rem] leading-relaxed text-fog">
-                {copy.notLead}
+              <p
+                data-reveal
+                className="mt-6 max-w-[44ch] text-[0.9375rem] leading-relaxed text-fog"
+              >
+                {copy.disciplinesLead}
+              </p>
+              <p
+                data-reveal
+                className="mt-8 flex items-start gap-3 max-w-[42ch] text-[0.9375rem] leading-relaxed text-paper/90"
+              >
+                <span
+                  aria-hidden="true"
+                  className="mt-[0.6em] h-px w-8 shrink-0 bg-accent"
+                />
+                {copy.disciplinesClose}
               </p>
             </div>
-            <ul className="lg:col-span-7">
-              {copy.not.map((item, index) => (
+
+            <ol data-reveal-stagger className="lg:col-span-7">
+              {copy.disciplines.map((item, index) => (
                 <li
                   key={item.label}
-                  data-reveal
-                  style={{ "--reveal-delay": `${index * 70}ms` } as React.CSSProperties}
-                  className="flex gap-5 border-t border-white/15 py-6 last:border-b sm:gap-8"
+                  className="group flex gap-5 border-t border-white/15 py-7 last:border-b sm:gap-8"
                 >
-                  <span className="font-mono text-[0.6875rem] leading-[1.9] tracking-[0.16em] text-fog">
+                  <span className="font-mono text-[0.6875rem] leading-[1.9] tracking-[0.16em] text-accent-soft">
                     {pad(index + 1)}
                   </span>
                   <div>
-                    <h3 className="font-display text-[1.1875rem] font-bold tracking-[-0.025em]">
+                    <h3 className="font-display text-[1.1875rem] font-bold tracking-[-0.025em] uppercase">
                       {item.label}
                     </h3>
                     <p className="mt-2 max-w-[56ch] text-[0.9375rem] leading-relaxed text-fog">
@@ -222,7 +235,7 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
                   </div>
                 </li>
               ))}
-            </ul>
+            </ol>
           </div>
         </div>
       </Section>

@@ -93,6 +93,8 @@ export type BookingDetails = {
   company: string;
   /** What they want to talk about. */
   message: string;
+  /** Which kind of project, from the published list. Optional. */
+  projectType?: string;
   /** Optional; the owner rings back on this if it is given. */
   phone?: string;
   /** IANA zone reported by the visitor's browser, echoed back in emails. */

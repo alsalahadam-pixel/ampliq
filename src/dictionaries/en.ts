@@ -10,7 +10,6 @@ export const en = {
   },
 
   nav: {
-    work: "Work",
     services: "Services",
     packages: "Packages",
     about: "About",
@@ -28,12 +27,9 @@ export const en = {
     start: "Start a project",
     consultation: "Free consultation",
     enquiry: "Send an enquiry",
-    work: "View our work",
-    allWork: "View all work",
     allServices: "Explore services",
     allInsights: "All insights",
     readMore: "Read",
-    backToWork: "Back to work",
     backToInsights: "Back to insights",
     backHome: "Back to home page",
     talk: "Book a consultation",
@@ -51,10 +47,11 @@ export const en = {
 
   home: {
     hero: {
-      eyebrow: "Marketing & creative agency — Germany",
+      eyebrow: "Marketing & creative agency — Germany & Europe",
       headlineTop: "Marketing,",
       headlineBottom: "amplified",
       lead: "Brand, website and campaigns, built as one system — so every euro you put into marketing makes the next one work harder.",
+      audience: "For mid-market and growing companies across Germany and Europe.",
       pillars: [
         { key: "build", label: "Build", note: "Websites that work" },
         { key: "create", label: "Create", note: "Brand and content" },
@@ -100,17 +97,10 @@ export const en = {
     system: {
       eyebrow: "The AMPLIQ system",
       headline: "Three parts. One system.",
-      body: "Marketing stops working when it's bought in pieces. We build the three layers that make each other stronger — a foundation people trust, work worth showing, and the reach to put it in front of the right people.",
+      body: "Marketing stops working when it's bought in pieces. We build the three layers that make each other stronger — a foundation people trust, creative worth paying attention to, and the reach to put both in front of the right people.",
       note: "Every engagement starts with the layer that's holding you back.",
     },
 
-    work: {
-      eyebrow: "Selected work",
-      headline: "Work that has to do a job.",
-      body: "Selected projects, documented in full: the brief, the thinking behind it, and what was actually shipped.",
-      openTitle: "Start the next one",
-      openBody: "Tell us what the business needs to achieve. You get a clear view of scope, timeline and budget before any work begins.",
-    },
 
     services: {
       eyebrow: "What we do",
@@ -184,29 +174,6 @@ export const en = {
     },
   },
 
-  work: {
-    title: "Work",
-    lead: "Selected projects, each documented in full — the brief, the approach, and what was delivered.",
-    metaClient: "Client",
-    metaYear: "Year",
-    metaCategory: "Discipline",
-    metaScope: "Scope",
-    metaRole: "Role",
-    metaStatus: "Status",
-    challenge: "The brief",
-    approach: "Approach",
-    creative: "Creative direction",
-    execution: "Execution",
-    gallery: "Gallery",
-    delivered: "What was delivered",
-    learnings: "What we took from it",
-    resultsPending:
-      "Performance data for this project is not published here. Where results are measured and confirmed with the client, they appear on the page — we do not estimate numbers.",
-    imagePlaceholder: "Project imagery to be added",
-    related: "More work",
-    conceptNotice:
-      "This is a self-initiated concept study, not client work. It's labelled as such everywhere it appears.",
-  },
 
   services: {
     title: "Services",
@@ -223,7 +190,7 @@ export const en = {
 
   packages: {
     title: "Packages",
-    lead: "Three ways to start, and a custom path. Each figure is an entry point for a defined scope, quoted individually before any work begins.",
+    lead: "Three ways to start. Each figure is a starting point for a defined scope — not a fixed project price, and never the whole AMPLIQ offering. Every engagement is quoted individually before anything begins.",
     from: "From",
     custom: "Custom quote",
     forWho: "Who it's for",
@@ -234,9 +201,9 @@ export const en = {
     customTitle: "Something in between?",
     customBody:
       "Most projects don't fit neatly into a package. Tell us the situation and we'll scope it properly — sometimes that means less than a package, not more.",
-    scopeNote: "Scope depends on your project.",
+    scopeNote: "Final price depends on the scope you actually need.",
     priceNote:
-      "All prices are net of VAT and represent a starting point for a defined scope — not a fixed project price. Every engagement is quoted individually.",
+      "All prices are net of VAT and are starting points for a defined scope, not fixed project prices. START is one focused project with one defined outcome — not a bundle of everything listed. Every engagement is quoted individually before it begins.",
   },
 
   about: {
@@ -260,6 +227,8 @@ export const en = {
     title: "Start a project.",
     lead: "Tell us where your business is today and what you want to reach. We read every message ourselves and reply within two working days.",
     directTitle: "Prefer email?",
+    projectLabel: "Projects & proposals",
+    helpLabel: "General help",
     directBody: "Write to us directly and we'll pick it up from there.",
     consultationTitle: "Rather talk first?",
     consultationBody:
@@ -292,14 +261,14 @@ export const en = {
       privacyLink: "Privacy policy",
       successTitle: "Thank you — that's arrived.",
       successBody:
-        "We'll read it properly and come back to you within two working days, usually sooner.",
+        "It's in front of a person, not a queue. A copy is on its way to your inbox, and we'll come back to you within two working days — usually sooner.",
       successAgain: "Send another enquiry",
       errorTitle: "That didn't send.",
       errorBody:
-        "Something went wrong on the way. Please try again, or email us directly and we'll pick it up.",
-      previewTitle: "Preview mode — nothing was sent.",
+        "Something went wrong on the way and your message was not delivered. Please try again — or email us directly and we'll pick it up from there.",
+      previewTitle: "Nothing was sent — this site can't deliver mail yet.",
       previewBody:
-        "This form has no delivery endpoint configured yet, so your message was not transmitted anywhere. Connect a provider before launch.",
+        "Your message was not transmitted anywhere, because no email provider is connected to this site yet. Nothing you did caused this. Until it is set up, write to us directly and it will reach us.",
       errors: {
         firstName: "Please enter your first name.",
         lastName: "Please enter your last name.",
@@ -309,28 +278,6 @@ export const en = {
         message: "Please tell us a little about the project.",
         summary: "Please check the highlighted fields.",
       },
-      needOptions: [
-        { value: "website", label: "A new website" },
-        { value: "redesign", label: "A website redesign" },
-        { value: "branding", label: "Branding or visual identity" },
-        { value: "content", label: "Photography, video or content" },
-        { value: "growth", label: "SEO, ads or social" },
-        { value: "full", label: "A full marketing partner" },
-        { value: "other", label: "Something else" },
-      ],
-      budgetOptions: [
-        { value: "500-1000", label: "€500 – €1,000" },
-        { value: "1000-2500", label: "€1,000 – €2,500" },
-        { value: "2500-5000", label: "€2,500 – €5,000" },
-        { value: "5000+", label: "€5,000+" },
-        { value: "unsure", label: "Not sure yet" },
-      ],
-      timelineOptions: [
-        { value: "asap", label: "As soon as possible" },
-        { value: "1-3", label: "1–3 months" },
-        { value: "3-6", label: "3–6 months" },
-        { value: "flexible", label: "Flexible" },
-      ],
       serviceOptions: [
         "Website",
         "Redesign",
@@ -420,6 +367,9 @@ export const en = {
       companyOptional: "optional",
       phone: "Phone",
       phoneOptional: "optional",
+      projectType: "What kind of project?",
+      projectTypeOptional: "optional",
+      projectTypePlaceholder: "Choose one — or leave it and tell us below",
       message: "What would you like to talk about?",
       messagePlaceholder:
         "The business, what isn't working, and what a good outcome looks like. A few lines is plenty.",
@@ -476,20 +426,38 @@ export const en = {
   },
 
   legal: {
+    indexTitle: "Legal",
+    indexLead:
+      "Imprint, privacy, terms and cancellation. Written to the structure German law expects, with every value we do not have yet marked as outstanding rather than filled in.",
     imprintTitle: "Imprint",
+    imprintLead: "Provider identification under § 5 DDG and § 18 MStV.",
     privacyTitle: "Privacy policy",
-    cookiesTitle: "Cookie settings",
+    privacyLead:
+      "What this website processes, why, on what legal basis, and what you can ask us to do about it.",
+    termsTitle: "Terms & conditions",
+    termsLead:
+      "The terms that apply to AMPLIQ engagements: scope, prices, rights of use, liability and notice.",
+    cancellationTitle: "Cancellation policy",
+    cancellationLead:
+      "The statutory right of withdrawal for consumers, how to exercise it, and when it expires.",
+    cookiesTitle: "Cookie policy",
+    cookiesLead:
+      "One functional cookie, set only if you switch language. No analytics, no advertising, no tracking.",
+    contents: "Contents",
     lastUpdated: "Last updated",
-    draftNoticeTitle: "This document is not complete.",
+    draftNoticeTitle: "Not yet complete, and not yet legally reviewed.",
     draftNoticeBody:
-      "The structure is in place, but the company details and legal text still have to be supplied and reviewed by a qualified lawyer before this site goes live. Nothing on this page should be treated as legal advice or as a completed disclosure.",
+      "The structure follows what German law requires and the technical descriptions match what this build actually does. The company details below are still outstanding, and the legal wording has not been reviewed by a qualified lawyer. Until both are done, treat this document as a working draft — not as a completed disclosure, and not as legal advice.",
+    outstandingRequired: "Required before launch:",
+    outstandingOptional: "Only if applicable to the legal form:",
     missingValue: "To be supplied",
+    readMore: "Read",
   },
 
   notFound: {
     code: "404",
     title: "This page doesn't exist.",
-    body: "The link may be old, or the page may have moved. The work is still where you left it.",
+    body: "The link may be old, or the page may have moved. Everything else is still where you left it.",
   },
 
   footer: {
@@ -498,6 +466,8 @@ export const en = {
     socialTitle: "Social",
     legalTitle: "Legal",
     contactTitle: "Contact",
+    projectLabel: "Projects & proposals",
+    helpLabel: "General help",
     rights: "All rights reserved.",
     builtNote: "Designed and built in-house.",
     ctaLine: "Have a project in mind?",

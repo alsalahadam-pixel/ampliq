@@ -11,7 +11,6 @@ export const de: Dictionary = {
   },
 
   nav: {
-    work: "Arbeiten",
     services: "Leistungen",
     packages: "Pakete",
     about: "Über uns",
@@ -29,12 +28,9 @@ export const de: Dictionary = {
     start: "Projekt starten",
     consultation: "Kostenlose Beratung",
     enquiry: "Anfrage senden",
-    work: "Arbeiten ansehen",
-    allWork: "Alle Arbeiten ansehen",
     allServices: "Leistungen entdecken",
     allInsights: "Alle Insights",
     readMore: "Lesen",
-    backToWork: "Zurück zu den Arbeiten",
     backToInsights: "Zurück zu den Insights",
     backHome: "Zurück zur Startseite",
     talk: "Beratung vereinbaren",
@@ -52,10 +48,11 @@ export const de: Dictionary = {
 
   home: {
     hero: {
-      eyebrow: "Marketing- & Kreativagentur — Deutschland",
+      eyebrow: "Marketing- & Kreativagentur — Deutschland & Europa",
       headlineTop: "Marketing,",
       headlineBottom: "verstärkt",
       lead: "Marke, Website und Kampagnen als ein System — damit jeder Euro im Marketing den nächsten wirksamer macht.",
+      audience: "Für mittelständische und wachsende Unternehmen in Deutschland und Europa.",
       pillars: [
         { key: "build", label: "Build", note: "Websites, die funktionieren" },
         { key: "create", label: "Create", note: "Marke und Content" },
@@ -101,17 +98,10 @@ export const de: Dictionary = {
     system: {
       eyebrow: "Das AMPLIQ System",
       headline: "Drei Ebenen. Ein System.",
-      body: "Marketing funktioniert nicht mehr, sobald es in Einzelteilen eingekauft wird. Wir bauen die drei Ebenen, die sich gegenseitig stärken: ein Fundament, dem man vertraut, Arbeiten, die man zeigen kann, und die Reichweite, die beides vor die richtigen Menschen bringt.",
+      body: "Marketing funktioniert nicht mehr, sobald es in Einzelteilen eingekauft wird. Wir bauen die drei Ebenen, die sich gegenseitig stärken: ein Fundament, dem man vertraut, Kreation, die Aufmerksamkeit verdient, und die Reichweite, die beides vor die richtigen Menschen bringt.",
       note: "Jedes Projekt beginnt bei der Ebene, die Sie gerade ausbremst.",
     },
 
-    work: {
-      eyebrow: "Ausgewählte Arbeiten",
-      headline: "Arbeiten, die eine Aufgabe haben.",
-      body: "Ausgewählte Projekte, vollständig dokumentiert: die Aufgabe, der Gedanke dahinter und das, was tatsächlich entstanden ist.",
-      openTitle: "Das nächste Projekt beginnen",
-      openBody: "Sagen Sie uns, was das Unternehmen erreichen soll. Umfang, Zeitrahmen und Budget stehen fest, bevor die Arbeit beginnt.",
-    },
 
     services: {
       eyebrow: "Was wir machen",
@@ -185,29 +175,6 @@ export const de: Dictionary = {
     },
   },
 
-  work: {
-    title: "Arbeiten",
-    lead: "Ausgewählte Projekte, jedes vollständig dokumentiert — Aufgabe, Herangehensweise und Ergebnis.",
-    metaClient: "Kunde",
-    metaYear: "Jahr",
-    metaCategory: "Disziplin",
-    metaScope: "Umfang",
-    metaRole: "Rolle",
-    metaStatus: "Status",
-    challenge: "Die Aufgabe",
-    approach: "Herangehensweise",
-    creative: "Kreative Richtung",
-    execution: "Umsetzung",
-    gallery: "Galerie",
-    delivered: "Was entstanden ist",
-    learnings: "Was wir mitgenommen haben",
-    resultsPending:
-      "Leistungsdaten zu diesem Projekt veröffentlichen wir hier nicht. Wo Ergebnisse gemessen und mit dem Kunden abgestimmt sind, stehen sie auf der Seite — geschätzte Zahlen gibt es bei uns nicht.",
-    imagePlaceholder: "Projektbilder folgen",
-    related: "Weitere Arbeiten",
-    conceptNotice:
-      "Eine eigeninitiierte Konzeptstudie, kein Kundenprojekt. Sie ist überall entsprechend gekennzeichnet.",
-  },
 
   services: {
     title: "Leistungen",
@@ -224,7 +191,7 @@ export const de: Dictionary = {
 
   packages: {
     title: "Pakete",
-    lead: "Drei Einstiege und ein individueller Weg. Jede Zahl ist ein Startpunkt für einen definierten Umfang — individuell kalkuliert, bevor die Arbeit beginnt.",
+    lead: "Drei Einstiege. Jede Zahl ist ein Startpunkt für einen definierten Umfang — kein Festpreis und nie das gesamte AMPLIQ-Angebot. Jedes Projekt wird individuell kalkuliert, bevor es beginnt.",
     from: "Ab",
     custom: "Individuelles Angebot",
     forWho: "Für wen",
@@ -235,9 +202,9 @@ export const de: Dictionary = {
     customTitle: "Etwas dazwischen?",
     customBody:
       "Die meisten Projekte passen nicht sauber in ein Paket. Beschreiben Sie die Situation, wir schnüren es passend — manchmal heißt das weniger als ein Paket, nicht mehr.",
-    scopeNote: "Der Umfang hängt von Ihrem Projekt ab.",
+    scopeNote: "Der Endpreis hängt vom tatsächlich benötigten Umfang ab.",
     priceNote:
-      "Alle Preise netto zzgl. USt. und als Startpunkt für einen definierten Umfang zu verstehen — kein fester Projektpreis. Jedes Projekt wird individuell kalkuliert.",
+      "Alle Preise netto zzgl. USt. und als Startpunkt für einen definierten Umfang zu verstehen, nicht als Festpreis. START ist ein fokussiertes Projekt mit einem definierten Ergebnis — kein Paket aus allem Aufgeführten. Jedes Projekt wird individuell kalkuliert, bevor es beginnt.",
   },
 
   about: {
@@ -261,6 +228,8 @@ export const de: Dictionary = {
     title: "Projekt starten.",
     lead: "Erzählen Sie uns, wo Ihr Unternehmen heute steht und was Sie erreichen möchten. Wir lesen jede Nachricht selbst und antworten innerhalb von zwei Werktagen.",
     directTitle: "Lieber per E-Mail?",
+    projectLabel: "Projekte & Angebote",
+    helpLabel: "Allgemeine Hilfe",
     directBody: "Schreiben Sie uns direkt, wir übernehmen von dort.",
     consultationTitle: "Lieber erst sprechen?",
     consultationBody:
@@ -293,14 +262,14 @@ export const de: Dictionary = {
       privacyLink: "Datenschutz",
       successTitle: "Danke — Ihre Anfrage ist angekommen.",
       successBody:
-        "Wir lesen sie in Ruhe und melden uns innerhalb von zwei Werktagen, meistens schneller.",
+        "Sie liegt bei einem Menschen, nicht in einer Warteschlange. Eine Kopie ist auf dem Weg in Ihr Postfach, und wir melden uns innerhalb von zwei Werktagen — meistens schneller.",
       successAgain: "Weitere Anfrage senden",
       errorTitle: "Das hat nicht geklappt.",
       errorBody:
-        "Beim Senden ist etwas schiefgegangen. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt per E-Mail.",
-      previewTitle: "Vorschaumodus — es wurde nichts gesendet.",
+        "Beim Senden ist etwas schiefgegangen und Ihre Nachricht wurde nicht zugestellt. Bitte versuchen Sie es erneut — oder schreiben Sie uns direkt, dann übernehmen wir von dort.",
+      previewTitle: "Es wurde nichts gesendet — diese Seite kann noch keine E-Mails verschicken.",
       previewBody:
-        "Für dieses Formular ist noch kein Versandziel hinterlegt, Ihre Nachricht wurde also nirgendwohin übertragen. Vor dem Launch muss ein Anbieter verbunden werden.",
+        "Ihre Nachricht wurde nirgendwohin übertragen, weil mit dieser Website noch kein E-Mail-Anbieter verbunden ist. Sie haben nichts falsch gemacht. Bis das eingerichtet ist, schreiben Sie uns bitte direkt — dann erreicht es uns.",
       errors: {
         firstName: "Bitte geben Sie Ihren Vornamen an.",
         lastName: "Bitte geben Sie Ihren Nachnamen an.",
@@ -310,28 +279,6 @@ export const de: Dictionary = {
         message: "Bitte beschreiben Sie Ihr Projekt kurz.",
         summary: "Bitte prüfen Sie die markierten Felder.",
       },
-      needOptions: [
-        { value: "website", label: "Eine neue Website" },
-        { value: "redesign", label: "Ein Website-Redesign" },
-        { value: "branding", label: "Branding oder Visual Identity" },
-        { value: "content", label: "Fotografie, Video oder Content" },
-        { value: "growth", label: "SEO, Ads oder Social Media" },
-        { value: "full", label: "Einen festen Marketingpartner" },
-        { value: "other", label: "Etwas anderes" },
-      ],
-      budgetOptions: [
-        { value: "500-1000", label: "500 € – 1.000 €" },
-        { value: "1000-2500", label: "1.000 € – 2.500 €" },
-        { value: "2500-5000", label: "2.500 € – 5.000 €" },
-        { value: "5000+", label: "5.000 €+" },
-        { value: "unsure", label: "Noch unsicher" },
-      ],
-      timelineOptions: [
-        { value: "asap", label: "So schnell wie möglich" },
-        { value: "1-3", label: "1–3 Monate" },
-        { value: "3-6", label: "3–6 Monate" },
-        { value: "flexible", label: "Flexibel" },
-      ],
       serviceOptions: [
         "Website",
         "Redesign",
@@ -422,6 +369,9 @@ export const de: Dictionary = {
       companyOptional: "optional",
       phone: "Telefon",
       phoneOptional: "optional",
+      projectType: "Um welche Art Projekt geht es?",
+      projectTypeOptional: "optional",
+      projectTypePlaceholder: "Auswählen — oder unten beschreiben",
       message: "Worüber möchten Sie sprechen?",
       messagePlaceholder:
         "Das Unternehmen, was gerade nicht funktioniert, und wie ein gutes Ergebnis aussähe. Ein paar Zeilen genügen.",
@@ -479,20 +429,38 @@ export const de: Dictionary = {
   },
 
   legal: {
+    indexTitle: "Rechtliches",
+    indexLead:
+      "Impressum, Datenschutz, AGB und Widerruf. Aufgebaut nach den Vorgaben des deutschen Rechts — alles, was uns noch fehlt, ist als offen markiert statt ausgefüllt.",
     imprintTitle: "Impressum",
+    imprintLead: "Anbieterkennzeichnung nach § 5 DDG und § 18 MStV.",
     privacyTitle: "Datenschutzerklärung",
-    cookiesTitle: "Cookie-Einstellungen",
+    privacyLead:
+      "Was diese Website verarbeitet, warum, auf welcher Rechtsgrundlage — und was Sie von uns verlangen können.",
+    termsTitle: "Allgemeine Geschäftsbedingungen",
+    termsLead:
+      "Die Bedingungen für Projekte mit AMPLIQ: Umfang, Preise, Nutzungsrechte, Haftung und Kündigung.",
+    cancellationTitle: "Widerrufsbelehrung",
+    cancellationLead:
+      "Das gesetzliche Widerrufsrecht für Verbraucher, wie Sie es ausüben und wann es erlischt.",
+    cookiesTitle: "Cookie-Richtlinie",
+    cookiesLead:
+      "Ein funktionales Cookie, gesetzt nur beim Sprachwechsel. Keine Analyse, keine Werbung, kein Tracking.",
+    contents: "Inhalt",
     lastUpdated: "Zuletzt aktualisiert",
-    draftNoticeTitle: "Dieses Dokument ist nicht vollständig.",
+    draftNoticeTitle: "Noch nicht vollständig und noch nicht juristisch geprüft.",
     draftNoticeBody:
-      "Die Struktur steht, die Unternehmensangaben und die rechtlichen Texte müssen jedoch noch ergänzt und vor dem Launch anwaltlich geprüft werden. Nichts auf dieser Seite ist eine Rechtsberatung oder eine vollständige Pflichtangabe.",
-    missingValue: "Wird ergänzt",
+      "Die Struktur folgt den Vorgaben des deutschen Rechts, und die technischen Beschreibungen entsprechen dem, was dieser Build tatsächlich tut. Die Unternehmensangaben fehlen noch, und der juristische Text wurde nicht von einer Anwältin oder einem Anwalt geprüft. Bis beides erledigt ist, ist dieses Dokument ein Arbeitsstand — keine vollständige Pflichtangabe und keine Rechtsberatung.",
+    outstandingRequired: "Vor dem Launch erforderlich:",
+    outstandingOptional: "Nur soweit für die Rechtsform einschlägig:",
+    missingValue: "Wird noch ergänzt",
+    readMore: "Lesen",
   },
 
   notFound: {
     code: "404",
     title: "Diese Seite gibt es nicht.",
-    body: "Der Link ist vielleicht alt oder die Seite ist umgezogen. Die Arbeiten liegen noch da, wo Sie sie verlassen haben.",
+    body: "Der Link ist vielleicht alt oder die Seite ist umgezogen. Alles andere liegt noch da, wo Sie es verlassen haben.",
   },
 
   footer: {
@@ -501,6 +469,8 @@ export const de: Dictionary = {
     socialTitle: "Social",
     legalTitle: "Rechtliches",
     contactTitle: "Kontakt",
+    projectLabel: "Projekte & Angebote",
+    helpLabel: "Allgemeine Hilfe",
     rights: "Alle Rechte vorbehalten.",
     builtNote: "Design und Entwicklung im Haus.",
     ctaLine: "Sie haben ein Projekt im Kopf?",

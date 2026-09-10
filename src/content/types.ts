@@ -9,7 +9,14 @@ export type Pillar = {
   label: string;
   title: Localized<string>;
   body: Localized<string>;
-  disciplines: Localized<string[]>;
+  /**
+   * The disciplines this layer covers.
+   *
+   * `slug` points at the service page where one exists. Disciplines without a
+   * page render as plain text rather than as a link to nothing — the list
+   * describes what the layer covers, not what happens to be published.
+   */
+  disciplines: { label: Localized<string>; slug: string | null }[];
 };
 
 export type Faq = {
@@ -58,37 +65,6 @@ export type PackageTier = {
   scope: Localized<string>;
   engagement: Localized<string>;
   emphasis?: boolean;
-};
-
-export type ProjectStatus = "client" | "concept";
-
-export type Project = {
-  slug: string;
-  title: string;
-  client: string;
-  /** `null` where the date isn't confirmed — never guessed. */
-  year: string | null;
-  status: ProjectStatus;
-  category: Localized<string>;
-  summary: Localized<string>;
-  role: Localized<string>;
-  scope: Localized<string[]>;
-  brief: Localized<string[]>;
-  approach: Localized<string[]>;
-  creative: Localized<string[]>;
-  execution: Localized<string[]>;
-  delivered: Localized<string[]>;
-  learnings: Localized<string[]>;
-  /**
-   * Image slots. `src` stays null until real project imagery exists — the case
-   * study renders a labelled placeholder rather than a stock stand-in.
-   */
-  gallery: { src: string | null; alt: Localized<string>; wide?: boolean }[];
-  externalUrl?: string;
-  seo: {
-    title: Localized<string>;
-    description: Localized<string>;
-  };
 };
 
 export type InsightSection = {

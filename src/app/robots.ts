@@ -11,7 +11,8 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Legal pages are noindex; keeping crawlers off them saves crawl budget.
-      disallow: ["/en/legal/", "/de/legal/"],
+      // The API is not content and has nothing to index either.
+      disallow: ["/en/legal", "/de/legal", "/api/"],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
     host: siteUrl,

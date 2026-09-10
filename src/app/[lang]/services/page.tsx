@@ -5,12 +5,13 @@ import { PageHero } from "@/components/layout/page-hero";
 import { FinalCta } from "@/components/sections/final-cta";
 import { ProcessRail } from "@/components/sections/process-rail";
 import { JsonLd } from "@/components/seo/json-ld";
+import { services } from "@/content/services";
 import { ServiceIndex } from "@/components/services/service-index";
 import { Section } from "@/components/ui/section";
 import { pillars } from "@/content/pillars";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
-import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
+import { breadcrumbSchema, buildMetadata, serviceListSchema } from "@/lib/seo";
 import { pad } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -94,10 +95,21 @@ export default async function ServicesPage({
       <FinalCta locale={lang} dict={dict} />
 
       <JsonLd
-        data={breadcrumbSchema(lang, [
-          { name: "AMPLIQ", path: "" },
-          { name: dict.services.title, path: "/services" },
-        ])}
+        data={[
+          breadcrumbSchema(lang, [
+            { name: "AMPLIQ", path: "" },
+            { name: dict.services.title, path: "/services" },
+          ]),
+          serviceListSchema({
+            locale: lang,
+            name: dict.services.title,
+            items: services.map((service) => ({
+              name: service.title[lang],
+              description: service.summary[lang],
+              path: `/services/${service.slug}`,
+            })),
+          }),
+        ]}
       />
     </>
   );

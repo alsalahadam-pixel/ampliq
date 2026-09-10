@@ -7,7 +7,6 @@ import type { Locale } from "@/lib/i18n";
  */
 export const routes = {
   home: "",
-  work: "/work",
   services: "/services",
   packages: "/packages",
   about: "/about",
@@ -15,9 +14,12 @@ export const routes = {
   contact: "/contact",
   /** The booking flow. Every "start a project" CTA leads here. */
   start: "/start",
+  legal: "/legal",
   imprint: "/legal/imprint",
   privacy: "/legal/privacy",
-  cookies: "/legal/privacy#cookies",
+  terms: "/legal/terms",
+  cancellation: "/legal/cancellation",
+  cookies: "/legal/cookies",
 } as const;
 
 export type RouteKey = keyof typeof routes;
@@ -30,10 +32,6 @@ export function href(locale: Locale, path = ""): string {
 
 export function route(locale: Locale, key: RouteKey): string {
   return href(locale, routes[key]);
-}
-
-export function workHref(locale: Locale, slug: string): string {
-  return href(locale, `${routes.work}/${slug}`);
 }
 
 export function serviceHref(locale: Locale, slug: string): string {

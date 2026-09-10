@@ -15,7 +15,7 @@ import {
   summariseDays,
 } from "@/lib/booking/availability";
 import { bookingConfig, publicBookingConfig } from "@/lib/booking/config";
-import { ownerAddress, sendEmail } from "@/lib/booking/email/send";
+import { notificationAddress, sendEmail } from "@/lib/mail";
 import {
   clientConfirmation,
   ownerNotification,
@@ -199,18 +199,18 @@ export async function submitBooking(
     }
   }
 
-  const owner = ownerAddress();
   const [clientMail] = await Promise.all([
     sendEmail(
       request.email,
       clientConfirmation(stored, config.timeZone, config.slotMinutes),
     ),
-    owner
-      ? sendEmail(
-          owner,
-          ownerNotification(stored, config.timeZone, config.slotMinutes),
-        )
-      : Promise.resolve({ sent: false as const }),
+    // The notification carries the enquirer as reply-to, so answering it goes
+    // straight back to them instead of to our own mailbox.
+    sendEmail(
+      notificationAddress(),
+      ownerNotification(stored, config.timeZone, config.slotMinutes),
+      request.email,
+    ),
   ]);
 
   return {

@@ -10,6 +10,7 @@
  */
 
 import type { BookingRequest } from "@/lib/booking/types";
+import { labelFor, projectTypes } from "@/content/enquiry";
 import { isLocale } from "@/lib/i18n";
 
 export const LIMITS = {
@@ -18,6 +19,7 @@ export const LIMITS = {
   company: 160,
   phone: 60,
   message: 4000,
+  projectType: 60,
   timeZone: 80,
 } as const;
 
@@ -81,6 +83,9 @@ export function validateBooking(
   const phone = asString(body.phone);
   if (phone.length > LIMITS.phone) errors.phone = "tooLong";
 
+  const projectType = asString(body.projectType);
+  if (projectType.length > LIMITS.projectType) errors.projectType = "tooLong";
+
   if (Object.keys(errors).length > 0) return { ok: false, errors };
 
   const reportedZone = asString(body.timeZone);
@@ -102,6 +107,9 @@ export function validateBooking(
       company,
       message,
       phone: phone || undefined,
+      // Stored as the readable label: the inbox is its only reader, and a
+      // raw slug there would just have to be decoded by hand.
+      projectType: labelFor(projectTypes, projectType || undefined),
       timeZone,
       locale: isLocale(locale) ? locale : "en",
     },

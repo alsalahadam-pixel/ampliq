@@ -10,13 +10,24 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
   return (
     <section className="on-dark relative isolate overflow-hidden bg-ink text-paper">
-      {/* Decorative mark: large, cropped by the viewport edge, never centred. */}
+      {/* Decorative mark: large, cropped by the viewport edge, never centred.
+          It drifts a few degrees with the page scroll, which reads as depth
+          rather than as an animation. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-12 -right-24 w-[72vw] max-w-[560px] text-accent/55 sm:-top-20 sm:-right-20 lg:top-1/2 lg:right-[-6%] lg:w-[46vw] lg:max-w-[720px] lg:-translate-y-1/2"
+        className="pointer-events-none absolute -top-12 -right-24 w-[72vw] max-w-[560px] sm:-top-20 sm:-right-20 lg:top-1/2 lg:right-[-6%] lg:w-[46vw] lg:max-w-[720px] lg:-translate-y-1/2"
       >
-        <DiscField markClassName="text-paper/[0.09]" />
+        <div data-drift className="text-accent/55">
+          <DiscField markClassName="text-paper/[0.09]" />
+        </div>
       </div>
+
+      {/* A second, far quieter layer: one hairline arc off the same geometry,
+          crossing behind the headline. Depth without another object. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-[30%] -left-[18%] hidden h-[70vh] w-[70vh] rounded-full border border-white/[0.06] lg:block"
+      />
 
       <div className="shell relative flex min-h-[92svh] flex-col justify-between pt-32 pb-10 lg:min-h-[94svh] lg:pt-44 lg:pb-12">
         <div className="grid flex-1 items-center gap-12 lg:grid-cols-12">
@@ -52,21 +63,33 @@ export function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               {hero.lead}
             </p>
 
+            {/* Who this is for, on the first screen rather than three sections
+                down: a visitor should be able to rule themselves in or out
+                without scrolling. */}
+            <p
+              data-enter
+              style={{ "--reveal-delay": "330ms" } as React.CSSProperties}
+              className="mt-5 flex items-center gap-3 text-sm text-fog"
+            >
+              <span aria-hidden="true" className="h-px w-8 bg-accent/70" />
+              {hero.audience}
+            </p>
+
             <div
               data-enter
-              style={{ "--reveal-delay": "360ms" } as React.CSSProperties}
-              className="mt-11 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
+              style={{ "--reveal-delay": "400ms" } as React.CSSProperties}
+              className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             >
               <ButtonLink href={route(locale, "start")} tone="dark" size="lg">
                 {dict.cta.start}
               </ButtonLink>
               <ButtonLink
-                href={route(locale, "work")}
+                href={route(locale, "services")}
                 variant="outline"
                 tone="dark"
                 size="lg"
               >
-                {dict.cta.work}
+                {dict.cta.allServices}
               </ButtonLink>
             </div>
           </div>

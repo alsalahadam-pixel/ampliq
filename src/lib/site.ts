@@ -13,8 +13,22 @@ import type { Localized } from "@/lib/i18n";
 const env = process.env;
 
 export const siteUrl = (
-  env.NEXT_PUBLIC_SITE_URL ?? "https://ampliq.de"
+  env.NEXT_PUBLIC_SITE_URL ?? "https://ampliq.net"
 ).replace(/\/$/, "");
+
+/**
+ * Two addresses, two jobs.
+ *
+ * Everything commercial — enquiries, proposals, booking confirmations and the
+ * notifications behind them — goes to `project`. General help goes to `help`.
+ * Nothing on the site should print a bare "contact email": the page decides
+ * which of the two it means, so a support question never lands in the middle
+ * of a project thread.
+ */
+export const contact = {
+  project: env.NEXT_PUBLIC_CONTACT_PROJECT_EMAIL ?? "project@ampliq.net",
+  help: env.NEXT_PUBLIC_CONTACT_HELP_EMAIL ?? "help@ampliq.net",
+} as const;
 
 export const site = {
   name: "AMPLIQ",
@@ -23,9 +37,12 @@ export const site = {
     de: "Marketing, verstärkt.",
   } satisfies Localized<string>,
   url: siteUrl,
-  email: env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@ampliq.de",
+  /** The commercial address. Support belongs to `contact.help`. */
+  email: contact.project,
+  /** No phone number is published: none has been supplied, and inventing one
+   *  would be worse than omitting it. Set the variable to publish one. */
   phone: env.NEXT_PUBLIC_CONTACT_PHONE ?? null,
-  /** Market served, used for copy and Organization schema. */
+  /** Primary market, used for copy and Organization schema. */
   market: "Germany",
 } as const;
 
@@ -56,7 +73,7 @@ export const legalEntity = {
   postalCode: env.NEXT_PUBLIC_LEGAL_POSTAL_CODE ?? null,
   city: env.NEXT_PUBLIC_LEGAL_CITY ?? null,
   country: env.NEXT_PUBLIC_LEGAL_COUNTRY ?? "Deutschland",
-  email: env.NEXT_PUBLIC_LEGAL_EMAIL ?? env.NEXT_PUBLIC_CONTACT_EMAIL ?? null,
+  email: env.NEXT_PUBLIC_LEGAL_EMAIL ?? contact.help,
   phone: env.NEXT_PUBLIC_LEGAL_PHONE ?? null,
   vatId: env.NEXT_PUBLIC_LEGAL_VAT_ID ?? null,
   registerCourt: env.NEXT_PUBLIC_LEGAL_REGISTER_COURT ?? null,
@@ -81,9 +98,3 @@ export const analytics = {
 
 export const analyticsEnabled = Object.values(analytics).some(Boolean);
 
-/**
- * Where the contact form posts. Unset means the form runs in preview mode:
- * it validates and shows its success state without pretending a message was
- * delivered.
- */
-export const contactEndpoint = env.NEXT_PUBLIC_CONTACT_ENDPOINT ?? null;

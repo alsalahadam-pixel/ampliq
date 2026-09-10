@@ -42,7 +42,10 @@ src/lib/booking/
     index.ts        picks one from the environment, or none
   email/
     templates.ts    branded client and owner mails, EN and DE
-    send.ts         Resend or a generic endpoint; honest no-op when unset
+
+src/lib/mail.ts           the one transport the whole site sends through
+src/lib/email/brand.ts    the shared AMPLIQ email shell
+src/lib/email/enquiry.ts  the enquiry mails, off the same shell
 
 src/components/booking/   the UI. Knows nothing about any provider.
 src/app/api/booking/      the two routes.
@@ -154,18 +157,24 @@ one mailbox it needs rather than every calendar in the tenant.
 
 ### Email
 
+One transport serves both the booking confirmations and the enquiry form.
+
 ```bash
 # Option A — Resend
 RESEND_API_KEY="re_…"
 
 # Option B — anything that takes { to, subject, html, text } as JSON
-# BOOKING_EMAIL_ENDPOINT="https://…"
-# BOOKING_EMAIL_TOKEN="…"                # sent as a bearer token if set
+# MAIL_ENDPOINT="https://…"
+# MAIL_ENDPOINT_TOKEN="…"                     # sent as a bearer token if set
 
-BOOKING_FROM_EMAIL="hello@ampliq.de"     # must be a verified sender
-BOOKING_FROM_NAME="AMPLIQ"
-BOOKING_OWNER_EMAIL="you@ampliq.de"      # where notifications land
-# BOOKING_REPLY_TO="you@ampliq.de"
+MAIL_FROM_EMAIL="project@ampliq.net"          # must be a verified sender
+MAIL_FROM_NAME="AMPLIQ"
+MAIL_NOTIFICATION_EMAIL="project@ampliq.net"  # where notifications land
+# MAIL_REPLY_TO="project@ampliq.net"
+
+# Optional: a standing meeting link, shown in the confirmation email. Without
+# one the email says the details follow by reply rather than inventing a link.
+# BOOKING_MEETING_LINK="https://meet.google.com/…"
 ```
 
 With none of these set, `sendEmail` logs what it would have sent and returns
@@ -173,8 +182,11 @@ With none of these set, `sendEmail` logs what it would have sent and returns
 the visitor plainly that no email went out.
 
 Two mails go out per booking: a branded confirmation to the visitor in the
-language they booked in, and a notification to the owner carrying the date, both
-timezones, the visitor's details and what they wrote.
+language they booked in — carrying the date, time, timezone, how the call
+happens and what they told us — and a notification to AMPLIQ carrying the name,
+email, company, phone, project type, description, date, time and timezone. The
+notification is sent with the visitor as reply-to, so answering it goes straight
+back to them.
 
 ## Persistence — read this before launch
 

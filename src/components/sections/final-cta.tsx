@@ -4,7 +4,7 @@ import { Eyebrow } from "@/components/ui/section";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { route } from "@/lib/routes";
-import { site } from "@/lib/site";
+import { contact } from "@/lib/site";
 
 /**
  * Closing call to action. Appears at the end of every page, so a visitor never
@@ -32,7 +32,9 @@ export function FinalCta({
         aria-hidden="true"
         className="pointer-events-none absolute -right-[22%] -bottom-[45%] w-[70vw] max-w-[640px] text-accent/55 lg:-right-[6%] lg:-bottom-[60%] lg:w-[42vw]"
       >
-        <DiscField markClassName="text-paper/[0.08]" />
+        <div data-drift>
+          <DiscField markClassName="text-paper/[0.08]" />
+        </div>
       </div>
 
       <div className="shell relative py-24 lg:py-36">
@@ -79,10 +81,10 @@ export function FinalCta({
           >
             {dict.footer.ctaLine}{" "}
             <a
-              href={`mailto:${site.email}`}
+              href={`mailto:${contact.project}`}
               className="link-underline text-paper transition-colors duration-200 hover:text-accent-soft"
             >
-              {site.email}
+              {contact.project}
             </a>
           </p>
         </div>

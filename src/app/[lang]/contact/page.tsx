@@ -11,7 +11,7 @@ import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
 import { route } from "@/lib/routes";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
-import { contactEndpoint, site } from "@/lib/site";
+import { contact } from "@/lib/site";
 import { pad } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -60,7 +60,7 @@ export default async function ContactPage({
         <div className="shell">
           <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-7">
-              <ContactForm locale={lang} dict={dict} endpoint={contactEndpoint} />
+              <ContactForm locale={lang} dict={dict} />
             </div>
 
             <aside className="flex flex-col gap-10 lg:col-span-4 lg:col-start-9">
@@ -71,12 +71,34 @@ export default async function ContactPage({
                 <p className="mt-3 text-[0.9375rem] leading-relaxed text-graphite">
                   {dict.contact.directBody}
                 </p>
-                <a
-                  href={`mailto:${site.email}`}
-                  className="link-underline mt-4 inline-block text-[0.9375rem] font-medium break-all"
-                >
-                  {site.email}
-                </a>
+                <dl className="mt-5 flex flex-col gap-4">
+                  <div>
+                    <dt className="text-xs text-graphite">
+                      {dict.contact.projectLabel}
+                    </dt>
+                    <dd className="mt-1">
+                      <a
+                        href={`mailto:${contact.project}`}
+                        className="link-underline text-[0.9375rem] font-medium break-all"
+                      >
+                        {contact.project}
+                      </a>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs text-graphite">
+                      {dict.contact.helpLabel}
+                    </dt>
+                    <dd className="mt-1">
+                      <a
+                        href={`mailto:${contact.help}`}
+                        className="link-underline text-[0.9375rem] font-medium break-all"
+                      >
+                        {contact.help}
+                      </a>
+                    </dd>
+                  </div>
+                </dl>
               </div>
 
               <div id="consultation" className="scroll-mt-28 border border-rule p-7">

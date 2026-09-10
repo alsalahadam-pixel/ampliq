@@ -3,6 +3,7 @@
 import { useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { projectTypes } from "@/content/enquiry";
 import { LIMITS } from "@/lib/booking/validate";
 import type { BookingDetails } from "@/lib/booking/types";
 import type { Dictionary } from "@/lib/dictionary";
@@ -124,6 +125,7 @@ export function DetailsForm({
       email: value("email"),
       company: value("company"),
       phone: value("phone") || undefined,
+      projectType: value("projectType") || undefined,
       message: value("message"),
       timeZone,
       locale,
@@ -248,6 +250,29 @@ export function DetailsForm({
             onChange={revalidate}
             className={cn(controlBase, merged.phone ? "border-danger" : "border-rule-strong")}
           />
+        </Field>
+
+        {/* Optional, but it lets us come to the call already pointed in the
+            right direction — and it reaches the inbox as a readable label. */}
+        <Field
+          label={t.projectType}
+          hint={t.projectTypeOptional}
+          htmlFor={fieldId("projectType")}
+          className="sm:col-span-2"
+        >
+          <select
+            id={fieldId("projectType")}
+            name="projectType"
+            defaultValue=""
+            className={cn(controlBase, "border-rule-strong")}
+          >
+            <option value="">{t.projectTypePlaceholder}</option>
+            {projectTypes.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label[locale]}
+              </option>
+            ))}
+          </select>
         </Field>
 
         <Field

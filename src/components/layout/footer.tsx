@@ -5,23 +5,26 @@ import { Logo } from "@/components/brand/logo";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { href, route } from "@/lib/routes";
-import { activeSocials, site } from "@/lib/site";
+import { activeSocials, contact, site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const year = new Date().getFullYear();
 
   const nav = [
-    { label: dict.nav.work, href: route(locale, "work") },
     { label: dict.nav.services, href: route(locale, "services") },
     { label: dict.nav.packages, href: route(locale, "packages") },
     { label: dict.nav.about, href: route(locale, "about") },
     { label: dict.nav.insights, href: route(locale, "insights") },
+    { label: dict.cta.start, href: route(locale, "start"), emphasis: true },
     { label: dict.nav.contact, href: route(locale, "contact") },
   ];
 
   const legal = [
     { label: dict.legal.imprintTitle, href: route(locale, "imprint") },
     { label: dict.legal.privacyTitle, href: route(locale, "privacy") },
+    { label: dict.legal.termsTitle, href: route(locale, "terms") },
+    { label: dict.legal.cancellationTitle, href: route(locale, "cancellation") },
     { label: dict.legal.cookiesTitle, href: route(locale, "cookies") },
   ];
 
@@ -53,9 +56,17 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                   <Link
                     href={item.href}
                     prefetch={false}
-                    className="link-underline text-[0.9375rem] text-paper/80 transition-colors duration-200 hover:text-paper"
+                    className={cn(
+                      "link-underline text-[0.9375rem] transition-colors duration-200 hover:text-paper",
+                      item.emphasis ? "text-paper" : "text-paper/80",
+                    )}
                   >
                     {item.label}
+                    {item.emphasis ? (
+                      <span aria-hidden="true" className="ml-1.5 text-accent-soft">
+                        →
+                      </span>
+                    ) : null}
                   </Link>
                 </li>
               ))}
@@ -64,13 +75,29 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
           <div className="lg:col-span-2">
             <h2 className="eyebrow text-fog">{dict.footer.contactTitle}</h2>
-            <ul className="mt-6 flex flex-col gap-3">
+            <ul className="mt-6 flex flex-col gap-4">
+              {/* Labelled, because which address to use is the whole point of
+                  having two of them. */}
               <li>
+                <span className="block text-xs text-fog">
+                  {dict.footer.projectLabel}
+                </span>
                 <a
-                  href={`mailto:${site.email}`}
-                  className="link-underline text-[0.9375rem] break-all text-paper/80 transition-colors duration-200 hover:text-paper"
+                  href={`mailto:${contact.project}`}
+                  className="link-underline mt-1 inline-block text-[0.9375rem] break-all text-paper/80 transition-colors duration-200 hover:text-paper"
                 >
-                  {site.email}
+                  {contact.project}
+                </a>
+              </li>
+              <li>
+                <span className="block text-xs text-fog">
+                  {dict.footer.helpLabel}
+                </span>
+                <a
+                  href={`mailto:${contact.help}`}
+                  className="link-underline mt-1 inline-block text-[0.9375rem] break-all text-paper/80 transition-colors duration-200 hover:text-paper"
+                >
+                  {contact.help}
                 </a>
               </li>
               {site.phone ? (

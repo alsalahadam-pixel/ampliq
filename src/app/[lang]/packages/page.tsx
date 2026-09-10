@@ -26,12 +26,12 @@ export async function generateMetadata({
     en: {
       title: "Packages",
       description:
-        "Three starting points — Start from €500, Grow from €1,000, and Scale on a custom quote — plus a custom path when nothing fits.",
+        "Three starting points — START from €599 for one focused project, GROW from €1,199 for several connected areas, and SCALE on a custom quote for an ongoing partnership.",
     },
     de: {
       title: "Pakete",
       description:
-        "Drei Einstiege — Start ab 500 €, Grow ab 1.000 € und Scale als individuelles Angebot — plus ein individueller Weg, wenn nichts passt.",
+        "Drei Einstiege — START ab 599 € für ein fokussiertes Projekt, GROW ab 1.199 € für mehrere verbundene Bereiche und SCALE als individuelles Angebot für eine laufende Partnerschaft.",
     },
   }[lang];
 
@@ -47,9 +47,9 @@ const packageFaqs = {
         "Because a fixed price for unseen work is either padded to cover the worst case or too low to deliver properly. The figures here are honest starting points; after the first conversation you get a fixed quote for a defined scope, and that figure does not move unless you change the scope.",
     },
     {
-      question: "What does a €500 project actually get me?",
+      question: "What does a €599 project actually get me?",
       answer:
-        "One defined deliverable, built to the same standard as everything else we produce — a landing page, a focused improvement to an existing site, a brand starter, or a campaign creative set. It is deliberately one thing rather than a bundle. A full website, a complete brand system, photography and ongoing marketing are separate scopes; quoting all of them at that figure would mean cutting corners somewhere, and we would rather tell you what the work actually costs.",
+        "One focused project with one defined outcome — a landing page, a focused improvement to an existing site, a brand starter, or a campaign creative set. One of those, not all of them, and built to the same standard as everything else we produce. A full website, a complete brand system, photography and ongoing marketing are separate scopes; quoting all of them at that figure would mean cutting corners somewhere, and we would rather tell you what the work actually costs.",
     },
     {
       question: "Can we start small and grow later?",
@@ -74,9 +74,9 @@ const packageFaqs = {
         "Weil ein Festpreis für ungesehene Arbeit entweder den schlimmsten Fall einkalkuliert oder zu niedrig ist, um sauber zu liefern. Die Zahlen hier sind ehrliche Startpunkte. Nach dem ersten Gespräch erhalten Sie einen Festpreis für einen definierten Umfang — und der ändert sich nur, wenn Sie den Umfang ändern.",
     },
     {
-      question: "Was bekomme ich für 500 € tatsächlich?",
+      question: "Was bekomme ich für 599 € tatsächlich?",
       answer:
-        "Ein definiertes Ergebnis, in derselben Qualität wie alles andere — eine Landingpage, eine gezielte Verbesserung an der bestehenden Seite, eine Marken-Basis oder ein Creative-Set für einen Kanal. Bewusst eine Sache und kein Bündel. Eine vollständige Website, ein komplettes Markensystem, Fotografie und laufendes Marketing sind eigene Umfänge; alles zu diesem Preis anzubieten hieße, an irgendeiner Stelle zu sparen. Wir sagen Ihnen lieber, was die Arbeit wirklich kostet.",
+        "Ein fokussiertes Projekt mit einem definierten Ergebnis — eine Landingpage, eine gezielte Verbesserung an der bestehenden Seite, eine Marken-Basis oder ein Creative-Set für einen Kanal. Eines davon, nicht alle, und in derselben Qualität wie alles andere. Eine vollständige Website, ein komplettes Markensystem, Fotografie und laufendes Marketing sind eigene Umfänge; alles zu diesem Preis anzubieten hieße, an irgendeiner Stelle zu sparen. Wir sagen Ihnen lieber, was die Arbeit wirklich kostet.",
     },
     {
       question: "Können wir klein starten und später ausbauen?",

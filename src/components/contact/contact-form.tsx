@@ -3,13 +3,28 @@
 import { useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { budgetRanges, projectTypes, timelines } from "@/content/enquiry";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { route } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
-type Errors = Partial<Record<"firstName" | "lastName" | "email" | "need" | "message", string>>;
-type Status = "idle" | "submitting" | "success" | "preview" | "error";
+type FieldName = "firstName" | "lastName" | "email" | "need" | "message";
+type Errors = Partial<Record<FieldName, string>>;
+
+/**
+ * `unconfigured` is its own state, distinct from `error`.
+ *
+ * The visitor did nothing wrong and there is nothing for them to retry: the
+ * site has no mail transport yet. Saying "something went wrong, try again"
+ * would send them round a loop that cannot succeed.
+ */
+type Status =
+  | "idle"
+  | "submitting"
+  | "success"
+  | "error"
+  | "unconfigured";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -50,16 +65,7 @@ function Field({
 const controlBase =
   "mt-2.5 w-full border-b bg-transparent pb-2.5 text-[1rem] text-ink transition-colors duration-200 placeholder:text-graphite/70 focus:border-accent focus:outline-none";
 
-export function ContactForm({
-  locale,
-  dict,
-  endpoint,
-}: {
-  locale: Locale;
-  dict: Dictionary;
-  /** Null means no delivery target is configured — the form says so. */
-  endpoint: string | null;
-}) {
+export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const form = dict.contact.form;
   const id = useId();
   const formRef = useRef<HTMLFormElement>(null);
@@ -93,13 +99,6 @@ export function ContactForm({
     setAttempted(true);
 
     const data = new FormData(event.currentTarget);
-
-    // Honeypot: real people leave this empty. Pretend success for bots.
-    if (String(data.get("company_website") ?? "")) {
-      setStatus("success");
-      return;
-    }
-
     const found = validate(data);
     setErrors(found);
 
@@ -109,14 +108,10 @@ export function ContactForm({
       return;
     }
 
-    if (!endpoint) {
-      setStatus("preview");
-      return;
-    }
-
     setStatus("submitting");
+
     try {
-      const response = await fetch(endpoint, {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
@@ -125,7 +120,27 @@ export function ContactForm({
           locale,
         }),
       });
+
+      // A static export has no route handler behind this path, and a site
+      // without a mail provider answers 503. Neither is a failure the visitor
+      // can fix by trying again, so both say so instead of pretending.
+      if (response.status === 503 || response.status === 404 || response.status === 405) {
+        setStatus("unconfigured");
+        return;
+      }
+
+      if (response.status === 400) {
+        const payload = (await response.json().catch(() => null)) as {
+          fields?: Record<string, string>;
+        } | null;
+        setErrors(serverErrorsToMessages(payload?.fields ?? {}, form));
+        setStatus("idle");
+        requestAnimationFrame(() => summaryRef.current?.focus());
+        return;
+      }
+
       if (!response.ok) throw new Error(String(response.status));
+
       setStatus("success");
       formRef.current?.reset();
     } catch {
@@ -146,8 +161,8 @@ export function ContactForm({
     setErrors(validate(new FormData(formRef.current)));
   }
 
-  if (status === "success" || status === "preview") {
-    const isPreview = status === "preview";
+  if (status === "success" || status === "unconfigured") {
+    const isPreview = status === "unconfigured";
     return (
       <div
         role="status"
@@ -314,9 +329,9 @@ export function ContactForm({
               <option value="" disabled>
                 {form.needPlaceholder}
               </option>
-              {form.needOptions.map((option) => (
+              {projectTypes.map((option) => (
                 <option key={option.value} value={option.value}>
-                  {option.label}
+                  {option.label[locale]}
                 </option>
               ))}
             </select>
@@ -330,9 +345,9 @@ export function ContactForm({
               className={cn(controlBase, "border-rule-strong")}
             >
               <option value="">—</option>
-              {form.budgetOptions.map((option) => (
+              {budgetRanges.map((option) => (
                 <option key={option.value} value={option.value}>
-                  {option.label}
+                  {option.label[locale]}
                 </option>
               ))}
             </select>
@@ -346,9 +361,9 @@ export function ContactForm({
               className={cn(controlBase, "border-rule-strong")}
             >
               <option value="">—</option>
-              {form.timelineOptions.map((option) => (
+              {timelines.map((option) => (
                 <option key={option.value} value={option.value}>
-                  {option.label}
+                  {option.label[locale]}
                 </option>
               ))}
             </select>
@@ -419,10 +434,64 @@ export function ContactForm({
             {form.privacyLink}
           </a>
         </p>
-        <Button type="submit" withArrow disabled={status === "submitting"} className="shrink-0">
-          {status === "submitting" ? form.submitting : form.submit}
+        <Button
+          type="submit"
+          withArrow={status !== "submitting"}
+          disabled={status === "submitting"}
+          aria-busy={status === "submitting"}
+          className="shrink-0"
+        >
+          {status === "submitting" ? (
+            <>
+              <Spinner />
+              {form.submitting}
+            </>
+          ) : (
+            form.submit
+          )}
         </Button>
       </div>
     </form>
+  );
+}
+
+/**
+ * The API rejects on the same field names the browser validates, so a
+ * server-side rejection lands on the right input rather than in a generic
+ * banner.
+ */
+function serverErrorsToMessages(
+  fields: Record<string, string>,
+  form: Dictionary["contact"]["form"],
+): Errors {
+  const messages: Errors = {};
+  const names: FieldName[] = ["firstName", "lastName", "email", "need", "message"];
+
+  for (const name of names) {
+    const code = fields[name];
+    if (!code) continue;
+    messages[name] =
+      name === "email" && code === "invalid"
+        ? form.errors.emailFormat
+        : form.errors[name];
+  }
+
+  return messages;
+}
+
+/** Movement while the request is in flight, so the button is visibly working. */
+function Spinner() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className="h-3.5 w-3.5 shrink-0 animate-spin"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="6" className="opacity-25" />
+      <path d="M14 8a6 6 0 0 0-6-6" strokeLinecap="round" />
+    </svg>
   );
 }
