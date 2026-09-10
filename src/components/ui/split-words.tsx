@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { cn } from "@/lib/utils";
 
 /**
@@ -5,10 +7,15 @@ import { cn } from "@/lib/utils";
  *
  * Done on the server, from a plain string, so the markup is identical on both
  * sides of hydration — the animation is pure CSS and never touches the DOM.
- * Assistive technology reads the original sentence: the words are inline
- * spans separated by real spaces, not a list of fragments.
+ * Assistive technology reads the original sentence: the words are inline spans
+ * separated by real text nodes, not a list of fragments.
  *
- * Use it on section headlines. The hero keeps its two-line mask, which is a
+ * The spaces sit BETWEEN the masked spans, never inside them. Each word span
+ * is an `overflow: hidden` inline-block, and a browser trims trailing
+ * whitespace at the edge of one — putting the space inside runs every word
+ * into the next.
+ *
+ * Use it on section headlines. The hero keeps its two-line mask, a
  * deliberately heavier entrance than anything further down the page.
  */
 export function SplitWords({
@@ -23,10 +30,12 @@ export function SplitWords({
   return (
     <span data-words className={cn("inline", className)}>
       {words.map((word, index) => (
-        <span key={`${word}-${index}`}>
-          <span>{word}</span>
+        <Fragment key={`${word}-${index}`}>
+          <span>
+            <span>{word}</span>
+          </span>
           {index < words.length - 1 ? " " : null}
-        </span>
+        </Fragment>
       ))}
     </span>
   );
