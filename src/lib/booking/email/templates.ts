@@ -196,7 +196,7 @@ export function clientConfirmation(
       )}</p>`,
       eyebrow(t.change),
       `<p style="margin:0;font-family:${FONT};font-size:15px;line-height:1.6;color:${INK};">${escapeHtml(
-        t.changeBody(contact.project),
+        t.changeBody(contact.info),
       )}</p>`,
     ].join("\n"),
     locale,
@@ -222,7 +222,7 @@ export function clientConfirmation(
     "",
     `${t.prepTitle}: ${t.prepBody}`,
     "",
-    `${t.change} ${t.changeBody(contact.project)}`,
+    `${t.change} ${t.changeBody(contact.info)}`,
     ...textFooter(locale),
   ]
     .filter((line) => line !== null)

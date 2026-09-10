@@ -45,7 +45,7 @@ export const legalFields = {
   postalCode: field("POSTAL CODE", env.NEXT_PUBLIC_LEGAL_POSTAL_CODE),
   city: field("CITY", env.NEXT_PUBLIC_LEGAL_CITY),
   country: field("COUNTRY", env.NEXT_PUBLIC_LEGAL_COUNTRY ?? "Deutschland"),
-  email: field("EMAIL", env.NEXT_PUBLIC_LEGAL_EMAIL ?? contact.help),
+  email: field("EMAIL", env.NEXT_PUBLIC_LEGAL_EMAIL ?? contact.info),
   phone: field("PHONE IF APPLICABLE", env.NEXT_PUBLIC_LEGAL_PHONE, false),
   vatId: field("VAT ID IF APPLICABLE", env.NEXT_PUBLIC_LEGAL_VAT_ID, false),
   taxNumber: field("TAX NUMBER IF APPLICABLE", env.NEXT_PUBLIC_LEGAL_TAX_NUMBER, false),
@@ -66,7 +66,7 @@ export const legalFields = {
   ),
   dataProtectionContact: field(
     "DATA PROTECTION CONTACT",
-    env.NEXT_PUBLIC_LEGAL_DPO ?? env.NEXT_PUBLIC_LEGAL_EMAIL ?? contact.help,
+    env.NEXT_PUBLIC_LEGAL_DPO ?? env.NEXT_PUBLIC_LEGAL_EMAIL ?? contact.info,
   ),
 } as const;
 

@@ -54,7 +54,7 @@ export function PackagesSection({
             </p>
           </div>
           <ButtonLink
-            href={route(locale, "start")}
+            href={route(locale, "call")}
             variant="outline"
             className="shrink-0"
           >

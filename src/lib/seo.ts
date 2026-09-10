@@ -75,14 +75,14 @@ export function organizationSchema(locale: Locale) {
         : "AMPLIQ is a marketing and creative agency combining strategy, design, content and digital growth.",
     logo: `${siteUrl}/brand/ampliq-logo.svg`,
     image: `${siteUrl}/opengraph-image`,
-    email: contact.project,
+    email: contact.info,
     // Two real addresses, each with the job it actually does. Nothing is
     // claimed here that is not published on the site itself.
     contactPoint: [
       {
         "@type": "ContactPoint",
         contactType: "sales",
-        email: contact.project,
+        email: contact.info,
         availableLanguage: ["en", "de"],
       },
       {

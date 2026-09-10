@@ -81,10 +81,10 @@ export function FinalCta({
           >
             {dict.footer.ctaLine}{" "}
             <a
-              href={`mailto:${contact.project}`}
+              href={`mailto:${contact.info}`}
               className="link-underline text-paper transition-colors duration-200 hover:text-accent-soft"
             >
-              {contact.project}
+              {contact.info}
             </a>
           </p>
         </div>

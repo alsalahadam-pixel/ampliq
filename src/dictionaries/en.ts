@@ -224,9 +224,10 @@ export const en = {
   },
 
   contact: {
-    title: "Start a project.",
+    title: "Tell us about the project.",
     lead: "Tell us where your business is today and what you want to reach. We read every message ourselves and reply within two working days.",
     directTitle: "Prefer email?",
+    generalLabel: "General enquiries",
     projectLabel: "Projects & proposals",
     helpLabel: "General help",
     directBody: "Write to us directly and we'll pick it up from there.",
@@ -294,8 +295,50 @@ export const en = {
     },
   },
 
-  booking: {
+
+  /**
+   * The fork every "Start a project" CTA lands on. Two honest ways in — a
+   * written brief or a call — presented at equal weight, because neither is
+   * a lesser option and the visitor knows which suits them better than we do.
+   */
+  start: {
+    metaTitle: "Start a project",
+    metaDescription:
+      "Two ways to start with AMPLIQ: send a written project brief, or book a free 30-minute call. Both reach the same people.",
     title: "Start a project.",
+    lead: "Two ways in. Send the brief and we come back to you in writing, or take half an hour and we talk it through. Both land with the same people.",
+    chooseEyebrow: "Choose how to begin",
+    chooseHeadline: "How would you rather start?",
+    brief: {
+      index: "01",
+      kind: "In writing",
+      title: "Send a project brief",
+      body: "Tell us where the business is, what it needs and roughly what you have to spend. We read it ourselves and come back with a first view on scope.",
+      points: [
+        "Around three minutes to fill in",
+        "A written reply within two working days",
+        "No call required",
+      ],
+      cta: "Write the brief",
+    },
+    call: {
+      index: "02",
+      kind: "In conversation",
+      title: "Book a 30‑minute call",
+      body: "Pick a time that suits you. No pitch deck — we listen, ask what we need to ask, and tell you honestly whether we are the right people for it.",
+      points: [
+        "Thirty minutes, free, no obligation",
+        "Times shown in your own timezone",
+        "Confirmed by email straight away",
+      ],
+      cta: "See available times",
+    },
+    directTitle: "Rather just write to us?",
+    directBody:
+      "{email} reaches the same inbox as the form. No template, no ticket number.",
+  },
+  booking: {
+    title: "Book a call.",
     lead: "Pick a time that works for you. Thirty minutes, no pitch deck — we listen, ask what we need to ask, and tell you honestly whether we're the right people for it.",
     metaTitle: "Book a call",
     metaDescription:
@@ -445,6 +488,7 @@ export const en = {
       "One functional cookie, set only if you switch language. No analytics, no advertising, no tracking.",
     contents: "Contents",
     lastUpdated: "Last updated",
+    draftNoticeLabel: "Document status",
     draftNoticeTitle: "Not yet complete, and not yet legally reviewed.",
     draftNoticeBody:
       "The structure follows what German law requires and the technical descriptions match what this build actually does. The company details below are still outstanding, and the legal wording has not been reviewed by a qualified lawyer. Until both are done, treat this document as a working draft — not as a completed disclosure, and not as legal advice.",

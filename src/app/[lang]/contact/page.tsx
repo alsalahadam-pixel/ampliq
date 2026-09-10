@@ -74,6 +74,19 @@ export default async function ContactPage({
                 <dl className="mt-5 flex flex-col gap-4">
                   <div>
                     <dt className="text-xs text-graphite">
+                      {dict.contact.generalLabel}
+                    </dt>
+                    <dd className="mt-1">
+                      <a
+                        href={`mailto:${contact.info}`}
+                        className="link-underline text-[0.9375rem] font-medium break-all"
+                      >
+                        {contact.info}
+                      </a>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs text-graphite">
                       {dict.contact.projectLabel}
                     </dt>
                     <dd className="mt-1">
@@ -109,7 +122,7 @@ export default async function ContactPage({
                   {dict.contact.consultationBody}
                 </p>
                 <ButtonLink
-                  href={route(lang, "start")}
+                  href={route(lang, "call")}
                   variant="outline"
                   size="sm"
                   className="mt-5 w-full"

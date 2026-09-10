@@ -109,7 +109,7 @@ ${bodyHtml}
   <p style="margin:0;font-family:${FONT};font-size:13px;line-height:1.5;color:${GRAPHITE};">
     <a href="${siteUrl}" style="color:${ACCENT};text-decoration:none;">${siteUrl.replace(/^https?:\/\//, "")}</a>
     &nbsp;·&nbsp;
-    <a href="mailto:${contact.project}" style="color:${ACCENT};text-decoration:none;">${contact.project}</a>
+    <a href="mailto:${contact.info}" style="color:${ACCENT};text-decoration:none;">${contact.info}</a>
   </p>
 </td></tr>
 
@@ -122,5 +122,5 @@ ${bodyHtml}
 
 /** Plain-text footer, matching the HTML one. */
 export function textFooter(locale: Locale): string[] {
-  return ["", `AMPLIQ — ${TAGLINE[locale]}`, siteUrl, contact.project];
+  return ["", `AMPLIQ — ${TAGLINE[locale]}`, siteUrl, contact.info];
 }

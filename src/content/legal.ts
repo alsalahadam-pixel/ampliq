@@ -67,7 +67,7 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
           {
             kind: "rows",
             rows: [
-              { label: "General enquiries", value: contact.help },
+              { label: "General enquiries", value: contact.info },
               { label: "Projects and proposals", value: contact.project },
               { label: "Telephone", value: legalValue("phone") },
             ],
@@ -213,7 +213,7 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
           {
             kind: "rows",
             rows: [
-              { label: "Allgemeine Anfragen", value: contact.help },
+              { label: "Allgemeine Anfragen", value: contact.info },
               { label: "Projekte und Angebote", value: contact.project },
               { label: "Telefon", value: legalValue("phone") },
             ],
@@ -1142,7 +1142,7 @@ export function termsChapters(locale: Locale): LegalChapter[] {
  * ------------------------------------------------------------------ */
 
 export function cancellationChapters(locale: Locale): LegalChapter[] {
-  const address = `${legalValue("name")}, ${legalValue("street")}, ${legalValue("postalCode")} ${legalValue("city")}, ${legalValue("country")} — ${contact.help}`;
+  const address = `${legalValue("name")}, ${legalValue("street")}, ${legalValue("postalCode")} ${legalValue("city")}, ${legalValue("country")} — ${contact.info}`;
 
   const chapters: Chapters = {
     en: [

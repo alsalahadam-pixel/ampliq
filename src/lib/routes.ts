@@ -12,8 +12,11 @@ export const routes = {
   about: "/about",
   insights: "/insights",
   contact: "/contact",
-  /** The booking flow. Every "start a project" CTA leads here. */
+  /** The fork. Every "start a project" CTA leads here, and it offers two
+      ways in: a written brief (`contact`) or a call (`call`). */
   start: "/start",
+  /** The booking calendar, one branch of `start`. */
+  call: "/start/call",
   legal: "/legal",
   imprint: "/legal/imprint",
   privacy: "/legal/privacy",

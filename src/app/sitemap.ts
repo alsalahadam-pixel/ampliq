@@ -25,6 +25,7 @@ const entries: Entry[] = [
   { path: "/about", changeFrequency: "yearly", priority: 0.6 },
   { path: "/insights", changeFrequency: "weekly", priority: 0.7 },
   { path: "/start", changeFrequency: "yearly", priority: 0.9 },
+  { path: "/start/call", changeFrequency: "yearly", priority: 0.7 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.8 },
   ...services.map((service) => ({
     path: `/services/${service.slug}`,

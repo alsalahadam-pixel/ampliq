@@ -36,7 +36,7 @@ type Transport = {
 /** `AMPLIQ <project@ampliq.net>` — the address the mail comes from. */
 function fromAddress(): string {
   const address =
-    process.env.MAIL_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || contact.project;
+    process.env.MAIL_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || contact.info;
   const name = process.env.MAIL_FROM_NAME || process.env.BOOKING_FROM_NAME || "AMPLIQ";
 
   return address.includes("<") ? address : `${name} <${address}>`;

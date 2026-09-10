@@ -12,22 +12,52 @@ import type { Localized } from "@/lib/i18n";
 
 const env = process.env;
 
+/**
+ * The domain, in one place.
+ *
+ * The final domain has not been bought yet, so every address and URL on the
+ * site is derived from this single constant rather than typed out. Changing
+ * `NEXT_PUBLIC_SITE_DOMAIN` moves the whole site — canonical URLs, hreflang,
+ * Open Graph, every published address and every email sender — in one edit.
+ *
+ * `ampliq.net` is a working default, not a decision. It is here so the build
+ * has something valid to render; replace it the moment the real domain exists.
+ */
+export const siteDomain = (
+  env.NEXT_PUBLIC_SITE_DOMAIN ?? "ampliq.net"
+)
+  .trim()
+  .replace(/^https?:\/\//, "")
+  .replace(/\/$/, "");
+
+/** Whether a real domain has been chosen, or we are still on the default. */
+export const domainIsConfigured = Boolean(env.NEXT_PUBLIC_SITE_DOMAIN);
+
 export const siteUrl = (
-  env.NEXT_PUBLIC_SITE_URL ?? "https://ampliq.net"
+  env.NEXT_PUBLIC_SITE_URL ?? `https://${siteDomain}`
 ).replace(/\/$/, "");
 
+/** Builds an address on the site's domain: `mailbox("info")` → info@… */
+function mailbox(name: string): string {
+  return `${name}@${siteDomain}`;
+}
+
 /**
- * Two addresses, two jobs.
+ * Three addresses, three jobs — all on the one domain above.
  *
- * Everything commercial — enquiries, proposals, booking confirmations and the
- * notifications behind them — goes to `project`. General help goes to `help`.
- * Nothing on the site should print a bare "contact email": the page decides
- * which of the two it means, so a support question never lands in the middle
- * of a project thread.
+ * `info` is the general public-facing address: the one in the footer, the
+ * imprint and the reply-to on every automated email. `project` and `help`
+ * exist so a proposal thread and a support question do not land in the same
+ * place, and each can be pointed at a different mailbox later without
+ * touching a page.
+ *
+ * Each can be overridden individually — useful if enquiries should go to a
+ * helpdesk on another domain — but none of them has to be.
  */
 export const contact = {
-  project: env.NEXT_PUBLIC_CONTACT_PROJECT_EMAIL ?? "project@ampliq.net",
-  help: env.NEXT_PUBLIC_CONTACT_HELP_EMAIL ?? "help@ampliq.net",
+  info: env.NEXT_PUBLIC_CONTACT_INFO_EMAIL ?? mailbox("info"),
+  project: env.NEXT_PUBLIC_CONTACT_PROJECT_EMAIL ?? mailbox("project"),
+  help: env.NEXT_PUBLIC_CONTACT_HELP_EMAIL ?? mailbox("help"),
 } as const;
 
 export const site = {
@@ -37,8 +67,8 @@ export const site = {
     de: "Marketing, verstärkt.",
   } satisfies Localized<string>,
   url: siteUrl,
-  /** The commercial address. Support belongs to `contact.help`. */
-  email: contact.project,
+  /** The general public address. See `contact` for the specialised ones. */
+  email: contact.info,
   /** No phone number is published: none has been supplied, and inventing one
    *  would be worse than omitting it. Set the variable to publish one. */
   phone: env.NEXT_PUBLIC_CONTACT_PHONE ?? null,

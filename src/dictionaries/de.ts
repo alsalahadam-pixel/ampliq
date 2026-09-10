@@ -225,9 +225,10 @@ export const de: Dictionary = {
   },
 
   contact: {
-    title: "Projekt starten.",
+    title: "Erzählen Sie uns vom Projekt.",
     lead: "Erzählen Sie uns, wo Ihr Unternehmen heute steht und was Sie erreichen möchten. Wir lesen jede Nachricht selbst und antworten innerhalb von zwei Werktagen.",
     directTitle: "Lieber per E-Mail?",
+    generalLabel: "Allgemeine Anfragen",
     projectLabel: "Projekte & Angebote",
     helpLabel: "Allgemeine Hilfe",
     directBody: "Schreiben Sie uns direkt, wir übernehmen von dort.",
@@ -295,8 +296,49 @@ export const de: Dictionary = {
     },
   },
 
-  booking: {
+
+  /**
+   * Die Weiche, auf der jeder "Projekt starten"-Button landet. Zwei
+   * gleichwertige Wege hinein — schriftliches Briefing oder Gespräch.
+   */
+  start: {
+    metaTitle: "Projekt starten",
+    metaDescription:
+      "Zwei Wege, mit AMPLIQ zu starten: ein schriftliches Projekt-Briefing senden oder ein kostenloses 30-Minuten-Gespräch buchen. Beides landet bei denselben Menschen.",
     title: "Projekt starten.",
+    lead: "Zwei Wege hinein. Schicken Sie uns das Briefing und wir antworten schriftlich, oder nehmen Sie sich eine halbe Stunde und wir sprechen darüber. Beides landet bei denselben Menschen.",
+    chooseEyebrow: "Wie möchten Sie beginnen?",
+    chooseHeadline: "Womit fangen wir an?",
+    brief: {
+      index: "01",
+      kind: "Schriftlich",
+      title: "Projekt-Briefing senden",
+      body: "Erzählen Sie uns, wo das Unternehmen steht, was es braucht und welches Budget ungefähr zur Verfügung steht. Wir lesen es selbst und melden uns mit einer ersten Einschätzung zum Umfang.",
+      points: [
+        "In etwa drei Minuten ausgefüllt",
+        "Schriftliche Antwort innerhalb von zwei Werktagen",
+        "Kein Telefonat nötig",
+      ],
+      cta: "Briefing schreiben",
+    },
+    call: {
+      index: "02",
+      kind: "Im Gespräch",
+      title: "30‑Minuten‑Gespräch buchen",
+      body: "Wählen Sie eine Zeit, die Ihnen passt. Keine Pitch-Präsentation — wir hören zu, fragen nach und sagen Ihnen ehrlich, ob wir die Richtigen dafür sind.",
+      points: [
+        "Dreißig Minuten, kostenlos, unverbindlich",
+        "Zeiten in Ihrer eigenen Zeitzone",
+        "Sofortige Bestätigung per E-Mail",
+      ],
+      cta: "Freie Zeiten ansehen",
+    },
+    directTitle: "Lieber direkt schreiben?",
+    directBody:
+      "{email} landet im selben Postfach wie das Formular. Keine Vorlage, keine Ticketnummer.",
+  },
+  booking: {
+    title: "Gespräch buchen.",
     lead: "Wählen Sie einen Termin, der Ihnen passt. Dreißig Minuten, ohne Verkaufspräsentation — wir hören zu, fragen nach und sagen Ihnen ehrlich, ob wir die Richtigen dafür sind.",
     metaTitle: "Termin buchen",
     metaDescription:
@@ -448,6 +490,7 @@ export const de: Dictionary = {
       "Ein funktionales Cookie, gesetzt nur beim Sprachwechsel. Keine Analyse, keine Werbung, kein Tracking.",
     contents: "Inhalt",
     lastUpdated: "Zuletzt aktualisiert",
+    draftNoticeLabel: "Dokumentstatus",
     draftNoticeTitle: "Noch nicht vollständig und noch nicht juristisch geprüft.",
     draftNoticeBody:
       "Die Struktur folgt den Vorgaben des deutschen Rechts, und die technischen Beschreibungen entsprechen dem, was dieser Build tatsächlich tut. Die Unternehmensangaben fehlen noch, und der juristische Text wurde nicht von einer Anwältin oder einem Anwalt geprüft. Bis beides erledigt ist, ist dieses Dokument ein Arbeitsstand — keine vollständige Pflichtangabe und keine Rechtsberatung.",

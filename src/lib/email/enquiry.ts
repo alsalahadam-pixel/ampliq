@@ -192,7 +192,7 @@ export function enquiryAcknowledgement(enquiry: Enquiry): EmailContent {
       paragraphs(enquiry.message),
       eyebrow(t.ackFaster),
       `<p style="margin:0;font-family:${FONT};font-size:15px;line-height:1.6;color:${GRAPHITE};">${escapeHtml(
-        t.ackFasterBody(contact.project),
+        t.ackFasterBody(contact.info),
       )}</p>`,
     ]
       .filter(Boolean)
@@ -210,7 +210,7 @@ export function enquiryAcknowledgement(enquiry: Enquiry): EmailContent {
     `${t.message}:`,
     enquiry.message,
     "",
-    `${t.ackFaster} ${t.ackFasterBody(contact.project)}`,
+    `${t.ackFaster} ${t.ackFasterBody(contact.info)}`,
     ...textFooter(enquiry.locale),
   ].join("\n");
 

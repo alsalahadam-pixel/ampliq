@@ -75,16 +75,24 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
           <div className="lg:col-span-2">
             <h2 className="eyebrow text-fog">{dict.footer.contactTitle}</h2>
+            {/* The general address leads; the specialised two follow, smaller,
+                for people who already know which one they want. */}
             <ul className="mt-6 flex flex-col gap-4">
-              {/* Labelled, because which address to use is the whole point of
-                  having two of them. */}
+              <li>
+                <a
+                  href={`mailto:${contact.info}`}
+                  className="link-underline inline-block text-[0.9375rem] break-all text-paper transition-colors duration-200 hover:text-accent-soft"
+                >
+                  {contact.info}
+                </a>
+              </li>
               <li>
                 <span className="block text-xs text-fog">
                   {dict.footer.projectLabel}
                 </span>
                 <a
                   href={`mailto:${contact.project}`}
-                  className="link-underline mt-1 inline-block text-[0.9375rem] break-all text-paper/80 transition-colors duration-200 hover:text-paper"
+                  className="link-underline mt-1 inline-block text-[0.875rem] break-all text-paper/70 transition-colors duration-200 hover:text-paper"
                 >
                   {contact.project}
                 </a>
@@ -95,7 +103,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
                 </span>
                 <a
                   href={`mailto:${contact.help}`}
-                  className="link-underline mt-1 inline-block text-[0.9375rem] break-all text-paper/80 transition-colors duration-200 hover:text-paper"
+                  className="link-underline mt-1 inline-block text-[0.875rem] break-all text-paper/70 transition-colors duration-200 hover:text-paper"
                 >
                   {contact.help}
                 </a>

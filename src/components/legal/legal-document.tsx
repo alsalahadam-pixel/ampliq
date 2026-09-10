@@ -6,11 +6,16 @@ import { outstandingLegalFields } from "@/lib/legal";
 import { cn } from "@/lib/utils";
 
 /**
- * Highlights `[PLACEHOLDER]` tokens inside a string.
+ * Marks `[PLACEHOLDER]` tokens inside a string.
  *
- * A placeholder must never read as finished text. Rendering it in the danger
- * colour, in mono, with a marker, means anyone reading the page — the operator,
- * a lawyer, a visitor — can see at a glance which parts are outstanding.
+ * A placeholder still has to be unmistakable — a reader must never take one for
+ * finished text — but it should not shout. The treatment is the brand's own:
+ * the mono face already used for labels and indices, a hairline box, and the
+ * accent that marks every other "this is a system element" on the site.
+ *
+ * Nothing is hidden to make the page look finished. The token is legible, it
+ * names exactly what is missing, and the notice at the top of each document
+ * lists the same set.
  */
 export function LegalText({ children }: { children: string }) {
   const parts = children.split(/(\[[A-Z][A-Z \-/]*\])/g);
@@ -21,9 +26,9 @@ export function LegalText({ children }: { children: string }) {
         /^\[[A-Z][A-Z \-/]*\]$/.test(part) ? (
           <span
             key={index}
-            className="font-mono mx-0.5 inline-flex items-center gap-1.5 rounded-[2px] border border-danger/35 bg-danger/8 px-1.5 py-0.5 text-[0.8125em] text-danger"
+            title="To be supplied before launch"
+            className="font-mono mx-0.5 inline-block rounded-[2px] border border-rule-strong bg-paper-soft px-1.5 py-[0.1em] text-[0.78em] tracking-[0.04em] text-graphite"
           >
-            <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-danger" />
             {part}
           </span>
         ) : (
@@ -35,61 +40,82 @@ export function LegalText({ children }: { children: string }) {
 }
 
 /**
- * The banner every legal page carries while information is missing.
+ * The header every legal page carries while information is outstanding.
  *
- * It states what is outstanding rather than claiming the document is compliant.
- * Once every required field is supplied and a lawyer has signed the wording
- * off, `legalReviewed` in the environment removes the notice.
+ * Styled as part of the document, not as a build warning: the site's own paper
+ * surface, a hairline border, the accent dot that marks a system element
+ * everywhere else. It still says exactly what is missing and that the wording
+ * is unreviewed — that is a legal necessity, not a decoration — but it reads as
+ * a considered editorial note rather than an error.
  */
 export function LegalStatusNotice({ dict }: { dict: Dictionary }) {
   const outstanding = outstandingLegalFields.filter((entry) => entry.required);
   const optional = outstandingLegalFields.filter((entry) => !entry.required);
 
+  // Once every required field is supplied and the wording is reviewed, the
+  // notice disappears of its own accord and the document simply reads as
+  // finished. Nothing has to be edited to make that happen.
+  if (outstanding.length === 0 && optional.length === 0) return null;
+
   return (
-    <div role="note" className="border-l-2 border-danger bg-danger/5 px-6 py-5">
-      <p className="font-display text-[1.0625rem] font-bold tracking-[-0.02em] text-ink">
+    <aside
+      aria-label={dict.legal.draftNoticeTitle}
+      className="border border-rule bg-paper-soft px-6 py-6 sm:px-8 sm:py-7"
+    >
+      <p className="eyebrow flex items-center gap-3 text-graphite">
+        <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-accent" />
+        {dict.legal.draftNoticeLabel}
+      </p>
+
+      <p className="font-display mt-4 text-[1.125rem] leading-snug font-bold tracking-[-0.025em] text-ink">
         {dict.legal.draftNoticeTitle}
       </p>
-      <p className="mt-2 max-w-[72ch] text-[0.9375rem] leading-relaxed text-graphite">
+      <p className="mt-3 max-w-[72ch] text-[0.9375rem] leading-relaxed text-graphite">
         {dict.legal.draftNoticeBody}
       </p>
 
-      {outstanding.length > 0 ? (
-        <>
-          <p className="mt-5 text-[0.8125rem] font-medium text-ink">
-            {dict.legal.outstandingRequired}
-          </p>
-          <ul className="mt-2 flex flex-wrap gap-1.5">
-            {outstanding.map((entry) => (
-              <li
-                key={entry.token}
-                className="font-mono rounded-[2px] border border-danger/35 bg-danger/8 px-2 py-1 text-[0.75rem] text-danger"
-              >
-                [{entry.token}]
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : null}
+      <dl className="mt-6 flex flex-col gap-5 border-t border-rule pt-5">
+        {outstanding.length > 0 ? (
+          <div>
+            <dt className="text-[0.8125rem] font-medium text-ink">
+              {dict.legal.outstandingRequired}
+            </dt>
+            <dd className="mt-2.5">
+              <ul className="flex flex-wrap gap-1.5">
+                {outstanding.map((entry) => (
+                  <li
+                    key={entry.token}
+                    className="font-mono rounded-[2px] border border-rule-strong bg-paper px-2 py-1 text-[0.6875rem] tracking-[0.04em] text-ink"
+                  >
+                    [{entry.token}]
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ) : null}
 
-      {optional.length > 0 ? (
-        <>
-          <p className="mt-5 text-[0.8125rem] font-medium text-ink">
-            {dict.legal.outstandingOptional}
-          </p>
-          <ul className="mt-2 flex flex-wrap gap-1.5">
-            {optional.map((entry) => (
-              <li
-                key={entry.token}
-                className="font-mono rounded-[2px] border border-rule-strong px-2 py-1 text-[0.75rem] text-graphite"
-              >
-                [{entry.token}]
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : null}
-    </div>
+        {optional.length > 0 ? (
+          <div>
+            <dt className="text-[0.8125rem] font-medium text-graphite">
+              {dict.legal.outstandingOptional}
+            </dt>
+            <dd className="mt-2.5">
+              <ul className="flex flex-wrap gap-1.5">
+                {optional.map((entry) => (
+                  <li
+                    key={entry.token}
+                    className="font-mono rounded-[2px] border border-rule px-2 py-1 text-[0.6875rem] tracking-[0.04em] text-graphite"
+                  >
+                    [{entry.token}]
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        ) : null}
+      </dl>
+    </aside>
   );
 }
 
