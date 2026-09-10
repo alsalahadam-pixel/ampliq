@@ -12,9 +12,10 @@ import { cn } from "@/lib/utils";
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const year = new Date().getFullYear();
 
-  // The legal column follows the routes: withheld while the section is
-  // unpublished, back the moment the entity details make it publishable. It is
-  // gated rather than deleted so activating is one change, not two.
+  // The legal column follows the routes. Both are public; the gate only shuts
+  // if NEXT_PUBLIC_LEGAL_PUBLISHED says so, and the column is built from the
+  // flag rather than hard-coded so that taking the section down is one change,
+  // not two.
   const legal = legalIsPublished
     ? [
         { label: dict.legal.imprintTitle, href: route(locale, "imprint") },

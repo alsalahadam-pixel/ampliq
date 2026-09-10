@@ -11,10 +11,11 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // Once published, the legal pages are noindex and keeping crawlers off
-      // them saves crawl budget. While they are unpublished they answer 404,
-      // and naming them here would only advertise a path that is deliberately
-      // not there. The API is not content and has nothing to index either.
+      // The legal pages are public but noindex: required disclosures, not
+      // content anyone should reach through search, so keeping crawlers off
+      // them saves crawl budget. If the section is ever taken down, naming the
+      // paths here would only advertise an address that is not there. The API
+      // is not content and has nothing to index either.
       disallow: legalIsPublished
         ? ["/en/legal", "/de/legal", "/api/"]
         : ["/api/"],

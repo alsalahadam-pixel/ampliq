@@ -39,10 +39,7 @@ export const en = {
     skipToContent: "Skip to content",
     email: "Email",
     of: "of",
-    concept: "Concept",
-    inProgress: "In progress",
     scrollHint: "Scroll",
-    placeholderNotice: "Placeholder — to be supplied before launch",
   },
 
   home: {

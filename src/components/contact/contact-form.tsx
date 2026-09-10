@@ -451,10 +451,10 @@ export function ContactForm({
       </div>
 
       <div className="flex flex-col gap-6 border-t border-rule pt-8 sm:flex-row sm:items-center sm:justify-between">
-{/* The note itself is always shown: it describes what happens to the
-              details, which is true either way. The link to the policy appears
-              only while that page is published — otherwise it would point at a
-              404. */}
+        {/* The note describes what happens to the details, which is true
+            whatever state the legal section is in. The link follows the policy
+            page itself, so taking the section down can never leave a link here
+            pointing at a 404. */}
         <p className="text-fine max-w-[46ch] text-graphite">
           {form.privacyNote}
           {legalPublished ? (

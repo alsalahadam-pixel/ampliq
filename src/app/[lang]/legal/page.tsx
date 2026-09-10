@@ -13,8 +13,9 @@ import { route, type RouteKey } from "@/lib/routes";
 import { buildMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
-  // Nothing is prerendered while the section is unpublished; the page's own
-  // guard answers 404 for anything that reaches it.
+  // Both locales prerender. The list empties only if the section is taken
+  // down with NEXT_PUBLIC_LEGAL_PUBLISHED, and the page's own guard answers
+  // 404 for anything that reaches it after that.
   return legalIsPublished ? locales.map((lang) => ({ lang })) : [];
 }
 

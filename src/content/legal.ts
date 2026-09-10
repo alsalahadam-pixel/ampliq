@@ -4,18 +4,28 @@
  * Written to the structure German law expects — §5 DDG and §18 MStV for the
  * Impressum, the GDPR articles for the privacy policy, §§ 312g/355 BGB for the
  * cancellation notice — with every entity-specific value pulled from
- * `@/lib/legal`. Where a value has not been supplied, a bracketed placeholder
- * renders in its place and is highlighted on the page.
+ * `@/lib/legal`.
+ *
+ * Two rules govern what goes in a sentence here. Nothing is invented: a fact
+ * AMPLIQ does not have is written as `legalValue(...)`, which resolves to a
+ * bracketed token, and the renderer drops the sentence, row or chapter that
+ * contains one. And nothing describes the state of the paperwork: no sentence
+ * says a value is coming, is being confirmed, or is required before launch. A
+ * document is what is known about the subject, not a progress report on itself.
+ *
+ * Where a statement only holds once a value exists — the supervisory authority,
+ * the register entry, the processors — it lives in its own block or chapter so
+ * that it appears with the value and is simply absent until then.
  *
  * **Nothing here is a substitute for legal review.** The structure is right and
- * the technical statements describe what this build actually does; the legal
- * wording still needs a qualified lawyer, and the pages say so.
+ * the technical statements describe what this build actually does; the wording
+ * still wants a qualified lawyer before it is relied on.
  */
 
 import type { LegalChapter } from "@/components/legal/legal-document";
 import type { Locale } from "@/lib/i18n";
-import { legalValue } from "@/lib/legal";
-import { contact, siteUrl } from "@/lib/site";
+import { entityName, legalValue, noticeAddress } from "@/lib/legal";
+import { contact, site, siteUrl } from "@/lib/site";
 
 /** The date the wording below last changed. Bump it when you edit a document. */
 export const LEGAL_UPDATED = "2026-09-09";
@@ -24,6 +34,18 @@ type Chapters = Record<Locale, LegalChapter[]>;
 
 const domain = siteUrl.replace(/^https?:\/\//, "");
 
+/**
+ * How the contracting party is named where the AGB has to introduce it: the
+ * registered designation with the trading name after it once the two differ,
+ * and the trading name on its own until then. Never a bracketed token — the
+ * sentence it opens is the one that says what the document governs, and losing
+ * it would leave the chapter without its subject.
+ */
+const contractingParty: Record<Locale, string> = {
+  en: entityName === site.name ? site.name : `${entityName} ("${site.name}")`,
+  de: entityName === site.name ? site.name : `${entityName} („${site.name}“)`,
+};
+
 /* ------------------------------------------------------------------ *
  * Impressum
  * ------------------------------------------------------------------ */
@@ -31,11 +53,12 @@ const domain = siteUrl.replace(/^https?:\/\//, "");
 /**
  * The Impressum.
  *
- * Register details — court, number — appear as rows once they are supplied and
- * are simply absent until then. Nothing announces their absence: a business
- * without a Handelsregister entry has nothing to declare on that point, and a
- * sentence saying so tells a visitor about the company's status rather than
- * about the provider, which is not what § 5 DDG asks for.
+ * Register details, tax numbers and the supervisory authority appear as their
+ * own rows and chapters once they are supplied, and are simply absent until
+ * then. Nothing announces their absence: a business without a Handelsregister
+ * entry has nothing to declare on that point, and a sentence saying so tells a
+ * visitor about the company's status rather than about the provider, which is
+ * not what § 5 DDG asks for.
  */
 export function imprintChapters(locale: Locale): LegalChapter[] {
   const chapters: Chapters = {
@@ -52,7 +75,7 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
           {
             kind: "rows",
             rows: [
-              { label: "Name", value: legalValue("name") },
+              { label: "Name", value: entityName },
               { label: "Legal form", value: legalValue("form") },
               { label: "Address", value: legalValue("street") },
               {
@@ -62,12 +85,9 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
               { label: "Country", value: legalValue("country") },
             ],
           },
-        ],
-      },
-      {
-        id: "contact",
-        heading: "Contact",
-        blocks: [
+          // § 5 DDG asks for the means of contact in the same breath as the
+          // identification, so they share a chapter rather than repeating the
+          // general address two rows apart under a heading of its own.
           {
             kind: "rows",
             rows: [
@@ -86,6 +106,9 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
       {
         id: "responsible",
         heading: "Responsible for content",
+        // § 18 MStV names a person. Without one the heading and its lead-in
+        // sentence have nothing to introduce, so the chapter waits for it.
+        requires: [legalValue("representative")],
         blocks: [
           {
             kind: "text",
@@ -116,10 +139,18 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
               { label: "Tax number", value: legalValue("taxNumber") },
             ],
           },
+        ],
+      },
+      {
+        id: "register",
+        heading: "Register entry",
+        blocks: [
           {
-            kind: "text",
-            value:
-              "Where the small business regulation under § 19 UStG applies, no VAT is shown on invoices and no VAT identification number exists. This will be stated explicitly here once the tax position is confirmed.",
+            kind: "rows",
+            rows: [
+              { label: "Registering court", value: legalValue("registerCourt") },
+              { label: "Registration number", value: legalValue("registerNumber") },
+            ],
           },
         ],
       },
@@ -130,7 +161,11 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
           {
             kind: "text",
             value:
-              "Marketing and design services are not a regulated profession in Germany, so no professional chamber, professional title or supervisory authority applies. Where an activity requiring authorisation is added, the responsible authority will be named here: [SUPERVISORY AUTHORITY IF APPLICABLE].",
+              "Marketing and design services are not a regulated profession in Germany, so no professional chamber, professional title or supervisory authority applies.",
+          },
+          {
+            kind: "text",
+            value: `Supervisory authority: ${legalValue("supervisoryAuthority")}.`,
           },
         ],
       },
@@ -193,7 +228,7 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
           {
             kind: "rows",
             rows: [
-              { label: "Name", value: legalValue("name") },
+              { label: "Name", value: entityName },
               { label: "Rechtsform", value: legalValue("form") },
               { label: "Anschrift", value: legalValue("street") },
               {
@@ -203,12 +238,6 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
               { label: "Land", value: legalValue("country") },
             ],
           },
-        ],
-      },
-      {
-        id: "contact",
-        heading: "Kontakt",
-        blocks: [
           {
             kind: "rows",
             rows: [
@@ -227,6 +256,7 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
       {
         id: "responsible",
         heading: "Inhaltlich verantwortlich",
+        requires: [legalValue("representative")],
         blocks: [
           {
             kind: "text",
@@ -256,10 +286,18 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
               { label: "Steuernummer", value: legalValue("taxNumber") },
             ],
           },
+        ],
+      },
+      {
+        id: "register",
+        heading: "Registereintrag",
+        blocks: [
           {
-            kind: "text",
-            value:
-              "Soweit die Kleinunternehmerregelung nach § 19 UStG angewendet wird, wird keine Umsatzsteuer ausgewiesen und es besteht keine Umsatzsteuer-Identifikationsnummer. Sobald die steuerliche Einordnung feststeht, wird das hier ausdrücklich angegeben.",
+            kind: "rows",
+            rows: [
+              { label: "Registergericht", value: legalValue("registerCourt") },
+              { label: "Registernummer", value: legalValue("registerNumber") },
+            ],
           },
         ],
       },
@@ -270,7 +308,11 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
           {
             kind: "text",
             value:
-              "Marketing- und Designleistungen sind in Deutschland kein reglementierter Beruf; es bestehen daher keine Kammerzugehörigkeit, keine Berufsbezeichnung und keine Aufsichtsbehörde. Sollte eine erlaubnispflichtige Tätigkeit hinzukommen, wird die zuständige Behörde hier benannt: [SUPERVISORY AUTHORITY IF APPLICABLE].",
+              "Marketing- und Designleistungen sind in Deutschland kein reglementierter Beruf; es bestehen daher keine Kammerzugehörigkeit, keine Berufsbezeichnung und keine Aufsichtsbehörde.",
+          },
+          {
+            kind: "text",
+            value: `Zuständige Aufsichtsbehörde: ${legalValue("supervisoryAuthority")}.`,
           },
         ],
       },
@@ -347,7 +389,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           {
             kind: "rows",
             rows: [
-              { label: "Name", value: legalValue("name") },
+              { label: "Name", value: entityName },
               { label: "Address", value: legalValue("street") },
               {
                 label: "Postal code and city",
@@ -369,7 +411,8 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
         blocks: [
           {
             kind: "text",
-            value: `This website is hosted at [HOSTING PROVIDER]. When you open a page, your browser automatically transmits data that the hosting provider records in server log files.`,
+            value:
+              "When you open a page, your browser automatically transmits data that the hosting infrastructure records in server log files.",
           },
           {
             kind: "list",
@@ -388,8 +431,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           },
           {
             kind: "text",
-            value:
-              "A data processing agreement under Art. 28 GDPR must be in place with the hosting provider before launch: [DATA PROCESSING AGREEMENT WITH HOST].",
+            value: `Hosting is provided by ${legalValue("hostingProvider")} as a processor under Art. 28 GDPR.`,
           },
         ],
       },
@@ -419,8 +461,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           },
           {
             kind: "text",
-            value:
-              "Email is sent through Resend (Resend Inc., USA) when configured. A data processing agreement and, where personal data reaches the United States, an appropriate transfer mechanism under Chapter V GDPR must be in place before launch: [EMAIL PROVIDER AGREEMENT].",
+            value: `Delivery of that email is handled by ${legalValue("emailProcessor")} as a processor under Art. 28 GDPR.`,
           },
         ],
       },
@@ -445,8 +486,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           },
           {
             kind: "text",
-            value:
-              "Where Google Calendar is used, the provider is Google Ireland Limited; where Microsoft 365 is used, the provider is Microsoft Ireland Operations Limited. A data processing agreement with the provider in use must be in place before launch: [CALENDAR PROVIDER AGREEMENT].",
+            value: `The calendar is operated by ${legalValue("calendarProcessor")} as a processor under Art. 28 GDPR.`,
           },
         ],
       },
@@ -565,7 +605,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           {
             kind: "rows",
             rows: [
-              { label: "Name", value: legalValue("name") },
+              { label: "Name", value: entityName },
               { label: "Anschrift", value: legalValue("street") },
               {
                 label: "PLZ und Ort",
@@ -588,7 +628,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           {
             kind: "text",
             value:
-              "Diese Website wird bei [HOSTING PROVIDER] gehostet. Beim Aufruf einer Seite übermittelt Ihr Browser automatisch Daten, die der Hoster in Server-Logfiles speichert.",
+              "Beim Aufruf einer Seite übermittelt Ihr Browser automatisch Daten, die die Hosting-Infrastruktur in Server-Logfiles speichert.",
           },
           {
             kind: "list",
@@ -607,8 +647,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           },
           {
             kind: "text",
-            value:
-              "Vor dem Launch muss mit dem Hoster ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO geschlossen werden: [DATA PROCESSING AGREEMENT WITH HOST].",
+            value: `Das Hosting erfolgt durch ${legalValue("hostingProvider")} als Auftragsverarbeiter nach Art. 28 DSGVO.`,
           },
         ],
       },
@@ -638,8 +677,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           },
           {
             kind: "text",
-            value:
-              "Der E-Mail-Versand erfolgt, soweit eingerichtet, über Resend (Resend Inc., USA). Vor dem Launch müssen ein Auftragsverarbeitungsvertrag und — soweit personenbezogene Daten in die USA gelangen — ein geeigneter Übermittlungsmechanismus nach Kapitel V DSGVO vorliegen: [EMAIL PROVIDER AGREEMENT].",
+            value: `Der Versand dieser E-Mail erfolgt über ${legalValue("emailProcessor")} als Auftragsverarbeiter nach Art. 28 DSGVO.`,
           },
         ],
       },
@@ -664,8 +702,7 @@ export function privacyChapters(locale: Locale): LegalChapter[] {
           },
           {
             kind: "text",
-            value:
-              "Bei Nutzung von Google Kalender ist Anbieter die Google Ireland Limited, bei Nutzung von Microsoft 365 die Microsoft Ireland Operations Limited. Vor dem Launch muss mit dem eingesetzten Anbieter ein Auftragsverarbeitungsvertrag geschlossen werden: [CALENDAR PROVIDER AGREEMENT].",
+            value: `Der Kalender wird von ${legalValue("calendarProcessor")} als Auftragsverarbeiter nach Art. 28 DSGVO betrieben.`,
           },
         ],
       },
@@ -789,7 +826,7 @@ export function termsChapters(locale: Locale): LegalChapter[] {
         blocks: [
           {
             kind: "text",
-            value: `These terms govern all contracts between ${legalValue("name")} ("AMPLIQ") and its clients concerning marketing, design, content and related services.`,
+            value: `These terms govern all contracts between ${contractingParty.en} and its clients concerning marketing, design, content and related services.`,
           },
           {
             kind: "text",
@@ -946,7 +983,11 @@ export function termsChapters(locale: Locale): LegalChapter[] {
           {
             kind: "text",
             value:
-              "German law applies, excluding the UN Convention on Contracts for the International Sale of Goods. Where the client is a merchant, a legal entity under public law or a special fund under public law, the place of jurisdiction is [CITY].",
+              "German law applies, excluding the UN Convention on Contracts for the International Sale of Goods.",
+          },
+          {
+            kind: "text",
+            value: `Where the client is a merchant, a legal entity under public law or a special fund under public law, the place of jurisdiction is ${legalValue("city")}.`,
           },
           {
             kind: "text",
@@ -964,7 +1005,7 @@ export function termsChapters(locale: Locale): LegalChapter[] {
         blocks: [
           {
             kind: "text",
-            value: `Diese Bedingungen gelten für alle Verträge zwischen ${legalValue("name")} („AMPLIQ") und ihren Kundinnen und Kunden über Marketing-, Design-, Content- und damit verbundene Leistungen.`,
+            value: `Diese Bedingungen gelten für alle Verträge zwischen ${contractingParty.de} und ihren Kundinnen und Kunden über Marketing-, Design-, Content- und damit verbundene Leistungen.`,
           },
           {
             kind: "text",
@@ -1120,8 +1161,11 @@ export function termsChapters(locale: Locale): LegalChapter[] {
         blocks: [
           {
             kind: "text",
-            value:
-              "Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts. Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist Gerichtsstand [CITY].",
+            value: "Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.",
+          },
+          {
+            kind: "text",
+            value: `Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist Gerichtsstand ${legalValue("city")}.`,
           },
           {
             kind: "text",
@@ -1141,7 +1185,11 @@ export function termsChapters(locale: Locale): LegalChapter[] {
  * ------------------------------------------------------------------ */
 
 export function cancellationChapters(locale: Locale): LegalChapter[] {
-  const address = `${legalValue("name")}, ${legalValue("street")}, ${legalValue("postalCode")} ${legalValue("city")}, ${legalValue("country")} — ${contact.info}`;
+  // The full postal address once it is supplied, and the name and email
+  // address until then — see `noticeAddress`. Either way the reader is given a
+  // route that actually reaches us, which is what §§ 355/356 BGB are asking
+  // this notice to do.
+  const address = noticeAddress();
 
   const chapters: Chapters = {
     en: [

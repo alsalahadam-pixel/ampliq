@@ -1,8 +1,8 @@
 # Before this site goes live
 
 Everything on the site is real except the items listed here. Nothing has been
-invented to fill a gap: where a fact was unavailable, the page either omits it
-or shows a visible placeholder.
+invented to fill a gap: where a fact was unavailable, the page leaves it out.
+No visitor is shown a placeholder, and no page discusses what is missing.
 
 ## The one command
 
@@ -19,40 +19,65 @@ each item; the command tells you which ones are still open right now.
 
 ## The legal section
 
-It is unpublished. Every route under `/legal` answers 404, no link to one
-appears in the footer or anywhere else, the paths are absent from `robots.txt`
-and the sitemap, and the documents are not in the shipped bundles at all —
-`npm run qa:build` checks that last part against `.next` rather than against
-the rendered page, because a page can render nothing and still hand a visitor
-the words.
+**It is public.** All five documents — Impressum, privacy policy, AGB,
+Widerrufsbelehrung, cookie policy — are reachable in both languages and linked
+from the footer. They are `noindex`, because they are required disclosures
+rather than pages anyone should find through search, and `robots.txt` keeps
+crawlers off them for the same reason.
 
-Nothing on the site says any of this. There is no notice, no placeholder, no
-"coming soon" — a legal URL behaves exactly like an address that does not
-exist.
+They render with none of the entity variables set. Every row, sentence, list
+item and chapter that depends on a value AMPLIQ does not have is left out of
+the page — see `withoutUnresolved` in `src/components/legal/legal-document.tsx`
+— so what a visitor reads is a shorter document, not a form with blanks in it.
 
-The documents themselves are complete and untouched in the repository. The
-gate is one flag, `legalIsPublished` in `src/lib/legal.ts`, and it flips itself
-the moment the required entity fields are set: the routes render, the footer
-column returns, the forms link their privacy note again, and `robots.txt` goes
-back to keeping crawlers off them. Nothing else needs editing.
+**Nothing on the site says a value is missing.** No notice, no placeholder, no
+red, no sentence about what is still being confirmed or is required before
+launch. A legal document states what is known about its subject; it is not a
+progress report on itself. Two checks enforce that:
+
+- `qa/legal-visibility.mjs` — every legal route answers 200, carries no draft
+  wording or bracketed token, has no heading standing over an empty section,
+  and is linked from the footer in both languages.
+- `qa/build-output.mjs` — no client bundle carries the entity registry, and no
+  prerendered page anywhere carries the wording. A page can render nothing and
+  still ship the words, so this reads `.next` rather than the rendered page.
+
+Supplying a value makes its row or sentence appear. Nothing else changes.
 
 ```bash
-# Publishes automatically once these are set:
-NEXT_PUBLIC_LEGAL_COMPANY="..."
+# The Impressum and privacy controller block:
+NEXT_PUBLIC_LEGAL_COMPANY="..."          # until set, the pages use "AMPLIQ"
 NEXT_PUBLIC_LEGAL_FORM="..."
-NEXT_PUBLIC_LEGAL_REPRESENTATIVE="..."
+NEXT_PUBLIC_LEGAL_REPRESENTATIVE="..."   # unlocks "Responsible for content"
 NEXT_PUBLIC_LEGAL_STREET="..."
-NEXT_PUBLIC_LEGAL_POSTAL_CODE="..."
+NEXT_PUBLIC_LEGAL_POSTAL_CODE="..."      # these three travel together
 NEXT_PUBLIC_LEGAL_CITY="..."
 
-# Or override the decision in either direction:
-NEXT_PUBLIC_LEGAL_PUBLISHED="false"   # keep it down after the details are in
-NEXT_PUBLIC_LEGAL_PUBLISHED="true"    # bring it up to review before then
+# Only where they exist. Leave them out and the pages never mention them:
+NEXT_PUBLIC_LEGAL_VAT_ID="..."
+NEXT_PUBLIC_LEGAL_TAX_NUMBER="..."
+NEXT_PUBLIC_LEGAL_REGISTER_COURT="..."   # both add a "Register entry" chapter
+NEXT_PUBLIC_LEGAL_REGISTER_NUMBER="..."
+NEXT_PUBLIC_LEGAL_AUTHORITY="..."
+
+# The processors the privacy policy names, once you know which they are:
+NEXT_PUBLIC_LEGAL_HOST="..."
+NEXT_PUBLIC_LEGAL_EMAIL_PROCESSOR="..."
+NEXT_PUBLIC_LEGAL_CALENDAR_PROCESSOR="..."
+
+# And the one switch that takes the whole section down again:
+NEXT_PUBLIC_LEGAL_PUBLISHED="false"
 ```
 
-Where a value is still missing after publishing, the row, sentence or list item
-that needs it is left out rather than shown as a gap — and a chapter left with
-nothing to say goes with it. Nothing is ever invented.
+Reading well is not the same as being legally sufficient. An Impressum without
+a business address does not satisfy § 5 DDG, and a withdrawal notice without a
+postal address does not satisfy § 355 BGB, however finished the page looks.
+`npm run launch-check` is what tracks that; the page is not.
+
+**The wording still wants a lawyer.** The structure follows German law and the
+technical statements describe what this build actually does — the cookie is
+real, the absence of analytics is real, the free/busy calendar read is real —
+but none of it has been reviewed by anyone qualified.
 
 ## The domain
 
@@ -77,12 +102,12 @@ them lives somewhere else, but the normal case is the single line above.
 | What | Where | Notes |
 | --- | --- | --- |
 | The final domain | `.env.local` → `NEXT_PUBLIC_SITE_DOMAIN` | See above. Until it is set, everything runs on the `ampliq.net` default. |
-| Legal entity: name, form, address, responsible person | `.env.local` → `NEXT_PUBLIC_LEGAL_*` | Nothing is shown to a visitor while these are missing: any row, sentence or list item that depends on an unsupplied value is left out, and a chapter left with nothing to say disappears with it. No placeholder, no gap marker, no "coming soon" — and nothing invented either. Supply the values and the full documents appear on their own. **AMPLIQ is not a registered company** — do not enter a GmbH, UG, Handelsregister number or VAT ID that does not exist. |
-| VAT ID, tax number, register details | `.env.local` → `..._VAT_ID`, `..._TAX_NUMBER`, `..._REGISTER_*` | Only where they genuinely apply to the legal form. Shown as "if applicable" rather than as a gap. |
-| Legal review of all five documents | `/legal/*` | The structure follows German law and the technical descriptions match this build; the legal wording still needs a qualified lawyer. The pages no longer say so on themselves — that notice was removed at your request — so this list is the only place it is recorded. |
-| Publishing the legal pages | automatic — see below | The whole section is **unpublished**: every legal route answers 404, no link appears anywhere, and nothing in the shipped build contains the documents. It comes back on its own once the entity details above are supplied. A German site trading publicly needs a reachable Impressum, so this is a launch blocker, not an optional extra. |
+| Legal entity: name, form, address, responsible person | `.env.local` → `NEXT_PUBLIC_LEGAL_*` | The pages are public and read as finished without these. Any row, sentence or list item that depends on an unsupplied value is left out, and a chapter left with nothing to say goes with it — no placeholder, no gap marker, no "coming soon", and nothing invented. But an Impressum without a business address is not legally sufficient however well it reads, which is why this is a blocker. Enter only what is true: leave the GmbH, UG, Handelsregister and VAT lines out if there is no such entry, and the pages will never mention them. |
+| VAT ID, tax number, register details | `.env.local` → `..._VAT_ID`, `..._TAX_NUMBER`, `..._REGISTER_*` | Only where they genuinely apply to the legal form. Absent from the documents until then — the register chapter does not exist unless both register lines are set. |
+| Legal review of all five documents | `/legal/*` | The structure follows German law and the technical descriptions match this build; the wording still needs a qualified lawyer. The pages do not say so on themselves — a document that discusses its own readiness is worse than one that simply waits — so this list is the only place it is recorded. |
+| Publishing the legal pages | already done | All five documents are **public** in both languages and linked from the footer. `NEXT_PUBLIC_LEGAL_PUBLISHED="false"` is the only thing that takes them down again. |
 | Email delivery | `.env.local` → `RESEND_API_KEY` or `MAIL_ENDPOINT` | One transport serves both the enquiry form and the booking confirmations. Until it is set, the form answers `503` and says plainly that nothing was sent, and a booking is recorded but **no email reaches anyone — including you**. Neither pretends to deliver. See `docs/booking.md`. |
-| Hosting provider name, and the DPA with them | `/legal/privacy` → `[HOSTING PROVIDER]` | Named in the privacy policy once the host is chosen. An Art. 28 GDPR agreement is required before launch. |
+| The three processors, and the Art. 28 agreements with them | `.env.local` → `NEXT_PUBLIC_LEGAL_HOST`, `..._EMAIL_PROCESSOR`, `..._CALENDAR_PROCESSOR` | Each adds one sentence to its chapter of the privacy policy and is absent until then, so the policy never names a provider this deployment does not use. The agreements themselves are paperwork, not configuration. |
 | Booking persistence | `src/lib/booking/store.ts` | The default store keeps bookings in the Node process: a restart forgets them, and two instances do not share a list. Connecting a calendar with write access is usually enough, since the calendar then becomes the source of truth. |
 
 ## Should be supplied

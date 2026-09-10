@@ -12,14 +12,17 @@ import { buildMetadata } from "@/lib/seo";
 /**
  * Shared shell for every legal document.
  *
- * Both halves are gated on `legalIsPublished`. While the section is
- * unpublished the routes answer 404 like any address that does not exist —
- * no explanation page, nothing that hints there is something here waiting to
- * be finished. The pages themselves stay in the repository, complete, and
- * come back the moment the entity details are supplied.
+ * The section is published: a visitor can always read what AMPLIQ does with
+ * their data, what the terms are and how to withdraw. Values that have not
+ * been supplied are left out by the renderer rather than shown as gaps, so the
+ * documents read as finished at every stage of being filled in.
  *
- * Once published they are `noindex`: legally required disclosures rather than
- * content anyone should reach through search.
+ * Both halves still honour `legalIsPublished`, which only
+ * `NEXT_PUBLIC_LEGAL_PUBLISHED="false"` turns off — a way to take the section
+ * down in one move if it is ever needed, and a no-op otherwise.
+ *
+ * The pages are `noindex`: legally required disclosures rather than content
+ * anyone should reach through search.
  */
 export function legalMetadata({
   lang,

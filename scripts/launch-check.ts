@@ -64,11 +64,12 @@ const groups: Group[] = [
         what: field.token,
         where: "NEXT_PUBLIC_LEGAL_*",
         done: field.value !== null,
-        meanwhile: "renders as a visible placeholder on all five legal pages",
+        meanwhile:
+          "the row or sentence that needs it is left out of the published documents — nothing on the page says it is missing",
       })),
   },
   {
-    title: "Legal entity — only if the legal form has them",
+    title: "Legal entity — only where the legal form or the deployment has them",
     blocking: false,
     items: Object.values(legalFields)
       .filter((field) => !field.required)
@@ -76,7 +77,7 @@ const groups: Group[] = [
         what: field.token,
         where: "NEXT_PUBLIC_LEGAL_*",
         done: field.value !== null,
-        meanwhile: 'shown as "if applicable" rather than as a gap',
+        meanwhile: "absent from the documents rather than shown as a gap",
       })),
   },
   {
@@ -194,7 +195,8 @@ console.log(
     : `${BOLD}${blockers} item${blockers === 1 ? "" : "s"} must be supplied before launch${RESET}, plus ${pending} optional.`,
 );
 console.log(
-  `${DIM}Legal wording still needs a qualified lawyer — see PLACEHOLDERS.md.${RESET}\n`,
+  `${DIM}The legal pages are public and say only what is known; the wording still${RESET}`,
 );
+console.log(`${DIM}wants a qualified lawyer before you rely on it — see PLACEHOLDERS.md.${RESET}\n`);
 
 process.exit(blockers === 0 ? 0 : 1);

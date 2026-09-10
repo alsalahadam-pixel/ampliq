@@ -7,13 +7,14 @@ import { cn } from "@/lib/utils";
 /**
  * A value the operator has not supplied yet.
  *
- * Nothing on a public page may show one. Rather than print a bracketed token
- * or invent something plausible, the renderer below simply leaves out any row,
- * sentence or list item that still depends on a missing value — and any
- * chapter left with nothing to say.
+ * Nothing on a public page may show one, and nothing on a public page may
+ * mention that one exists. Rather than print a bracketed token, invent
+ * something plausible, or explain what is missing, the renderer below leaves
+ * out any row, sentence or list item that still depends on a missing value —
+ * and any chapter left with nothing to say.
  *
  * The document therefore reads as finished at every stage of being filled in:
- * shorter while values are outstanding, complete the moment they are supplied,
+ * shorter while values are outstanding, longer the moment they are supplied,
  * and never claiming a fact AMPLIQ does not have. `npm run launch-check` is
  * where the gaps are tracked; the page is not.
  */
@@ -29,9 +30,15 @@ function resolved(value: string): boolean {
  * Applied to the whole document before anything renders, so a chapter that
  * loses all of its content disappears from both the page and its contents
  * rail rather than standing empty under a heading.
+ *
+ * `requires` covers the case that filtering block by block cannot: a chapter
+ * whose heading and lead-in sentence only make sense alongside a value that is
+ * outstanding. Listing that value keeps the whole chapter away until it lands,
+ * instead of leaving an introduction with nothing after it.
  */
 export function withoutUnresolved(chapters: LegalChapter[]): LegalChapter[] {
   return chapters
+    .filter((chapter) => (chapter.requires ?? []).every(resolved))
     .map((chapter) => ({
       ...chapter,
       blocks: chapter.blocks
@@ -60,6 +67,8 @@ export type LegalChapter = {
   id: string;
   heading: string;
   blocks: LegalBlock[];
+  /** Values the whole chapter depends on; unresolved, it does not render. */
+  requires?: string[];
 };
 
 /** Renders one document: contents rail on the left, chapters on the right. */

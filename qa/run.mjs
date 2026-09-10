@@ -23,13 +23,13 @@ const BASE = process.env.QA_BASE ?? "http://localhost:3100";
 /** In dependency order: the cheap structural checks first. */
 const CHECKS = [
   { name: "site-url", what: "the site origin is never a fragment, whatever the environment says" },
-  { name: "build-output", what: "nothing legal is in the shipped bundles or prerendered files" },
+  { name: "build-output", what: "no entity registry in client bundles, no draft wording anywhere" },
   { name: "crawl", what: "every internal link resolves, no console errors" },
   { name: "seo", what: "titles, descriptions, canonicals, hreflang, Open Graph, robots, sitemap" },
   { name: "a11y", what: "labels, alt text, accessible names, heading order" },
   { name: "contrast", what: "WCAG AA contrast on every text node" },
   { name: "german", what: "translation completeness, formal address, link locale" },
-  { name: "legal-visibility", what: "no draft language, placeholder or legal link is public" },
+  { name: "legal-visibility", what: "the five documents are public, linked and whole; no draft language" },
   { name: "addresses", what: "project@ and info@ stay in their own lanes" },
   { name: "rules-probe", what: "no hairline is drawn twice" },
   { name: "mobile", what: "overflow, gutters, tap targets and text size at 7 widths" },

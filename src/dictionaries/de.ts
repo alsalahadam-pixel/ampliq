@@ -40,10 +40,7 @@ export const de: Dictionary = {
     skipToContent: "Zum Inhalt springen",
     email: "E-Mail",
     of: "von",
-    concept: "Konzept",
-    inProgress: "In Arbeit",
     scrollHint: "Scrollen",
-    placeholderNotice: "Platzhalter — muss vor dem Launch ergänzt werden",
   },
 
   home: {
