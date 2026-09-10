@@ -69,6 +69,7 @@ export function DetailsForm({
   /** Server-side field errors, keyed the same way as the client's. */
   serverErrors,
   onSubmit,
+  legalPublished,
 }: {
   locale: Locale;
   dict: Dictionary;
@@ -76,6 +77,14 @@ export function DetailsForm({
   submitting: boolean;
   serverErrors: Record<string, string>;
   onSubmit: (details: BookingDetails) => void;
+  /**
+   * Whether the privacy policy is published, passed down from the server.
+   *
+   * Imported directly, `@/lib/legal` would drag the whole entity registry —
+   * every placeholder token — into the browser bundle of a page that only
+   * needs one boolean. It is a prop for that reason.
+   */
+  legalPublished: boolean;
 }) {
   const t = dict.booking.details;
   const id = useId();
@@ -321,11 +330,20 @@ export function DetailsForm({
       </div>
 
       <div className="flex flex-col gap-6 border-t border-rule pt-7 sm:flex-row sm:items-center sm:justify-between">
+{/* The note itself is always shown: it describes what happens to the
+              details, which is true either way. The link to the policy appears
+              only while that page is published — otherwise it would point at a
+              404. */}
         <p className="text-fine max-w-[46ch] text-graphite">
-          {t.privacyNote}{" "}
-          <a href={route(locale, "privacy")} className="link-underline text-ink">
-            {t.privacyLink}
-          </a>
+          {t.privacyNote}
+          {legalPublished ? (
+            <>
+              {" "}
+              <a href={route(locale, "privacy")} className="link-underline text-ink">
+                {t.privacyLink}
+              </a>
+            </>
+          ) : null}
         </p>
         <Button type="submit" withArrow disabled={submitting} className="shrink-0">
           {submitting ? t.submitting : t.submit}

@@ -13,9 +13,11 @@ const routes = [
 ];
 
 const failures = new Map();
+const skipped = [];
 
 for (const path of routes) {
-  await page.goto(BASE + path, { waitUntil: "load" });
+  const response = await page.goto(BASE + path, { waitUntil: "load" });
+  if (response && response.status() === 404) { skipped.push(path); continue; }
   // Reveal animations start elements at opacity 0; measure the finished state.
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForTimeout(200);
@@ -124,7 +126,10 @@ for (const path of routes) {
 process.exitCode = failures.size > 0 ? 1 : 0;
 
 if (failures.size === 0) {
-  console.log(`CONTRAST CLEAN — WCAG AA across ${routes.length} routes`);
+  console.log(
+    `CONTRAST CLEAN — WCAG AA across ${routes.length - skipped.length} routes` +
+      (skipped.length ? ` (${skipped.length} unpublished, skipped)` : ""),
+  );
 } else {
   console.log(`Contrast below WCAG AA (${failures.size} distinct):\n`);
   for (const [key, v] of [...failures].sort((a, b) => b[1].count - a[1].count)) {

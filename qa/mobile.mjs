@@ -24,6 +24,7 @@ const widths = [
 
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });
 const issues = [];
+const skipped = new Set();
 let checks = 0;
 
 for (const { w, label } of widths) {
@@ -45,7 +46,11 @@ for (const { w, label } of widths) {
 
   for (const path of paths) {
     errs.length = 0;
-    await page.goto(base + path, { waitUntil: "load" });
+    const response = await page.goto(base + path, { waitUntil: "load" });
+    // An unpublished route answers 404; measuring the not-found page once per
+    // width would inflate the coverage figure with a page nobody is meant to
+    // reach. `legal-visibility` is what asserts it 404s.
+    if (response && response.status() === 404) { skipped.add(path); continue; }
     await page.waitForTimeout(200);
     checks++;
 
@@ -172,4 +177,5 @@ await browser.close();
 process.exitCode = issues.length > 0 ? 1 : 0;
 console.log("\n" + (issues.length
   ? `${issues.length} of ${checks} page/width combinations flagged:\n\n` + issues.join("\n")
-  : `CLEAN across ${widths.length} widths × ${paths.length} pages (${checks} checks)`));
+  : `CLEAN across ${widths.length} widths × ${paths.length - skipped.size} pages (${checks} checks)` +
+    (skipped.size ? `, ${skipped.size} unpublished routes skipped` : "")));

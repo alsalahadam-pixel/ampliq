@@ -28,6 +28,15 @@ const domain = siteUrl.replace(/^https?:\/\//, "");
  * Impressum
  * ------------------------------------------------------------------ */
 
+/**
+ * The Impressum.
+ *
+ * Register details — court, number — appear as rows once they are supplied and
+ * are simply absent until then. Nothing announces their absence: a business
+ * without a Handelsregister entry has nothing to declare on that point, and a
+ * sentence saying so tells a visitor about the company's status rather than
+ * about the provider, which is not what § 5 DDG asks for.
+ */
 export function imprintChapters(locale: Locale): LegalChapter[] {
   const chapters: Chapters = {
     en: [
@@ -52,11 +61,6 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
               },
               { label: "Country", value: legalValue("country") },
             ],
-          },
-          {
-            kind: "text",
-            value:
-              "AMPLIQ is not currently entered in a commercial register. If and when a company is registered, the register, court and number will be added here.",
           },
         ],
       },
@@ -198,11 +202,6 @@ export function imprintChapters(locale: Locale): LegalChapter[] {
               },
               { label: "Land", value: legalValue("country") },
             ],
-          },
-          {
-            kind: "text",
-            value:
-              "AMPLIQ ist derzeit nicht im Handelsregister eingetragen. Sobald eine Gesellschaft eingetragen ist, werden Register, Registergericht und Registernummer hier ergänzt.",
           },
         ],
       },

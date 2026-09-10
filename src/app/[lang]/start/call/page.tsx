@@ -8,6 +8,7 @@ import { Section } from "@/components/ui/section";
 import { publicBookingConfig } from "@/lib/booking/config";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
+import { legalIsPublished } from "@/lib/legal";
 import { route } from "@/lib/routes";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
@@ -56,7 +57,12 @@ export default async function BookCallPage({ params }: PageProps<"/[lang]/start/
 
       <Section tone="paper">
         <div className="shell">
-          <BookingFlow config={config} locale={lang} dict={dict} />
+          <BookingFlow
+            config={config}
+            locale={lang}
+            dict={dict}
+            legalPublished={legalIsPublished}
+          />
         </div>
       </Section>
 

@@ -98,6 +98,26 @@ export const legalEntityIsComplete = !outstandingLegalFields.some(
   (entry) => entry.required,
 );
 
+/**
+ * Whether the legal section is published.
+ *
+ * The documents exist and are complete in structure, but a half-filled
+ * Impressum is worse than none: it tells a visitor what the business has not
+ * settled yet. So until the entity details are real the whole section is
+ * unpublished — every route answers 404, nothing links to it, and nothing
+ * anywhere says why. Supply the values and it comes back on its own.
+ *
+ * `NEXT_PUBLIC_LEGAL_PUBLISHED` overrides the automatic decision in both
+ * directions: "false" keeps the pages down after the details are in (waiting
+ * on a lawyer, say), "true" brings them up for a review pass before then.
+ */
+export const legalIsPublished = (() => {
+  const override = env.NEXT_PUBLIC_LEGAL_PUBLISHED?.trim().toLowerCase();
+  if (override === "true") return true;
+  if (override === "false") return false;
+  return legalEntityIsComplete;
+})();
+
 /** One-line postal address, or the placeholders that make up its gaps. */
 export function legalAddressLines(): string[] {
   return [

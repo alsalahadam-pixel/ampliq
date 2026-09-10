@@ -5,7 +5,10 @@ const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 await p.route('**', r => r.request().url().startsWith('http://localhost') ? r.continue() : r.abort());
 const out = [];
 for (const path of ['/en','/en/contact','/en/start','/de/start','/en/start/call','/de/start/call','/en/packages','/en/services','/en/services/seo','/en/about','/en/insights','/en/legal','/en/legal/imprint','/en/legal/terms','/de']) {
-  await p.goto(BASE+path, { waitUntil: 'load' });
+  const res = await p.goto(BASE+path, { waitUntil: 'load' });
+  // A route that is deliberately not published has nothing to audit; saying
+  // "clean" about a 404 page would overstate what this covers.
+  if (res && res.status() === 404) { out.push(`${path}: skipped (404)`); continue; }
   await p.waitForTimeout(300);
   const r = await p.evaluate(() => {
     const issues = [];
@@ -30,6 +33,9 @@ for (const path of ['/en','/en/contact','/en/start','/de/start','/en/start/call'
   });
   out.push(`${path}: ${r.length ? r.slice(0,5).join(' | ') : 'clean'}`);
 }
-process.exitCode = out.some((line) => !line.endsWith(': clean')) ? 1 : 0;
+// A skipped route is a route that is deliberately not published, not a fault.
+process.exitCode = out.some(
+  (line) => !line.endsWith(': clean') && !line.endsWith('skipped (404)'),
+) ? 1 : 0;
 console.log(out.join('\n'));
 await b.close();

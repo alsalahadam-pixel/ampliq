@@ -4,12 +4,26 @@ import { Disc } from "@/components/brand/logo";
 import { Logo } from "@/components/brand/logo";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
+import { legalIsPublished } from "@/lib/legal";
 import { href, route } from "@/lib/routes";
 import { activeSocials, contact, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const year = new Date().getFullYear();
+
+  // The legal column follows the routes: withheld while the section is
+  // unpublished, back the moment the entity details make it publishable. It is
+  // gated rather than deleted so activating is one change, not two.
+  const legal = legalIsPublished
+    ? [
+        { label: dict.legal.imprintTitle, href: route(locale, "imprint") },
+        { label: dict.legal.privacyTitle, href: route(locale, "privacy") },
+        { label: dict.legal.termsTitle, href: route(locale, "terms") },
+        { label: dict.legal.cancellationTitle, href: route(locale, "cancellation") },
+        { label: dict.legal.cookiesTitle, href: route(locale, "cookies") },
+      ]
+    : [];
 
   const nav = [
     { label: dict.nav.services, href: route(locale, "services") },
@@ -40,7 +54,10 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </p>
           </div>
 
-          <nav className="lg:col-span-3 lg:col-start-7" aria-label={dict.footer.navTitle}>
+          <nav
+            className={cn("lg:col-span-3", legal.length === 0 && "lg:col-start-7")}
+            aria-label={dict.footer.navTitle}
+          >
             <h2 className="eyebrow text-fog">{dict.footer.navTitle}</h2>
             {/* No gap between the rows: each link carries its own vertical
                 padding instead, so the tappable areas meet rather than leaving
@@ -68,7 +85,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             </ul>
           </nav>
 
-          <div className="lg:col-span-3">
+          <div className={cn(legal.length > 0 ? "lg:col-span-2" : "lg:col-span-3")}>
             <h2 className="eyebrow text-fog">{dict.footer.contactTitle}</h2>
             {/* The general address leads; the specialised two follow, smaller,
                 for people who already know which one they want. */}
@@ -137,13 +154,24 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           </div>
 
 
-          {/* The legal column lives here. It is withheld until the entity
-              details are real — an Impressum with gaps is worse than none —
-              and goes back as a fourth `lg:col-span-2` nav of links to
-              `imprint`, `privacy`, `terms`, `cancellation` and `cookies`,
-              headed by `dict.footer.legalTitle`, which is still in both
-              dictionaries waiting for it. `npm run launch-check` tracks what
-              is outstanding. */}
+          {legal.length > 0 ? (
+            <nav className="lg:col-span-2" aria-label={dict.footer.legalTitle}>
+              <h2 className="eyebrow text-fog">{dict.footer.legalTitle}</h2>
+              <ul className="mt-5 flex flex-col">
+                {legal.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      prefetch={false}
+                      className="link-underline inline-block py-1.5 text-[0.9375rem] text-paper/80 transition-colors duration-200 hover:text-paper"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
         </div>
 
         <div className="mt-16 flex flex-col-reverse gap-6 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">

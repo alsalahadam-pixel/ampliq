@@ -5,9 +5,12 @@ import { LegalPage, legalMetadata } from "@/components/legal/legal-page";
 import { imprintChapters } from "@/content/legal";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
+import { legalIsPublished } from "@/lib/legal";
 
 export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
+  // Nothing is prerendered while the section is unpublished; the page's own
+  // guard answers 404 for anything that reaches it.
+  return legalIsPublished ? locales.map((lang) => ({ lang })) : [];
 }
 
 export async function generateMetadata({
@@ -27,7 +30,7 @@ export async function generateMetadata({
 
 export default async function Page({ params }: PageProps<"/[lang]/legal/imprint">) {
   const { lang } = await params;
-  if (!isLocale(lang)) notFound();
+  if (!isLocale(lang) || !legalIsPublished) notFound();
 
   const dict = getDictionary(lang);
 

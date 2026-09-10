@@ -9,6 +9,7 @@ import { Section } from "@/components/ui/section";
 import { processSteps } from "@/content/process";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
+import { legalIsPublished } from "@/lib/legal";
 import { route } from "@/lib/routes";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import { contact } from "@/lib/site";
@@ -60,7 +61,7 @@ export default async function ContactPage({
         <div className="shell">
           <div className="grid gap-14 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-7">
-              <ContactForm locale={lang} dict={dict} />
+              <ContactForm locale={lang} dict={dict} legalPublished={legalIsPublished} />
             </div>
 
             <aside className="flex flex-col gap-10 lg:col-span-4 lg:col-start-9">

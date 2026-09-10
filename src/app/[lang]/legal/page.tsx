@@ -8,11 +8,14 @@ import { Section } from "@/components/ui/section";
 import { LEGAL_UPDATED } from "@/content/legal";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, locales } from "@/lib/i18n";
+import { legalIsPublished } from "@/lib/legal";
 import { route, type RouteKey } from "@/lib/routes";
 import { buildMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
+  // Nothing is prerendered while the section is unpublished; the page's own
+  // guard answers 404 for anything that reaches it.
+  return legalIsPublished ? locales.map((lang) => ({ lang })) : [];
 }
 
 export async function generateMetadata({
@@ -35,7 +38,7 @@ export default async function LegalIndexPage({
   params,
 }: PageProps<"/[lang]/legal">) {
   const { lang } = await params;
-  if (!isLocale(lang)) notFound();
+  if (!isLocale(lang) || !legalIsPublished) notFound();
 
   const dict = getDictionary(lang);
 

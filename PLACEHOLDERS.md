@@ -17,6 +17,43 @@ reads the same registries the pages read (`src/lib/legal.ts`,
 so it cannot drift from what the site actually renders. This document explains
 each item; the command tells you which ones are still open right now.
 
+## The legal section
+
+It is unpublished. Every route under `/legal` answers 404, no link to one
+appears in the footer or anywhere else, the paths are absent from `robots.txt`
+and the sitemap, and the documents are not in the shipped bundles at all —
+`npm run qa:build` checks that last part against `.next` rather than against
+the rendered page, because a page can render nothing and still hand a visitor
+the words.
+
+Nothing on the site says any of this. There is no notice, no placeholder, no
+"coming soon" — a legal URL behaves exactly like an address that does not
+exist.
+
+The documents themselves are complete and untouched in the repository. The
+gate is one flag, `legalIsPublished` in `src/lib/legal.ts`, and it flips itself
+the moment the required entity fields are set: the routes render, the footer
+column returns, the forms link their privacy note again, and `robots.txt` goes
+back to keeping crawlers off them. Nothing else needs editing.
+
+```bash
+# Publishes automatically once these are set:
+NEXT_PUBLIC_LEGAL_COMPANY="..."
+NEXT_PUBLIC_LEGAL_FORM="..."
+NEXT_PUBLIC_LEGAL_REPRESENTATIVE="..."
+NEXT_PUBLIC_LEGAL_STREET="..."
+NEXT_PUBLIC_LEGAL_POSTAL_CODE="..."
+NEXT_PUBLIC_LEGAL_CITY="..."
+
+# Or override the decision in either direction:
+NEXT_PUBLIC_LEGAL_PUBLISHED="false"   # keep it down after the details are in
+NEXT_PUBLIC_LEGAL_PUBLISHED="true"    # bring it up to review before then
+```
+
+Where a value is still missing after publishing, the row, sentence or list item
+that needs it is left out rather than shown as a gap — and a chapter left with
+nothing to say goes with it. Nothing is ever invented.
+
 ## The domain
 
 **Set it in one place.** Every URL and every published address on the site is
@@ -43,7 +80,7 @@ them lives somewhere else, but the normal case is the single line above.
 | Legal entity: name, form, address, responsible person | `.env.local` → `NEXT_PUBLIC_LEGAL_*` | Nothing is shown to a visitor while these are missing: any row, sentence or list item that depends on an unsupplied value is left out, and a chapter left with nothing to say disappears with it. No placeholder, no gap marker, no "coming soon" — and nothing invented either. Supply the values and the full documents appear on their own. **AMPLIQ is not a registered company** — do not enter a GmbH, UG, Handelsregister number or VAT ID that does not exist. |
 | VAT ID, tax number, register details | `.env.local` → `..._VAT_ID`, `..._TAX_NUMBER`, `..._REGISTER_*` | Only where they genuinely apply to the legal form. Shown as "if applicable" rather than as a gap. |
 | Legal review of all five documents | `/legal/*` | The structure follows German law and the technical descriptions match this build; the legal wording still needs a qualified lawyer. The pages no longer say so on themselves — that notice was removed at your request — so this list is the only place it is recorded. |
-| Publishing the legal pages | `src/components/layout/footer.tsx` | The five documents are built and reachable by URL, but **no link to them appears in the footer or navigation**, and they stay `noindex` and out of the sitemap. The footer comment marks exactly where the column goes back. A German site trading publicly needs a reachable Impressum, so restore the links once the entity details and the legal review are done. |
+| Publishing the legal pages | automatic — see below | The whole section is **unpublished**: every legal route answers 404, no link appears anywhere, and nothing in the shipped build contains the documents. It comes back on its own once the entity details above are supplied. A German site trading publicly needs a reachable Impressum, so this is a launch blocker, not an optional extra. |
 | Email delivery | `.env.local` → `RESEND_API_KEY` or `MAIL_ENDPOINT` | One transport serves both the enquiry form and the booking confirmations. Until it is set, the form answers `503` and says plainly that nothing was sent, and a booking is recorded but **no email reaches anyone — including you**. Neither pretends to deliver. See `docs/booking.md`. |
 | Hosting provider name, and the DPA with them | `/legal/privacy` → `[HOSTING PROVIDER]` | Named in the privacy policy once the host is chosen. An Art. 28 GDPR agreement is required before launch. |
 | Booking persistence | `src/lib/booking/store.ts` | The default store keeps bookings in the Node process: a restart forgets them, and two instances do not share a list. Connecting a calendar with write access is usually enough, since the calendar then becomes the source of truth. |

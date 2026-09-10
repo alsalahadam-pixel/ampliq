@@ -73,7 +73,22 @@ function Field({
 const controlBase =
   "min-h-11 w-full border-b bg-transparent pt-2.5 pb-2.5 text-[1rem] text-ink transition-colors duration-200 placeholder:text-graphite/70 focus:border-accent focus:outline-none";
 
-export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function ContactForm({
+  locale,
+  dict,
+  legalPublished,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+  /**
+   * Whether the privacy policy is published, passed down from the server.
+   *
+   * Imported directly, `@/lib/legal` would drag the whole entity registry —
+   * every placeholder token — into the browser bundle of a page that only
+   * needs one boolean. It is a prop for that reason.
+   */
+  legalPublished: boolean;
+}) {
   const form = dict.contact.form;
   const id = useId();
   const formRef = useRef<HTMLFormElement>(null);
@@ -436,11 +451,20 @@ export function ContactForm({ locale, dict }: { locale: Locale; dict: Dictionary
       </div>
 
       <div className="flex flex-col gap-6 border-t border-rule pt-8 sm:flex-row sm:items-center sm:justify-between">
+{/* The note itself is always shown: it describes what happens to the
+              details, which is true either way. The link to the policy appears
+              only while that page is published — otherwise it would point at a
+              404. */}
         <p className="text-fine max-w-[46ch] text-graphite">
-          {form.privacyNote}{" "}
-          <a href={route(locale, "privacy")} className="link-underline text-ink">
-            {form.privacyLink}
-          </a>
+          {form.privacyNote}
+          {legalPublished ? (
+            <>
+              {" "}
+              <a href={route(locale, "privacy")} className="link-underline text-ink">
+                {form.privacyLink}
+              </a>
+            </>
+          ) : null}
         </p>
         <Button
           type="submit"

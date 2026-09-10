@@ -96,10 +96,13 @@ export function BookingFlow({
   config,
   locale,
   dict,
+  legalPublished,
 }: {
   config: PublicBookingConfig;
   locale: Locale;
   dict: Dictionary;
+  /** Handed down to the details form; see the note on its own prop. */
+  legalPublished: boolean;
 }) {
   const intlTag = INTL_TAG[locale];
 
@@ -404,6 +407,7 @@ export function BookingFlow({
                   submitting={submitting}
                   serverErrors={serverErrors}
                   onSubmit={submit}
+                  legalPublished={legalPublished}
                 />
               </div>
             </>

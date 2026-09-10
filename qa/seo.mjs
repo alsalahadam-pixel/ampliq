@@ -11,8 +11,17 @@ const routes = [
   "/en/start/call", "/de/start/call",
   "/en/services/web-design", "/de/services/web-design",
   "/en/insights/what-a-business-website-costs-in-germany",
+];
+
+// The legal section is only checked when it is published. While it is down its
+// routes are 404s, which have no canonical and no hreflang by design — that
+// they answer 404 at all is `legal-visibility`'s job, not this one.
+const legalRoutes = [
   "/en/legal/imprint", "/de/legal/imprint", "/en/legal/privacy",
 ];
+const legalPublished =
+  (await fetch(`${BASE}${legalRoutes[0]}`, { redirect: "manual" })).status === 200;
+if (legalPublished) routes.push(...legalRoutes);
 
 const issues = [];
 for (const path of routes) {
@@ -70,6 +79,7 @@ const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 
 console.log("robots.txt:\n" + robots.trim().split("\n").map((l) => "  " + l).join("\n"));
 console.log(`\nsitemap: ${urls.length} URLs`);
+console.log(`legal section: ${legalPublished ? "published" : "unpublished (its routes are not checked here)"}`);
 const legalInSitemap = urls.filter((u) => u.includes("/legal"));
 if (legalInSitemap.length) console.log(`  ⚠ noindex legal pages listed in sitemap: ${legalInSitemap.length}`);
 for (const want of ["/en/start", "/en/start/call", "/de/start/call", "/en/contact"]) {

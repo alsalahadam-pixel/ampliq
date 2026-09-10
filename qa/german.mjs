@@ -19,11 +19,13 @@ const routes = [
 const ENGLISH_ONLY = /\b(the|and|with|your|our|from|that|which|please|thank you|choose|select|submit|available|working days|read more|learn more|get in touch|coming soon|lorem ipsum|TODO|TBD)\b/i;
 
 const issues = [];
+const skipped = [];
 let duCount = 0;
 let sieCount = 0;
 
 for (const path of routes) {
-  await page.goto(BASE + path, { waitUntil: "load" });
+  const response = await page.goto(BASE + path, { waitUntil: "load" });
+  if (response && response.status() === 404) { skipped.push(path); continue; }
   const r = await page.evaluate(() => {
     const main = document.querySelector("main") ?? document.body;
     return {
@@ -68,5 +70,6 @@ for (const path of routes) {
 
 process.exitCode = issues.length > 0 || duCount > 0 ? 1 : 0;
 console.log(`formal address: Sie ×${sieCount}, du ×${duCount}${duCount ? "  ⚠ mixed forms" : "  ✓ consistent"}`);
-console.log("\n" + (issues.length ? `German issues (${issues.length}):\n\n` + issues.join("\n") : `GERMAN CLEAN across ${routes.length} routes`));
+console.log("\n" + (issues.length ? `German issues (${issues.length}):\n\n` + issues.join("\n") : `GERMAN CLEAN across ${routes.length - skipped.length} routes` +
+    (skipped.length ? ` (${skipped.length} unpublished, skipped)` : "")));
 await browser.close();

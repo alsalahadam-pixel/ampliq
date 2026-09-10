@@ -22,6 +22,7 @@ const BASE = process.env.QA_BASE ?? "http://localhost:3100";
 
 /** In dependency order: the cheap structural checks first. */
 const CHECKS = [
+  { name: "build-output", what: "nothing legal is in the shipped bundles or prerendered files" },
   { name: "crawl", what: "every internal link resolves, no console errors" },
   { name: "seo", what: "titles, descriptions, canonicals, hreflang, Open Graph, robots, sitemap" },
   { name: "a11y", what: "labels, alt text, accessible names, heading order" },
