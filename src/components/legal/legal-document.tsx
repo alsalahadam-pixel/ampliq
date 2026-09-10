@@ -162,7 +162,7 @@ export function LegalDocument({
             <ol className="mt-5 flex flex-col gap-2.5 border-t border-rule pt-5">
               {chapters.map((chapter, index) => (
                 <li key={chapter.id} className="flex gap-3">
-                  <span className="font-mono text-[0.6875rem] leading-[1.7] tracking-[0.14em] text-fog">
+                  <span className="font-mono text-[0.6875rem] leading-[1.7] tracking-[0.14em] text-graphite">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <a

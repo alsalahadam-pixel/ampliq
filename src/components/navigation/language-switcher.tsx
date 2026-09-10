@@ -51,7 +51,10 @@ export function LanguageSwitcher({
               onClick={() => rememberLocale(code)}
               aria-current={isActive ? "true" : undefined}
               className={cn(
-                "font-mono uppercase transition-opacity duration-200",
+                // Padded to a real tap target — this is a two-character
+                // control, and in the mobile menu it is one people use. The
+                // negative margin keeps the header and the menu row unchanged.
+                "font-mono -my-2.5 inline-block px-2 py-2.5 uppercase transition-opacity duration-200",
                 size === "lg" ? "text-sm tracking-[0.14em]" : "text-[0.6875rem] tracking-[0.16em]",
                 isActive ? "opacity-100" : "opacity-45 hover:opacity-100",
               )}

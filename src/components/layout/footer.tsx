@@ -163,7 +163,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         </div>
 
         <div className="mt-16 flex flex-col-reverse gap-6 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs tracking-[0.02em] text-fog">
+          <p className="text-fine tracking-[0.02em] text-fog">
             © {year} {site.name}. {dict.footer.rights}
           </p>
           <Disc className="h-7 w-7 text-paper/30" />

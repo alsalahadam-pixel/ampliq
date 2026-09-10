@@ -422,7 +422,7 @@ export function BookingFlow({
             <p
               className={cn(
                 "font-display mt-4 text-[1.25rem] leading-tight font-bold tracking-[-0.03em]",
-                !selectedDate && "text-fog",
+                !selectedDate && "text-graphite",
               )}
             >
               {selectedSlot

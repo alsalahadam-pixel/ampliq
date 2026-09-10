@@ -43,7 +43,7 @@ export function Steps({
                 "flex items-center gap-2 text-[0.6875rem] font-medium tracking-[0.09em] uppercase transition-colors duration-300",
                 state === "current" && "text-ink",
                 state === "done" && "text-graphite",
-                state === "upcoming" && "text-fog",
+                state === "upcoming" && "text-graphite",
               )}
             >
               <span
@@ -51,7 +51,7 @@ export function Steps({
                   "flex h-5 w-5 items-center justify-center rounded-full text-[0.625rem] tabular-nums",
                   state === "current" && "bg-ink text-paper",
                   state === "done" && "bg-rule-strong text-ink",
-                  state === "upcoming" && "border border-rule-strong text-fog",
+                  state === "upcoming" && "border border-rule-strong text-graphite",
                 )}
               >
                 {state === "done" ? (

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { InsightCard, formatDate } from "@/components/insights/insight-card";
 import { PageHero } from "@/components/layout/page-hero";
 import { FinalCta } from "@/components/sections/final-cta";
 import { JsonLd } from "@/components/seo/json-ld";
+import { ButtonLink } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import { insightBySlug, insights, sortedInsights } from "@/content/insights";
 import { getDictionary } from "@/lib/dictionary";
@@ -172,12 +172,9 @@ export default async function InsightPage({
                   <p className="mt-3 max-w-[56ch] text-[0.9375rem] leading-relaxed text-graphite">
                     {dict.insights.ctaBody}
                   </p>
-                  <Link
-                    href={route(lang, "start")}
-                    className="mt-6 inline-flex h-13 items-center justify-center rounded-[2px] bg-ink px-6 text-[0.9375rem] font-medium text-paper transition-colors duration-300 hover:bg-accent"
-                  >
+                  <ButtonLink href={route(lang, "start")} className="mt-6">
                     {dict.cta.start}
-                  </Link>
+                  </ButtonLink>
                 </div>
               </div>
             </article>

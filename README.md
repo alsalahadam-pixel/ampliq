@@ -27,6 +27,8 @@ npm run dev                  # http://localhost:3000 → redirects to /en
 | `npm run build` | Production build |
 | `npm run start` | Serve the production build |
 | `npm run lint` | ESLint |
+| `npm run qa` | The QA suite — links, SEO, accessibility, contrast, German, mobile, the two forms, page weight. Needs a built site running (see `qa/README.md`) |
+| `npm run launch-check` | What the site is still waiting for before it can go live |
 | `npm run brand` | Regenerate `public/brand/*` and the favicon from the DISC geometry |
 
 ## Architecture
@@ -40,16 +42,20 @@ src/
     layout/            Page hero, footer, analytics, legal blocks
     navigation/        Header, mobile menu, language switcher
     sections/          Cross-page sections (final CTA, process, packages)
-    home/ work/ services/ packages/ insights/ contact/
-    ui/                Button, Section, FAQ primitives
-  content/             Structured data: services, packages, projects, insights
+    home/ services/ packages/ insights/ contact/ booking/ legal/
+    ui/                Button, Section, FAQ, Media primitives
+  content/             Structured data: services, packages, insights, media slots
   dictionaries/        UI copy — en.ts defines the shape, de.ts must satisfy it
   lib/                 i18n, routes, SEO helpers, site config
 ```
 
-**Content is data.** Adding a service, project or article is an entry in
+**Content is data.** Adding a service or article is an entry in
 `src/content/*` — the page, the index card, the sitemap entry and the structured
 data all follow. No template duplication.
+
+There is no portfolio section. AMPLIQ has no client work to show yet, and
+inventing case studies was never an option, so the site earns its credibility
+from how the work is described instead.
 
 **Translations are type-checked.** `de.ts` is typed against `en.ts`, so a
 missing German string fails the build rather than silently falling back.
@@ -72,9 +78,36 @@ static SVGs in `public/brand/` and the Open Graph card all derive from it, so th
 mark cannot drift between surfaces. See `PLACEHOLDERS.md` for how to swap in
 official vector files.
 
+## The domain
+
+Everything — canonical URLs, hreflang, the sitemap, Open Graph, and all three
+published addresses — derives from one constant. Buying the real domain is a
+one-line change:
+
+```bash
+NEXT_PUBLIC_SITE_DOMAIN="yourdomain.com"
+```
+
+## Photography
+
+There is none yet. Rather than build sections that assume there never will be,
+every intended photograph has a named slot in `src/content/media.ts` carrying
+its aspect ratio and alt text, and the sections are built around those boxes.
+Adding a picture is putting the file in `public/media/` and filling in `src` —
+no section is re-laid out, and nothing shifts while it loads. Until then the
+slot holds the DISC panel.
+
 ## Before launch
 
-`PLACEHOLDERS.md` lists everything that still needs real data — legal entity
-details, the contact form endpoint, project imagery — and everything that is
-deliberately absent (client logos, testimonials, statistics) because it does not
-exist yet and was not invented.
+```bash
+npm run launch-check
+```
+
+Prints everything still outstanding, grouped by whether it blocks launch, and
+exits non-zero while anything required is missing. It reads the same registries
+the pages read, so it cannot drift from what the site renders.
+
+`PLACEHOLDERS.md` explains each item — legal entity details, the mail
+transport, photography — and everything that is deliberately absent (client
+logos, testimonials, statistics) because it does not exist yet and was not
+invented.
