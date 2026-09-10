@@ -22,6 +22,7 @@ const BASE = process.env.QA_BASE ?? "http://localhost:3100";
 
 /** In dependency order: the cheap structural checks first. */
 const CHECKS = [
+  { name: "site-url", what: "the site origin is never a fragment, whatever the environment says" },
   { name: "build-output", what: "nothing legal is in the shipped bundles or prerendered files" },
   { name: "crawl", what: "every internal link resolves, no console errors" },
   { name: "seo", what: "titles, descriptions, canonicals, hreflang, Open Graph, robots, sitemap" },
@@ -39,7 +40,14 @@ const CHECKS = [
 
 function run(name) {
   return new Promise((resolve) => {
-    const child = spawn(process.execPath, [join(HERE, `${name}.mjs`)], {
+    // `site-url` imports the app's own module, so it needs type stripping and
+    // the `@/` resolver the rest of the scripts do not.
+    const args =
+      name === "site-url"
+        ? ["--disable-warning=MODULE_TYPELESS_PACKAGE_JSON", "--experimental-strip-types", "--import", join(HERE, "..", "scripts", "alias-hook.mjs"), join(HERE, `${name}.mjs`)]
+        : [join(HERE, `${name}.mjs`)];
+
+    const child = spawn(process.execPath, args, {
       env: { ...process.env, QA_BASE: BASE },
       stdio: ["ignore", "pipe", "pipe"],
     });

@@ -28,6 +28,7 @@ node qa/mobile.mjs
 
 | Check | Covers |
 | --- | --- |
+| `site-url` | The site origin against every input an environment variable can hold: empty, whitespace, `https://`, a bare word, a wrong scheme. Everything on the site derives from this one value, so a fragment here fails the build rather than one page — which is exactly what happened once. Needs neither a build nor a server. |
 | `build-output` | Reads `.next` rather than the rendered page. A page can render nothing and still hand a visitor the words — importing a server module into a client component ships its whole contents to the browser. Asserts no client bundle and no prerendered file contains the legal documents, their placeholder tokens, or any statement about what the business has not settled. Needs a build, not a server. |
 | `crawl` | Follows every internal link from both locale roots. Broken routes, references to pages that no longer exist, console and page errors. |
 | `seo` | Title and description length against what a search result actually shows, canonical URLs, hreflang completeness, Open Graph image and locale, `html lang`, one `h1` per page, valid JSON-LD, legal pages `noindex` and absent from the sitemap, `robots.txt`. |

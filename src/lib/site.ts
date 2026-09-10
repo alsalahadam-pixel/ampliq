@@ -13,29 +13,76 @@ import type { Localized } from "@/lib/i18n";
 const env = process.env;
 
 /**
- * The domain, in one place.
+ * The origin used when nothing valid has been supplied.
  *
- * The final domain has not been bought yet, so every address and URL on the
- * site is derived from this single constant rather than typed out. Changing
- * `NEXT_PUBLIC_SITE_DOMAIN` moves the whole site — canonical URLs, hreflang,
- * Open Graph, every published address and every email sender — in one edit.
- *
- * `ampliq.net` is a working default, not a decision. It is here so the build
- * has something valid to render; replace it the moment the real domain exists.
+ * A real value, never a fragment: everything below is built by parsing a
+ * candidate and falling back to this whole origin, so no code path can
+ * assemble a scheme and an empty host into `https://`.
  */
-export const siteDomain = (
-  env.NEXT_PUBLIC_SITE_DOMAIN ?? "ampliq.net"
-)
-  .trim()
-  .replace(/^https?:\/\//, "")
-  .replace(/\/$/, "");
+const FALLBACK_ORIGIN = "https://ampliq.net";
 
-/** Whether a real domain has been chosen, or we are still on the default. */
-export const domainIsConfigured = Boolean(env.NEXT_PUBLIC_SITE_DOMAIN);
+/**
+ * Reads an origin from an environment variable, or nothing.
+ *
+ * Accepts either form — `ampliq.net` or `https://ampliq.net/` — and returns a
+ * normalised origin with no trailing slash. Returns null for anything that is
+ * not usable, which is the case that matters: a variable that exists but is
+ * empty. `??` does not fall back on an empty string, and a hosting dashboard
+ * hands you exactly that for a variable defined with no value. That produced
+ * `https://` here, and `new URL("https://")` throws — which is what broke the
+ * production build.
+ *
+ * A bare word is rejected too: `ampliq` parses as a URL but is a typo, not a
+ * site. `localhost` is the one exception, for local and preview builds.
+ */
+function readOrigin(value: string | undefined): string | null {
+  const trimmed = value?.trim();
+  if (!trimmed) return null;
 
-export const siteUrl = (
-  env.NEXT_PUBLIC_SITE_URL ?? `https://${siteDomain}`
-).replace(/\/$/, "");
+  const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
+  try {
+    const url = new URL(candidate);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+    const host = url.hostname;
+    if (!host) return null;
+    if (host !== "localhost" && !host.includes(".")) return null;
+    return url.origin;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The canonical origin, in one place.
+ *
+ * Everything on the site derives from it: canonical URLs, hreflang, the
+ * sitemap, Open Graph, and all three published addresses. Set
+ * `NEXT_PUBLIC_SITE_DOMAIN` to the real domain and the whole site follows;
+ * `NEXT_PUBLIC_SITE_URL` overrides the origin outright when a deployment sits
+ * on a different host.
+ *
+ * Guaranteed to be a valid absolute origin. Every candidate is parsed before
+ * it is accepted, so `new URL(siteUrl)` downstream cannot throw.
+ */
+export const siteUrl =
+  readOrigin(env.NEXT_PUBLIC_SITE_URL) ??
+  readOrigin(env.NEXT_PUBLIC_SITE_DOMAIN) ??
+  FALLBACK_ORIGIN;
+
+/** Already parsed, so nothing else has to call `new URL` on a string. */
+export const siteOrigin = new URL(siteUrl);
+
+/** The hostname of `siteUrl`, which is what every mailbox is built on. */
+export const siteDomain = siteOrigin.hostname;
+
+/** Whether a usable domain was supplied, or we are still on the default. */
+export const domainIsConfigured =
+  readOrigin(env.NEXT_PUBLIC_SITE_URL) !== null ||
+  readOrigin(env.NEXT_PUBLIC_SITE_DOMAIN) !== null;
+
+/** Exported for the check that exercises it against bad input. */
+export { readOrigin };
 
 /** Builds an address on the site's domain: `mailbox("info")` → info@… */
 function mailbox(name: string): string {

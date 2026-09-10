@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { getDictionary } from "@/lib/dictionary";
 import { isLocale, localeTags, locales } from "@/lib/i18n";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
-import { site, siteUrl } from "@/lib/site";
+import { site, siteOrigin } from "@/lib/site";
 
 import "../globals.css";
 
@@ -56,7 +56,9 @@ export async function generateMetadata({
   const locale = isLocale(lang) ? lang : "en";
 
   return {
-    metadataBase: new URL(siteUrl),
+    // Already parsed and validated in `@/lib/site`, so this cannot throw on
+    // a half-configured environment the way `new URL(siteUrl)` did.
+    metadataBase: siteOrigin,
     title: {
       default:
         locale === "de"
