@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PageHero } from "@/components/layout/page-hero";
-import { LegalStatusNotice } from "@/components/legal/legal-document";
 import { Arrow } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import { LEGAL_UPDATED } from "@/content/legal";
@@ -63,9 +62,7 @@ export default async function LegalIndexPage({
 
       <Section tone="paper">
         <div className="shell">
-          <LegalStatusNotice dict={dict} />
-
-          <ul className="mt-14 border-t border-rule">
+          <ul className="border-t border-rule">
             {documents.map((document, index) => (
               <li key={document.key} data-reveal>
                 <Link

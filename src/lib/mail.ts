@@ -33,10 +33,18 @@ type Transport = {
   send(to: string, content: EmailContent, replyTo?: string): Promise<boolean>;
 };
 
-/** `AMPLIQ <project@ampliq.net>` — the address the mail comes from. */
+/**
+ * `AMPLIQ <project@…>` — the address the mail comes from.
+ *
+ * Every message this site sends is project correspondence: an enquiry
+ * notification, its acknowledgement, a booking confirmation. So the sender is
+ * the project address, not the general one — a reply lands where the project
+ * conversation already is. `MAIL_FROM_EMAIL` overrides it, and whatever it is
+ * set to must be verified with the mail provider.
+ */
 function fromAddress(): string {
   const address =
-    process.env.MAIL_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || contact.info;
+    process.env.MAIL_FROM_EMAIL || process.env.BOOKING_FROM_EMAIL || contact.project;
   const name = process.env.MAIL_FROM_NAME || process.env.BOOKING_FROM_NAME || "AMPLIQ";
 
   return address.includes("<") ? address : `${name} <${address}>`;

@@ -473,7 +473,7 @@ export const de: Dictionary = {
   legal: {
     indexTitle: "Rechtliches",
     indexLead:
-      "Impressum, Datenschutz, AGB und Widerruf. Aufgebaut nach den Vorgaben des deutschen Rechts — alles, was uns noch fehlt, ist als offen markiert statt ausgefüllt.",
+      "Impressum, Datenschutz, AGB und Widerruf — aufgebaut nach den Vorgaben des deutschen Rechts.",
     imprintTitle: "Impressum",
     imprintLead: "Anbieterkennzeichnung nach § 5 DDG und § 18 MStV.",
     privacyTitle: "Datenschutzerklärung",
@@ -490,13 +490,6 @@ export const de: Dictionary = {
       "Ein funktionales Cookie, gesetzt nur beim Sprachwechsel. Keine Analyse, keine Werbung, kein Tracking.",
     contents: "Inhalt",
     lastUpdated: "Zuletzt aktualisiert",
-    draftNoticeLabel: "Dokumentstatus",
-    draftNoticeTitle: "Noch nicht vollständig und noch nicht juristisch geprüft.",
-    draftNoticeBody:
-      "Die Struktur folgt den Vorgaben des deutschen Rechts, und die technischen Beschreibungen entsprechen dem, was dieser Build tatsächlich tut. Die Unternehmensangaben fehlen noch, und der juristische Text wurde nicht von einer Anwältin oder einem Anwalt geprüft. Bis beides erledigt ist, ist dieses Dokument ein Arbeitsstand — keine vollständige Pflichtangabe und keine Rechtsberatung.",
-    outstandingRequired: "Vor dem Launch erforderlich:",
-    outstandingOptional: "Nur soweit für die Rechtsform einschlägig:",
-    missingValue: "Wird noch ergänzt",
     readMore: "Lesen",
   },
 

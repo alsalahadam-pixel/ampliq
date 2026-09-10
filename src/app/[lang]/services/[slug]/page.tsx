@@ -95,7 +95,7 @@ export default async function ServicePage({
 
       {/* Problem / approach, side by side. A bridge between the hero and the
           detail below, so it carries less vertical space than a full section. */}
-      <Section tone="paper" bleed className="py-16 sm:py-20 lg:py-24">
+      <Section tone="paper" bleed className="py-16 lg:py-20">
         <div className="shell">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <div data-reveal>

@@ -51,9 +51,9 @@ export function ServiceIndex({ locale }: { locale: Locale }) {
                         reacts as one object rather than as a hovered link. */}
                     <span
                       aria-hidden="true"
-                      className="absolute bottom-[-1px] left-0 h-px w-0 bg-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full"
+                      className="absolute bottom-[-1px] left-0 h-px w-0 bg-accent transition-[width] duration-500 ease-out-expo group-hover:w-full"
                     />
-                    <span className="font-display text-[1.375rem] leading-tight font-bold tracking-[-0.03em] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:text-[1.75rem] sm:group-hover:translate-x-3">
+                    <span className="font-display text-[1.375rem] leading-tight font-bold tracking-[-0.03em] transition-transform duration-500 ease-out-expo sm:text-[1.75rem] sm:group-hover:translate-x-3">
                       {service.title[locale]}
                     </span>
                     <span className="flex items-center gap-6 sm:shrink-0">

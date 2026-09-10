@@ -94,7 +94,7 @@ export function organizationSchema(locale: Locale) {
       {
         "@type": "ContactPoint",
         contactType: "sales",
-        email: contact.info,
+        email: contact.project,
         availableLanguage: ["en", "de"],
       },
       {

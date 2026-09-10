@@ -103,7 +103,7 @@ export const legalEntity = {
   postalCode: env.NEXT_PUBLIC_LEGAL_POSTAL_CODE ?? null,
   city: env.NEXT_PUBLIC_LEGAL_CITY ?? null,
   country: env.NEXT_PUBLIC_LEGAL_COUNTRY ?? "Deutschland",
-  email: env.NEXT_PUBLIC_LEGAL_EMAIL ?? contact.help,
+  email: env.NEXT_PUBLIC_LEGAL_EMAIL ?? contact.info,
   phone: env.NEXT_PUBLIC_LEGAL_PHONE ?? null,
   vatId: env.NEXT_PUBLIC_LEGAL_VAT_ID ?? null,
   registerCourt: env.NEXT_PUBLIC_LEGAL_REGISTER_COURT ?? null,

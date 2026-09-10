@@ -66,7 +66,8 @@ export default async function InsightsPage({
               With a small, deliberately un-padded archive this reads as an
               edited page rather than a grid waiting to be filled. */}
           {featured ? (
-            <div data-reveal className="border-t border-ink pt-8">
+            // The card draws its own rule; the wrapper only carries the reveal.
+            <div data-reveal>
               <InsightCard
                 insight={featured}
                 locale={lang}

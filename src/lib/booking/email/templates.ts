@@ -196,10 +196,11 @@ export function clientConfirmation(
       )}</p>`,
       eyebrow(t.change),
       `<p style="margin:0;font-family:${FONT};font-size:15px;line-height:1.6;color:${INK};">${escapeHtml(
-        t.changeBody(contact.info),
+        t.changeBody(contact.project),
       )}</p>`,
     ].join("\n"),
     locale,
+    contact.project,
   );
 
   const text = [
@@ -222,8 +223,8 @@ export function clientConfirmation(
     "",
     `${t.prepTitle}: ${t.prepBody}`,
     "",
-    `${t.change} ${t.changeBody(contact.info)}`,
-    ...textFooter(locale),
+    `${t.change} ${t.changeBody(contact.project)}`,
+    ...textFooter(locale, contact.project),
   ]
     .filter((line) => line !== null)
     .join("\n");
@@ -270,6 +271,7 @@ export function ownerNotification(
   </p>`,
     ].join("\n"),
     locale,
+    contact.project,
   );
 
   const text = [
@@ -288,7 +290,7 @@ export function ownerNotification(
     "",
     `${t.project}:`,
     booking.message,
-    ...textFooter(locale),
+    ...textFooter(locale, contact.project),
   ]
     .filter((line) => line !== null)
     .join("\n");

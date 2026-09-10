@@ -135,6 +135,7 @@ export function enquiryNotification(enquiry: Enquiry): EmailContent {
   </p>`,
     ].join("\n"),
     "en",
+    contact.project,
   );
 
   const text = [
@@ -155,7 +156,7 @@ export function enquiryNotification(enquiry: Enquiry): EmailContent {
     "",
     `${t.message}:`,
     enquiry.message,
-    ...textFooter("en"),
+    ...textFooter("en", contact.project),
   ]
     .filter((line) => line !== null)
     .join("\n");
@@ -192,12 +193,13 @@ export function enquiryAcknowledgement(enquiry: Enquiry): EmailContent {
       paragraphs(enquiry.message),
       eyebrow(t.ackFaster),
       `<p style="margin:0;font-family:${FONT};font-size:15px;line-height:1.6;color:${GRAPHITE};">${escapeHtml(
-        t.ackFasterBody(contact.info),
+        t.ackFasterBody(contact.project),
       )}</p>`,
     ]
       .filter(Boolean)
       .join("\n"),
     enquiry.locale,
+    contact.project,
   );
 
   const text = [
@@ -210,8 +212,8 @@ export function enquiryAcknowledgement(enquiry: Enquiry): EmailContent {
     `${t.message}:`,
     enquiry.message,
     "",
-    `${t.ackFaster} ${t.ackFasterBody(contact.info)}`,
-    ...textFooter(enquiry.locale),
+    `${t.ackFaster} ${t.ackFasterBody(contact.project)}`,
+    ...textFooter(enquiry.locale, contact.project),
   ].join("\n");
 
   return { subject: t.ackSubject, html, text };

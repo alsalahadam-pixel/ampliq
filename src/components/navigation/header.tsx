@@ -145,13 +145,13 @@ function MenuGlyph({ open }: { open: boolean }) {
     <span aria-hidden="true" className="relative block h-4 w-5">
       <span
         className={cn(
-          "absolute left-0 block h-px w-full bg-current transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "absolute left-0 block h-px w-full bg-current transition-all duration-400 ease-out-expo",
           open ? "top-1/2 rotate-45" : "top-1",
         )}
       />
       <span
         className={cn(
-          "absolute left-0 block h-px bg-current transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "absolute left-0 block h-px bg-current transition-all duration-400 ease-out-expo",
           open ? "top-1/2 w-full -rotate-45" : "top-[11px] w-3/5",
         )}
       />

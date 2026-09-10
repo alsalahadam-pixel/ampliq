@@ -375,7 +375,7 @@ export function BookingFlow({
                   body={dict.booking.problems.noServerBody}
                   action={
                     <a
-                      href={`mailto:${contact.info}`}
+                      href={`mailto:${contact.project}`}
                       className="link-underline mt-3 inline-block text-[0.875rem] font-medium text-ink"
                     >
                       {dict.booking.problems.emailUs}

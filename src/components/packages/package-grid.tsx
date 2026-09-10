@@ -49,7 +49,7 @@ export function PackageGrid({
               // The whole card lifts very slightly on hover and the accent
               // rule above it draws across. Enough to feel responsive; far
               // short of a card that floats.
-              "group relative flex flex-col p-8 transition-[transform,background-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:p-10",
+              "group relative flex flex-col p-8 transition-[transform,background-color] duration-500 ease-out-expo lg:p-10",
               dark
                 ? "on-dark bg-ink text-paper hover:bg-ink-soft"
                 : "bg-paper text-ink hover:bg-paper-soft",
@@ -60,7 +60,7 @@ export function PackageGrid({
             <span
               aria-hidden="true"
               className={cn(
-                "absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100",
+                "absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform duration-600 ease-out-expo group-hover:scale-x-100",
                 dark ? "bg-accent-soft" : "bg-accent",
               )}
             />
@@ -148,9 +148,25 @@ export function PackageGrid({
             ) : null}
 
             <div className="mt-8">
-              <h4 className={cn("eyebrow", dark ? "text-fog" : "text-graphite")}>
-                {tier.includesLabel?.[locale] ?? dict.packages.includes}
-              </h4>
+              {/* Two tiers replace the generic label with a sentence of their
+                  own ("a START project is one of these — not all of them").
+                  A sentence set in uppercase mono with label tracking shouts,
+                  and wraps to two lines on a phone, so it is set as what it
+                  is. The short generic label stays an eyebrow. */}
+              {tier.includesLabel ? (
+                <h4
+                  className={cn(
+                    "text-fine font-medium",
+                    dark ? "text-fog" : "text-graphite",
+                  )}
+                >
+                  {tier.includesLabel[locale]}
+                </h4>
+              ) : (
+                <h4 className={cn("eyebrow", dark ? "text-fog" : "text-graphite")}>
+                  {dict.packages.includes}
+                </h4>
+              )}
               <ul className="mt-4 flex flex-col gap-2.5">
                 {tier.includes[locale].map((item) => (
                   <li key={item} className="flex gap-3 text-[0.9375rem] leading-relaxed">

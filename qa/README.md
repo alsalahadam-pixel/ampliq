@@ -33,6 +33,9 @@ node qa/mobile.mjs
 | `a11y` | Form labels, image alt text, links and buttons with no accessible name, heading order. |
 | `contrast` | Computes the real ratio for every text node against the background actually painted behind it, at the size and weight it renders. Skips inactive controls and elements with no measurable text colour (WCAG 1.4.3 exempts both). |
 | `german` | Every internal link on a German page stays German, no untranslated English, consistent formal address (`Sie`, never `du`), no unfilled `{placeholders}`, correct `html lang`. |
+| `legal-visibility` | Nothing on any public page says the legal documents are unfinished: no draft notice, no `[PLACEHOLDER]`, no red, and no legal link in the header, nav or footer. Also checks the documents still read as documents rather than empty shells, and that the enquiry form keeps its privacy link. |
+| `addresses` | `project@` and `info@` do not blur into each other: the Start-a-project fork, the brief, the booking and the closing CTA use the project address; the footer and the organisation record use the general one; support is `help@`. |
+| `rules-probe` | Hairlines drawn twice — two rules of the same width stacked within 56px, which reads as a mistake. Divided lists are excluded. |
 | `mobile` | 320 / 375 / 390 / 430 / 768 / 1024 / 1440 across every page in both languages: horizontal overflow and what caused it, side gutters, tap-target size, text too small to read, console errors. |
 | `contact` | Fills and submits the enquiry form. Asserts that an empty submit never reaches the network, that an unconfigured mail transport produces a 503 rather than a fake success, and that the UI says so. |
 | `booking` | The whole booking flow: availability, keyboard navigation of the calendar grid, timezone display, validation, a real booking, the slot then showing as taken, and the API refusing an invalid or past slot. Also asserts the availability response leaks no event details. |

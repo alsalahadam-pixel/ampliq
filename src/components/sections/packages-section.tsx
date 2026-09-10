@@ -38,7 +38,11 @@ export function PackagesSection({
           <PackageGrid locale={locale} dict={dict} detailed={detailed} />
         </div>
 
-        <p className="mt-5 text-fine text-graphite">{dict.packages.priceNote}</p>
+        {/* Fine print, but still a sentence: held to a readable measure rather
+            than let run the full width of the grid above it. */}
+        <p className="text-fine mt-5 max-w-[86ch] text-graphite">
+          {dict.packages.priceNote}
+        </p>
 
         {/* The custom path — most enquiries land here rather than on a tier. */}
         <div

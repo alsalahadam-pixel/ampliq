@@ -38,7 +38,7 @@ export function Arrow({ className }: { className?: string }) {
     <svg
       viewBox="0 0 16 16"
       className={cn(
-        "h-3.5 w-3.5 shrink-0 transition-transform duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1",
+        "h-3.5 w-3.5 shrink-0 transition-transform duration-400 ease-out-expo group-hover:translate-x-1",
         className,
       )}
       fill="none"

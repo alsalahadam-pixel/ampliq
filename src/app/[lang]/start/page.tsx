@@ -118,13 +118,13 @@ export default async function StartPage({ params }: PageProps<"/[lang]/start">) 
                   {dict.start.directTitle}
                 </h3>
                 <p className="mt-3 text-[0.9375rem] leading-relaxed text-graphite">
-                  {fill(dict.start.directBody, { email: contact.info })}
+                  {fill(dict.start.directBody, { email: contact.project })}
                 </p>
                 <a
-                  href={`mailto:${contact.info}`}
+                  href={`mailto:${contact.project}`}
                   className="link-underline mt-1.5 inline-block py-2.5 text-[0.9375rem] font-medium break-all"
                 >
-                  {contact.info}
+                  {contact.project}
                 </a>
               </div>
             </aside>
@@ -169,6 +169,14 @@ function PathCard({
       style={{ "--reveal-delay": delay } as React.CSSProperties}
       className="group relative flex flex-col border border-rule bg-paper-soft p-8 transition-colors duration-300 hover:border-rule-strong focus-within:border-rule-strong sm:p-10 lg:row-span-5 lg:grid lg:grid-rows-subgrid"
     >
+      {/* The accent rule that draws across the top on hover — the same
+          affordance the insight and package cards use, so the three kinds of
+          card on the site behave alike. */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-accent transition-transform duration-600 ease-out-expo group-hover:scale-x-100 group-focus-within:scale-x-100"
+      />
+
       <div className="flex items-center gap-3">
         <span className="font-mono text-[0.6875rem] tracking-[0.16em] text-accent">
           {path.index}

@@ -4,9 +4,6 @@ import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { pad } from "@/lib/utils";
 
-/** Columns rise slightly across the row — progression, without a diagram. */
-const rise = ["lg:pt-16", "lg:pt-12", "lg:pt-8", "lg:pt-4", "lg:pt-0"];
-
 export function ProcessRail({
   locale,
   dict,
@@ -27,13 +24,18 @@ export function ProcessRail({
           tone="dark"
         />
 
+        {/* Five columns on one baseline. The stages used to rise across the
+            row, which was a nice idea and a bad one: it put every label at a
+            different height, so the set could not be read as a set, and left
+            the bottom of the section ragged. The hairline, the ghost numeral
+            and the order carry the progression on their own. */}
         <ol className="mt-16 grid gap-10 sm:grid-cols-2 lg:mt-20 lg:grid-cols-5 lg:gap-6">
           {processSteps.map((step, index) => (
             <li
               key={step.title.en}
               data-reveal
               style={{ "--reveal-delay": `${index * 90}ms` } as React.CSSProperties}
-              className={`border-t border-white/15 pt-6 ${rise[index]}`}
+              className="border-t border-white/15 pt-6"
             >
               <span
                 aria-hidden="true"

@@ -71,20 +71,10 @@ export default async function ContactPage({
                 <p className="mt-3 text-[0.9375rem] leading-relaxed text-graphite">
                   {dict.contact.directBody}
                 </p>
+                {/* This page is the written half of Start a project, so the
+                    project address leads. The general and support addresses
+                    follow for anyone who arrived from the nav instead. */}
                 <dl className="mt-5 flex flex-col gap-4">
-                  <div>
-                    <dt className="text-xs text-graphite">
-                      {dict.contact.generalLabel}
-                    </dt>
-                    <dd className="mt-1">
-                      <a
-                        href={`mailto:${contact.info}`}
-                        className="link-underline text-[0.9375rem] font-medium break-all"
-                      >
-                        {contact.info}
-                      </a>
-                    </dd>
-                  </div>
                   <div>
                     <dt className="text-xs text-graphite">
                       {dict.contact.projectLabel}
@@ -100,12 +90,25 @@ export default async function ContactPage({
                   </div>
                   <div>
                     <dt className="text-xs text-graphite">
+                      {dict.contact.generalLabel}
+                    </dt>
+                    <dd className="mt-1">
+                      <a
+                        href={`mailto:${contact.info}`}
+                        className="link-underline text-[0.9375rem] break-all"
+                      >
+                        {contact.info}
+                      </a>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs text-graphite">
                       {dict.contact.helpLabel}
                     </dt>
                     <dd className="mt-1">
                       <a
                         href={`mailto:${contact.help}`}
-                        className="link-underline text-[0.9375rem] font-medium break-all"
+                        className="link-underline text-[0.9375rem] break-all"
                       >
                         {contact.help}
                       </a>

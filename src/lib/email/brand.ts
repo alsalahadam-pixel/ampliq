@@ -80,7 +80,19 @@ export function detailsTable(rows: string): string {
 }
 
 /** Wraps a body in the branded frame. */
-export function emailShell(bodyHtml: string, locale: Locale): string {
+/**
+ * The shell every message is built in.
+ *
+ * `replyTo` is the address printed in the footer: the project address on
+ * anything to do with a project, so a reply lands in the same conversation,
+ * and the general one otherwise. It defaults to the general address because
+ * that is the safe answer for a message whose subject is not a project.
+ */
+export function emailShell(
+  bodyHtml: string,
+  locale: Locale,
+  replyTo: string = contact.info,
+): string {
   return `<!doctype html>
 <html lang="${locale}">
 <head>
@@ -109,7 +121,7 @@ ${bodyHtml}
   <p style="margin:0;font-family:${FONT};font-size:13px;line-height:1.5;color:${GRAPHITE};">
     <a href="${siteUrl}" style="color:${ACCENT};text-decoration:none;">${siteUrl.replace(/^https?:\/\//, "")}</a>
     &nbsp;·&nbsp;
-    <a href="mailto:${contact.info}" style="color:${ACCENT};text-decoration:none;">${contact.info}</a>
+    <a href="mailto:${replyTo}" style="color:${ACCENT};text-decoration:none;">${replyTo}</a>
   </p>
 </td></tr>
 
@@ -121,6 +133,9 @@ ${bodyHtml}
 }
 
 /** Plain-text footer, matching the HTML one. */
-export function textFooter(locale: Locale): string[] {
-  return ["", `AMPLIQ — ${TAGLINE[locale]}`, siteUrl, contact.info];
+export function textFooter(
+  locale: Locale,
+  replyTo: string = contact.info,
+): string[] {
+  return ["", `AMPLIQ — ${TAGLINE[locale]}`, siteUrl, replyTo];
 }

@@ -2,121 +2,53 @@ import type { ReactNode } from "react";
 
 import { Section } from "@/components/ui/section";
 import type { Dictionary } from "@/lib/dictionary";
-import { outstandingLegalFields } from "@/lib/legal";
 import { cn } from "@/lib/utils";
 
 /**
- * Marks `[PLACEHOLDER]` tokens inside a string.
+ * A value the operator has not supplied yet.
  *
- * A placeholder still has to be unmistakable — a reader must never take one for
- * finished text — but it should not shout. The treatment is the brand's own:
- * the mono face already used for labels and indices, a hairline box, and the
- * accent that marks every other "this is a system element" on the site.
+ * Nothing on a public page may show one. Rather than print a bracketed token
+ * or invent something plausible, the renderer below simply leaves out any row,
+ * sentence or list item that still depends on a missing value — and any
+ * chapter left with nothing to say.
  *
- * Nothing is hidden to make the page look finished. The token is legible, it
- * names exactly what is missing, and the notice at the top of each document
- * lists the same set.
+ * The document therefore reads as finished at every stage of being filled in:
+ * shorter while values are outstanding, complete the moment they are supplied,
+ * and never claiming a fact AMPLIQ does not have. `npm run launch-check` is
+ * where the gaps are tracked; the page is not.
  */
-export function LegalText({ children }: { children: string }) {
-  const parts = children.split(/(\[[A-Z][A-Z \-/]*\])/g);
+const UNRESOLVED = /\[[A-Z][A-Z \-/]*\]/;
 
-  return (
-    <>
-      {parts.map((part, index) =>
-        /^\[[A-Z][A-Z \-/]*\]$/.test(part) ? (
-          <span
-            key={index}
-            title="To be supplied before launch"
-            className="font-mono mx-0.5 inline-block rounded-[2px] border border-rule-strong bg-paper-soft px-1.5 py-[0.1em] text-[0.78em] tracking-[0.04em] text-graphite"
-          >
-            {part}
-          </span>
-        ) : (
-          <span key={index}>{part}</span>
-        ),
-      )}
-    </>
-  );
+function resolved(value: string): boolean {
+  return !UNRESOLVED.test(value);
 }
 
 /**
- * The header every legal page carries while information is outstanding.
+ * Drops everything that still depends on a value we do not have.
  *
- * Styled as part of the document, not as a build warning: the site's own paper
- * surface, a hairline border, the accent dot that marks a system element
- * everywhere else. It still says exactly what is missing and that the wording
- * is unreviewed — that is a legal necessity, not a decoration — but it reads as
- * a considered editorial note rather than an error.
+ * Applied to the whole document before anything renders, so a chapter that
+ * loses all of its content disappears from both the page and its contents
+ * rail rather than standing empty under a heading.
  */
-export function LegalStatusNotice({ dict }: { dict: Dictionary }) {
-  const outstanding = outstandingLegalFields.filter((entry) => entry.required);
-  const optional = outstandingLegalFields.filter((entry) => !entry.required);
-
-  // Once every required field is supplied and the wording is reviewed, the
-  // notice disappears of its own accord and the document simply reads as
-  // finished. Nothing has to be edited to make that happen.
-  if (outstanding.length === 0 && optional.length === 0) return null;
-
-  return (
-    <aside
-      aria-label={dict.legal.draftNoticeTitle}
-      className="border border-rule bg-paper-soft px-6 py-6 sm:px-8 sm:py-7"
-    >
-      <p className="eyebrow flex items-center gap-3 text-graphite">
-        <span aria-hidden="true" className="h-[5px] w-[5px] rounded-full bg-accent" />
-        {dict.legal.draftNoticeLabel}
-      </p>
-
-      <p className="font-display mt-4 text-[1.125rem] leading-snug font-bold tracking-[-0.025em] text-ink">
-        {dict.legal.draftNoticeTitle}
-      </p>
-      <p className="mt-3 max-w-[72ch] text-[0.9375rem] leading-relaxed text-graphite">
-        {dict.legal.draftNoticeBody}
-      </p>
-
-      <dl className="mt-6 flex flex-col gap-5 border-t border-rule pt-5">
-        {outstanding.length > 0 ? (
-          <div>
-            <dt className="text-[0.8125rem] font-medium text-ink">
-              {dict.legal.outstandingRequired}
-            </dt>
-            <dd className="mt-2.5">
-              <ul className="flex flex-wrap gap-1.5">
-                {outstanding.map((entry) => (
-                  <li
-                    key={entry.token}
-                    className="font-mono rounded-[2px] border border-rule-strong bg-paper px-2 py-1 text-[0.6875rem] tracking-[0.04em] text-ink"
-                  >
-                    [{entry.token}]
-                  </li>
-                ))}
-              </ul>
-            </dd>
-          </div>
-        ) : null}
-
-        {optional.length > 0 ? (
-          <div>
-            <dt className="text-[0.8125rem] font-medium text-graphite">
-              {dict.legal.outstandingOptional}
-            </dt>
-            <dd className="mt-2.5">
-              <ul className="flex flex-wrap gap-1.5">
-                {optional.map((entry) => (
-                  <li
-                    key={entry.token}
-                    className="font-mono rounded-[2px] border border-rule px-2 py-1 text-[0.6875rem] tracking-[0.04em] text-graphite"
-                  >
-                    [{entry.token}]
-                  </li>
-                ))}
-              </ul>
-            </dd>
-          </div>
-        ) : null}
-      </dl>
-    </aside>
-  );
+export function withoutUnresolved(chapters: LegalChapter[]): LegalChapter[] {
+  return chapters
+    .map((chapter) => ({
+      ...chapter,
+      blocks: chapter.blocks
+        .map((block): LegalBlock | null => {
+          if (block.kind === "text") {
+            return resolved(block.value) ? block : null;
+          }
+          if (block.kind === "list") {
+            const items = block.items.filter(resolved);
+            return items.length > 0 ? { ...block, items } : null;
+          }
+          const rows = block.rows.filter((row) => resolved(row.value));
+          return rows.length > 0 ? { ...block, rows } : null;
+        })
+        .filter((block): block is LegalBlock => block !== null),
+    }))
+    .filter((chapter) => chapter.blocks.length > 0);
 }
 
 export type LegalBlock =
@@ -144,14 +76,14 @@ export function LegalDocument({
   /** Optional block above the chapters, e.g. the Impressum entity table. */
   before?: ReactNode;
 }) {
+  const visible = withoutUnresolved(chapters);
+
   return (
     <Section tone="paper">
       <div className="shell">
-        <LegalStatusNotice dict={dict} />
+        {before ? <div className="mb-14">{before}</div> : null}
 
-        {before ? <div className="mt-14">{before}</div> : null}
-
-        <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Contents. Sticky on desktop; a plain list on mobile, where a
               sticky rail would eat the screen. */}
           <nav
@@ -160,7 +92,7 @@ export function LegalDocument({
           >
             <h2 className="eyebrow text-graphite">{dict.legal.contents}</h2>
             <ol className="mt-5 flex flex-col gap-2.5 border-t border-rule pt-5">
-              {chapters.map((chapter, index) => (
+              {visible.map((chapter, index) => (
                 <li key={chapter.id} className="flex gap-3">
                   <span className="font-mono text-[0.6875rem] leading-[1.7] tracking-[0.14em] text-graphite">
                     {String(index + 1).padStart(2, "0")}
@@ -182,7 +114,7 @@ export function LegalDocument({
           </nav>
 
           <div className="lg:col-span-8 lg:col-start-5">
-            {chapters.map((chapter, index) => (
+            {visible.map((chapter, index) => (
               <section
                 key={chapter.id}
                 id={chapter.id}
@@ -225,7 +157,7 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
   if (block.kind === "text") {
     return (
       <p className="max-w-[70ch] text-[0.9375rem] leading-relaxed text-graphite">
-        <LegalText>{block.value}</LegalText>
+        {block.value}
       </p>
     );
   }
@@ -239,9 +171,7 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
               aria-hidden="true"
               className="mt-[0.6em] h-[5px] w-[5px] shrink-0 rounded-full bg-accent/70"
             />
-            <span>
-              <LegalText>{item}</LegalText>
-            </span>
+            <span>{item}</span>
           </li>
         ))}
       </ul>
@@ -258,9 +188,7 @@ function LegalBlockView({ block }: { block: LegalBlock }) {
           <dt className="text-[0.9375rem] text-graphite sm:w-56 sm:shrink-0">
             {row.label}
           </dt>
-          <dd className="text-[0.9375rem] text-ink">
-            <LegalText>{row.value}</LegalText>
-          </dd>
+          <dd className="text-[0.9375rem] text-ink">{row.value}</dd>
         </div>
       ))}
     </dl>

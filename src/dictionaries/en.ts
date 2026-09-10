@@ -471,7 +471,7 @@ export const en = {
   legal: {
     indexTitle: "Legal",
     indexLead:
-      "Imprint, privacy, terms and cancellation. Written to the structure German law expects, with every value we do not have yet marked as outstanding rather than filled in.",
+      "Imprint, privacy, terms and cancellation — written to the structure German law expects.",
     imprintTitle: "Imprint",
     imprintLead: "Provider identification under § 5 DDG and § 18 MStV.",
     privacyTitle: "Privacy policy",
@@ -488,13 +488,6 @@ export const en = {
       "One functional cookie, set only if you switch language. No analytics, no advertising, no tracking.",
     contents: "Contents",
     lastUpdated: "Last updated",
-    draftNoticeLabel: "Document status",
-    draftNoticeTitle: "Not yet complete, and not yet legally reviewed.",
-    draftNoticeBody:
-      "The structure follows what German law requires and the technical descriptions match what this build actually does. The company details below are still outstanding, and the legal wording has not been reviewed by a qualified lawyer. Until both are done, treat this document as a working draft — not as a completed disclosure, and not as legal advice.",
-    outstandingRequired: "Required before launch:",
-    outstandingOptional: "Only if applicable to the legal form:",
-    missingValue: "To be supplied",
     readMore: "Read",
   },
 

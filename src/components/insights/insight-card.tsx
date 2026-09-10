@@ -39,7 +39,7 @@ export function InsightCard({
             card's own hairline doing the work, rather than a shadow. */}
         <span
           aria-hidden="true"
-          className="absolute inset-x-0 -top-px h-[2px] origin-left scale-x-0 bg-accent transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
+          className="absolute inset-x-0 -top-px h-[2px] origin-left scale-x-0 bg-accent transition-transform duration-600 ease-out-expo group-hover:scale-x-100"
         />
         <div className="flex items-center gap-3 font-mono text-[0.625rem] tracking-[0.16em] text-graphite uppercase">
           <span className="text-accent">{insight.category[locale]}</span>
