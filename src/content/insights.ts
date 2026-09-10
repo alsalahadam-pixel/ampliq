@@ -124,8 +124,8 @@ export const insights: Insight[] = [
     },
     seo: {
       title: {
-        en: "What does a business website cost in Germany? (2026 guide)",
-        de: "Was kostet eine Website für ein Unternehmen in Deutschland?",
+        en: "What a business website costs in Germany",
+        de: "Was eine Unternehmens-Website in Deutschland kostet",
       },
       description: {
         en: "What actually drives website pricing in Germany: scope, content, templates and the costs that appear after launch — plus how to compare two quotes properly.",
@@ -249,8 +249,8 @@ export const insights: Insight[] = [
         de: "Warum gutes Branding mehr ist als ein Logo",
       },
       description: {
-        en: "Recognition comes from typography, colour roles, layout rules and art direction — not the mark. What actually creates a consistent brand, and where to start on a small budget.",
-        de: "Wiedererkennung entsteht durch Typografie, Farbrollen, Layoutregeln und Art Direction — nicht durch das Logo. Was eine konsistente Marke ausmacht und wo man mit kleinem Budget beginnt.",
+        en: "Recognition comes from typography, colour roles, layout rules and art direction — not the mark. What makes a brand consistent, and where to start.",
+        de: "Wiedererkennung entsteht durch Typografie, Farbrollen, Layoutregeln und Art Direction — nicht durch das Logo. Und wo man am besten beginnt.",
       },
     },
   },
@@ -366,8 +366,8 @@ export const insights: Insight[] = [
     },
     seo: {
       title: {
-        en: "Website redesign mistakes that cost companies customers",
-        de: "Website-Redesign: Fehler, die Unternehmen Kunden kosten",
+        en: "Website redesign mistakes that cost customers",
+        de: "Website-Redesign: Fehler, die Kunden kosten",
       },
       description: {
         en: "Five preventable redesign failures: lost URLs, deleted pages that worked, slower load times, homepage-only thinking and missing measurement.",

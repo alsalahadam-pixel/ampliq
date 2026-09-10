@@ -46,7 +46,7 @@ export function PageHero({
         {breadcrumb ? (
           <Link
             href={breadcrumb.href}
-            className="eyebrow inline-flex items-center gap-2 text-fog transition-colors duration-200 hover:text-paper"
+            className="eyebrow -my-3 inline-flex items-center gap-2 py-3 text-fog transition-colors duration-200 hover:text-paper"
           >
             <span aria-hidden="true">←</span>
             {breadcrumb.label}

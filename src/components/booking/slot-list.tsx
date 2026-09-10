@@ -75,7 +75,7 @@ export function SlotList({
         <h3 className="font-display text-[1.375rem] leading-none font-bold tracking-[-0.03em]">
           {heading}
         </h3>
-        <p className="text-xs text-graphite">
+        <p className="text-fine text-graphite">
           {fill(t.durationNote, { minutes: slotMinutes })} ·{" "}
           {fill(t.shownIn, { zone: visitorZone })}
         </p>

@@ -74,7 +74,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
         <div className="shell flex h-18 items-center justify-between gap-6 lg:h-22">
           <Link
             href={href(locale)}
-            className="shrink-0 transition-opacity duration-200 hover:opacity-70"
+            className="flex h-11 shrink-0 items-center transition-opacity duration-200 hover:opacity-70"
             aria-label="AMPLIQ — home"
           >
             <Logo className="text-[1.125rem] lg:text-[1.3125rem]" />
@@ -120,7 +120,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="-mr-2 flex items-center gap-2.5 p-2 lg:hidden"
+            className="-mr-2 flex h-11 items-center gap-2.5 px-2 lg:hidden"
           >
             <span className="eyebrow">{open ? dict.nav.close : dict.nav.menu}</span>
             <MenuGlyph open={open} />

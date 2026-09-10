@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { type Locale, localeTags, locales } from "@/lib/i18n";
+import { type Locale, localeTags, locales, openGraphLocales } from "@/lib/i18n";
 import { activeSocials, contact, site, siteUrl } from "@/lib/site";
 
 /**
@@ -45,13 +45,25 @@ export function buildMetadata({
       title,
       description,
       siteName: site.name,
-      locale: localeTags[locale].replace("-", "_"),
+      locale: openGraphLocales[locale],
       publishedTime,
+      // Declaring `openGraph` at all replaces what the `opengraph-image` file
+      // convention contributes, so the card has to be named here or every
+      // page but the locale root shares with no image at all.
+      images: [
+        {
+          url: `${siteUrl}/${locale}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${site.name} — ${site.tagline[locale]}`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [`${siteUrl}/${locale}/opengraph-image`],
     },
   };
 }

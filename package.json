@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "brand": "node scripts/generate-brand-assets.ts"
+    "brand": "node scripts/generate-brand-assets.ts",
+    "launch-check": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/launch-check.ts"
   },
   "dependencies": {
     "next": "16.3.4",

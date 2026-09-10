@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { sortedInsights } from "@/content/insights";
 import { InsightCard } from "@/components/insights/insight-card";
-import { Arrow } from "@/components/ui/button";
+import { Arrow, TextLink } from "@/components/ui/button";
 import { Section, SectionHeader } from "@/components/ui/section";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
@@ -51,13 +51,12 @@ export function InsightsTeaser({
           ))}
         </div>
 
-        <Link
+        <TextLink
           href={route(locale, "insights")}
-          className="group mt-12 inline-flex items-center gap-2 text-[0.9375rem] font-medium tracking-[-0.01em] lg:hidden"
+          className="mt-12 lg:hidden"
         >
-          <span className="link-underline">{dict.cta.allInsights}</span>
-          <Arrow />
-        </Link>
+          {dict.cta.allInsights}
+        </TextLink>
       </div>
     </Section>
   );

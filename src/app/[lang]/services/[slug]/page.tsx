@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { PageHero } from "@/components/layout/page-hero";
 import { FinalCta } from "@/components/sections/final-cta";
 import { JsonLd } from "@/components/seo/json-ld";
-import { Arrow, ButtonLink } from "@/components/ui/button";
+import { Arrow, ButtonLink, TextLink } from "@/components/ui/button";
 import { FaqList } from "@/components/ui/faq";
 import { Section } from "@/components/ui/section";
 import { pillarByKey } from "@/content/pillars";
@@ -221,13 +221,9 @@ export default async function ServicePage({
               <p className="mt-6 text-[0.9375rem] leading-relaxed text-graphite">
                 {dict.home.packages.body}
               </p>
-              <Link
-                href={route(lang, "packages")}
-                className="group mt-4 inline-flex items-center gap-2 text-[0.9375rem] font-medium tracking-[-0.01em]"
-              >
-                <span className="link-underline">{dict.packages.title}</span>
-                <Arrow />
-              </Link>
+              <TextLink href={route(lang, "packages")} className="mt-4">
+                {dict.packages.title}
+              </TextLink>
             </div>
           </div>
         </div>

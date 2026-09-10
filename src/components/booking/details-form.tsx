@@ -16,8 +16,16 @@ type Errors = Partial<Record<FieldName, string>>;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/**
+ * The underlined field.
+ *
+ * The top gap is the control's own padding rather than a margin, so the text
+ * and the rule sit exactly where they did while the tappable box grows from
+ * 35px to a comfortable 44 — the difference between hitting a field on a phone
+ * and hitting the one above it. 16px text keeps iOS from zooming on focus.
+ */
 const controlBase =
-  "mt-2.5 w-full border-b bg-transparent pb-2.5 text-[1rem] text-ink transition-colors duration-200 placeholder:text-graphite/70 focus:border-accent focus:outline-none";
+  "min-h-11 w-full border-b bg-transparent pt-2.5 pb-2.5 text-[1rem] text-ink transition-colors duration-200 placeholder:text-graphite/70 focus:border-accent focus:outline-none";
 
 function Field({
   label,
@@ -313,7 +321,7 @@ export function DetailsForm({
       </div>
 
       <div className="flex flex-col gap-6 border-t border-rule pt-7 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-[46ch] text-xs leading-relaxed text-graphite">
+        <p className="text-fine max-w-[46ch] text-graphite">
           {t.privacyNote}{" "}
           <a href={route(locale, "privacy")} className="link-underline text-ink">
             {t.privacyLink}

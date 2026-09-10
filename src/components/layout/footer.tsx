@@ -35,7 +35,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
           <div className="lg:col-span-5">
             <Link
               href={href(locale)}
-              className="inline-block transition-opacity duration-200 hover:opacity-70"
+              className="-my-2 inline-block py-2 transition-opacity duration-200 hover:opacity-70"
               aria-label="AMPLIQ — home"
             >
               <Logo className="text-[1.375rem]" />
@@ -50,14 +50,17 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
           <nav className="lg:col-span-3" aria-label={dict.footer.navTitle}>
             <h2 className="eyebrow text-fog">{dict.footer.navTitle}</h2>
-            <ul className="mt-6 flex flex-col gap-3">
+            {/* No gap between the rows: each link carries its own vertical
+                padding instead, so the tappable areas meet rather than leaving
+                dead space between them on a phone. */}
+            <ul className="mt-5 flex flex-col">
               {nav.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     prefetch={false}
                     className={cn(
-                      "link-underline text-[0.9375rem] transition-colors duration-200 hover:text-paper",
+                      "link-underline inline-block py-1.5 text-[0.9375rem] transition-colors duration-200 hover:text-paper",
                       item.emphasis ? "text-paper" : "text-paper/80",
                     )}
                   >
@@ -143,13 +146,13 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
           <nav className="lg:col-span-2" aria-label={dict.footer.legalTitle}>
             <h2 className="eyebrow text-fog">{dict.footer.legalTitle}</h2>
-            <ul className="mt-6 flex flex-col gap-3">
+            <ul className="mt-5 flex flex-col">
               {legal.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
                     prefetch={false}
-                    className="link-underline text-[0.9375rem] text-paper/80 transition-colors duration-200 hover:text-paper"
+                    className="link-underline inline-block py-1.5 text-[0.9375rem] text-paper/80 transition-colors duration-200 hover:text-paper"
                   >
                     {item.label}
                   </Link>

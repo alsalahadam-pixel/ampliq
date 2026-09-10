@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Disc } from "@/components/brand/logo";
 import { Principles } from "@/components/home/principles";
 import { PageHero } from "@/components/layout/page-hero";
 import { FinalCta } from "@/components/sections/final-cta";
 import { ProcessRail } from "@/components/sections/process-rail";
 import { JsonLd } from "@/components/seo/json-ld";
+import { Media } from "@/components/ui/media";
 import { Section } from "@/components/ui/section";
 import { SplitWords } from "@/components/ui/split-words";
 import { getDictionary } from "@/lib/dictionary";
@@ -169,7 +169,17 @@ export default async function AboutPage({ params }: PageProps<"/[lang]/about">) 
               <h2 data-reveal className="text-display-md max-w-[16ch]">
                 {copy.statement}
               </h2>
-              <Disc className="mt-10 hidden h-14 w-14 text-rule-strong lg:block" />
+              {/* The photograph that belongs beside this statement. Until
+                  there is one the slot holds the DISC panel; the box is the
+                  same either way, so the picture drops in without the section
+                  being re-laid out. */}
+              <Media
+                slot="about-team"
+                locale={lang}
+                priority
+                sizes="(min-width: 1024px) 34vw, 100vw"
+                className="mt-10 hidden lg:block"
+              />
             </div>
             <div className="flex flex-col gap-6 lg:col-span-7">
               {copy.paragraphs.map((paragraph, index) => (

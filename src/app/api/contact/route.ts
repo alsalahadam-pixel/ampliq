@@ -56,8 +56,25 @@ function rateLimited(key: string): boolean {
   return hits.length > MAX_PER_WINDOW;
 }
 
+/**
+ * Collapses a single-line field to exactly that.
+ *
+ * Nothing here reaches a raw SMTP header — the transports take JSON — but a
+ * name carrying a newline still produces a broken subject line and a mangled
+ * row in the notification. Control characters have no business in a name, an
+ * address or a company, so they are stripped rather than trusted downstream.
+ */
+function singleLine(value: unknown): string {
+  return typeof value === "string"
+    ? value.replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim()
+    : "";
+}
+
+/** The message keeps its line breaks; every other field does not. */
 function asString(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
+  return typeof value === "string"
+    ? value.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]+/g, "").trim()
+    : "";
 }
 
 type Parsed =
@@ -72,15 +89,15 @@ function parse(payload: unknown): Parsed {
   const body = payload as Record<string, unknown>;
   const errors: Record<string, string> = {};
 
-  const firstName = asString(body.firstName);
+  const firstName = singleLine(body.firstName);
   if (!firstName) errors.firstName = "required";
   else if (firstName.length > LIMITS.firstName) errors.firstName = "tooLong";
 
-  const lastName = asString(body.lastName);
+  const lastName = singleLine(body.lastName);
   if (!lastName) errors.lastName = "required";
   else if (lastName.length > LIMITS.lastName) errors.lastName = "tooLong";
 
-  const email = asString(body.email);
+  const email = singleLine(body.email);
   if (!email) errors.email = "required";
   else if (email.length > LIMITS.email) errors.email = "tooLong";
   else if (!EMAIL.test(email)) errors.email = "invalid";
@@ -89,26 +106,26 @@ function parse(payload: unknown): Parsed {
   if (message.length < 10) errors.message = "required";
   else if (message.length > LIMITS.message) errors.message = "tooLong";
 
-  const company = asString(body.company);
+  const company = singleLine(body.company);
   if (company.length > LIMITS.company) errors.company = "tooLong";
 
-  const phone = asString(body.phone);
+  const phone = singleLine(body.phone);
   if (phone.length > LIMITS.phone) errors.phone = "tooLong";
 
-  const website = asString(body.website);
+  const website = singleLine(body.website);
   if (website.length > LIMITS.website) errors.website = "tooLong";
 
-  const need = asString(body.need);
+  const need = singleLine(body.need);
   if (!need) errors.need = "required";
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
 
-  const rawLocale = asString(body.locale);
+  const rawLocale = singleLine(body.locale);
   const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
 
   const services = Array.isArray(body.services)
     ? body.services
-        .map(asString)
+        .map(singleLine)
         .filter((value) => value && value.length <= LIMITS.service)
         .slice(0, 20)
     : [];
@@ -124,8 +141,8 @@ function parse(payload: unknown): Parsed {
       website: website || undefined,
       // Readable labels reach the inbox, not slugs.
       projectType: labelFor(projectTypes, need),
-      budget: labelFor(budgetRanges, asString(body.budget) || undefined),
-      timeline: labelFor(timelines, asString(body.timeline) || undefined),
+      budget: labelFor(budgetRanges, singleLine(body.budget) || undefined),
+      timeline: labelFor(timelines, singleLine(body.timeline) || undefined),
       services,
       message,
       locale,

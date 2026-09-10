@@ -122,7 +122,7 @@ export default async function StartPage({ params }: PageProps<"/[lang]/start">) 
                 </p>
                 <a
                   href={`mailto:${contact.info}`}
-                  className="link-underline mt-4 inline-block text-[0.9375rem] font-medium break-all"
+                  className="link-underline mt-1.5 inline-block py-2.5 text-[0.9375rem] font-medium break-all"
                 >
                   {contact.info}
                 </a>

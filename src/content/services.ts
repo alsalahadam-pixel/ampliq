@@ -371,8 +371,8 @@ export const services: Service[] = [
     related: ["visual-identity", "graphic-design", "web-design"],
     seo: {
       title: {
-        en: "Branding for companies that have outgrown their identity",
-        de: "Branding für Unternehmen, die ihrer Identität entwachsen sind",
+        en: "Branding for companies outgrowing their identity",
+        de: "Branding für Unternehmen im Wachstum",
       },
       description: {
         en: "Positioning, messaging and a visual system your team can actually apply. Branding and brand guidelines by AMPLIQ.",
@@ -622,7 +622,7 @@ export const services: Service[] = [
     seo: {
       title: {
         en: "Graphic design for presentations, print and social",
-        de: "Grafikdesign für Präsentationen, Print und Social Media",
+        de: "Grafikdesign für Print, Präsentation und Social",
       },
       description: {
         en: "On-brand decks, print material, signage and social assets — delivered as reusable templates. Graphic design by AMPLIQ.",
@@ -747,7 +747,7 @@ export const services: Service[] = [
     seo: {
       title: {
         en: "Business photography: team, workplace and product",
-        de: "Unternehmensfotografie: Team, Arbeitsumfeld und Produkt",
+        de: "Unternehmensfotografie: Team, Umfeld, Produkt",
       },
       description: {
         en: "Art-directed company photography planned around where the images will be used. Team portraits, workplace and product shoots by AMPLIQ.",
@@ -1121,8 +1121,8 @@ export const services: Service[] = [
     related: ["social-media", "video", "web-design"],
     seo: {
       title: {
-        en: "Meta Ads: Facebook and Instagram advertising that pays back",
-        de: "Meta Ads: Facebook- und Instagram-Werbung, die sich rechnet",
+        en: "Meta Ads that pay back: Facebook and Instagram",
+        de: "Meta Ads: Facebook- und Instagram-Werbung",
       },
       description: {
         en: "Facebook and Instagram campaigns built on a clear offer, real creative and a landing page that converts. Meta Ads management by AMPLIQ.",

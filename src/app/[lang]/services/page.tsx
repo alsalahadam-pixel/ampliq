@@ -28,7 +28,7 @@ export async function generateMetadata({
     en: {
       title: "Services",
       description:
-        "Web design, branding, visual identity, photography, video, SEO, Meta Ads and social media — organised into three layers that work together.",
+        "Web design, branding, visual identity, photography, video, SEO, Meta Ads and social media, organised into three layers that work together.",
     },
     de: {
       title: "Leistungen",

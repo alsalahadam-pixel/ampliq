@@ -68,6 +68,12 @@
   --text-lead--line-height: 1.55;
   --text-lead--letter-spacing: -0.011em;
 
+  /* Fine print that is still a sentence — price notes, privacy lines. Small
+     enough to read as secondary, large enough to actually read. Labels and
+     indices stay on --text-label / text-xs. */
+  --text-fine: 0.8125rem;
+  --text-fine--line-height: 1.6;
+
   --text-label: 0.6875rem;
   --text-label--line-height: 1;
   --text-label--letter-spacing: 0.16em;
@@ -163,6 +169,10 @@
 /* Underline that draws in on hover — used on text links. */
 @utility link-underline {
   background-image: linear-gradient(currentColor, currentColor);
+  /* Positioned against the content box, not the padding box: a link can then
+     be padded out to a thumb-sized target without the underline sliding away
+     from the words it belongs to. */
+  background-origin: content-box;
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: 0% 1px;

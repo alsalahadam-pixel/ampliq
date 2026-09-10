@@ -26,12 +26,12 @@ export async function generateMetadata({
     en: {
       title: "Packages",
       description:
-        "Three starting points — START from €599 for one focused project, GROW from €1,199 for several connected areas, and SCALE on a custom quote for an ongoing partnership.",
+        "Three starting points: START from €599 for one focused project, GROW from €1,199 for several connected areas, SCALE on a custom quote.",
     },
     de: {
       title: "Pakete",
       description:
-        "Drei Einstiege — START ab 599 € für ein fokussiertes Projekt, GROW ab 1.199 € für mehrere verbundene Bereiche und SCALE als individuelles Angebot für eine laufende Partnerschaft.",
+        "Drei Einstiege: START ab 599 € für ein fokussiertes Projekt, GROW ab 1.199 € für mehrere Bereiche, SCALE als individuelles Angebot.",
     },
   }[lang];
 

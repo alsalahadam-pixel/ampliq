@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { pillars } from "@/content/pillars";
 import { Section, SectionHeader } from "@/components/ui/section";
-import { Arrow } from "@/components/ui/button";
+import { Arrow, TextLink } from "@/components/ui/button";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
 import { route, serviceHref } from "@/lib/routes";
@@ -119,13 +119,12 @@ export function SystemSection({
           className="mt-14 flex flex-col gap-5 border-t border-white/12 pt-8 sm:flex-row sm:items-center sm:justify-between"
         >
           <p className="max-w-[48ch] text-[0.9375rem] text-fog">{system.note}</p>
-          <Link
+          <TextLink
             href={route(locale, "services")}
-            className="group inline-flex shrink-0 items-center gap-2 text-[0.9375rem] font-medium tracking-[-0.01em] text-paper"
+            className="shrink-0 text-paper"
           >
-            <span className="link-underline">{dict.cta.allServices}</span>
-            <Arrow />
-          </Link>
+            {dict.cta.allServices}
+          </TextLink>
         </div>
       </div>
     </Section>

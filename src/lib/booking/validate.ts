@@ -33,8 +33,25 @@ export type ValidationResult =
   | { ok: true; value: BookingRequest }
   | { ok: false; errors: Record<string, string> };
 
+/**
+ * A single-line field is exactly that.
+ *
+ * The mail transports take JSON, so nothing here reaches a raw SMTP header —
+ * but a name carrying a newline still produces a broken subject line and a
+ * mangled row in the notification, and a control character has no business in
+ * a name, an address or a company.
+ */
+function singleLine(value: unknown): string {
+  return typeof value === "string"
+    ? value.replace(/[\u0000-\u001f\u007f]+/g, " ").replace(/\s+/g, " ").trim()
+    : "";
+}
+
+/** The message keeps the paragraph breaks the visitor typed. */
 function asString(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
+  return typeof value === "string"
+    ? value.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]+/g, "").trim()
+    : "";
 }
 
 /** Whether the runtime recognises the zone the browser reported. */
@@ -59,16 +76,16 @@ export function validateBooking(
 
   const body = payload as Record<string, unknown>;
 
-  const start = asString(body.start);
+  const start = singleLine(body.start);
   if (!start || !Number.isFinite(Date.parse(start))) {
     errors.start = "invalid";
   }
 
-  const name = asString(body.name);
+  const name = singleLine(body.name);
   if (name.length < 2) errors.name = "required";
   else if (name.length > LIMITS.name) errors.name = "tooLong";
 
-  const email = asString(body.email);
+  const email = singleLine(body.email);
   if (!email) errors.email = "required";
   else if (email.length > LIMITS.email) errors.email = "tooLong";
   else if (!EMAIL.test(email)) errors.email = "invalid";
@@ -77,18 +94,18 @@ export function validateBooking(
   if (message.length < 10) errors.message = "required";
   else if (message.length > LIMITS.message) errors.message = "tooLong";
 
-  const company = asString(body.company);
+  const company = singleLine(body.company);
   if (company.length > LIMITS.company) errors.company = "tooLong";
 
-  const phone = asString(body.phone);
+  const phone = singleLine(body.phone);
   if (phone.length > LIMITS.phone) errors.phone = "tooLong";
 
-  const projectType = asString(body.projectType);
+  const projectType = singleLine(body.projectType);
   if (projectType.length > LIMITS.projectType) errors.projectType = "tooLong";
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
 
-  const reportedZone = asString(body.timeZone);
+  const reportedZone = singleLine(body.timeZone);
   const timeZone =
     reportedZone &&
     reportedZone.length <= LIMITS.timeZone &&
@@ -96,7 +113,7 @@ export function validateBooking(
       ? reportedZone
       : fallbackTimeZone;
 
-  const locale = asString(body.locale);
+  const locale = singleLine(body.locale);
 
   return {
     ok: true,

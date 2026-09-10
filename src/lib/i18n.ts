@@ -19,6 +19,15 @@ export const localeTags: Record<Locale, string> = {
   de: "de-DE",
 };
 
+/**
+ * Open Graph wants the `xx_XX` form, which is not the same as the hreflang
+ * tag: `en` is a valid hreflang but not a valid og:locale.
+ */
+export const openGraphLocales: Record<Locale, string> = {
+  en: "en_GB",
+  de: "de_DE",
+};
+
 export const localeNames: Record<Locale, string> = {
   en: "English",
   de: "Deutsch",

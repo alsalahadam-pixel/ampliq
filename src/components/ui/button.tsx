@@ -126,7 +126,10 @@ export function TextLink({
     <Link
       href={href}
       className={cn(
-        "group inline-flex items-center gap-2 text-[0.9375rem] font-medium tracking-[-0.01em]",
+        // Padded to a comfortable tap target, then pulled back by the same
+        // amount so no layout shifts. The underline is positioned against the
+        // content box, so it stays on the words.
+        "group -my-2.5 inline-flex items-center gap-2 py-2.5 text-[0.9375rem] font-medium tracking-[-0.01em]",
         className,
       )}
     >

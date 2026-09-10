@@ -38,7 +38,7 @@ export function PackagesSection({
           <PackageGrid locale={locale} dict={dict} detailed={detailed} />
         </div>
 
-        <p className="mt-5 text-xs text-graphite">{dict.packages.priceNote}</p>
+        <p className="mt-5 text-fine text-graphite">{dict.packages.priceNote}</p>
 
         {/* The custom path — most enquiries land here rather than on a tier. */}
         <div

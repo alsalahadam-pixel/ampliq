@@ -1,7 +1,5 @@
-import Link from "next/link";
-
 import { Disc } from "@/components/brand/logo";
-import { Arrow } from "@/components/ui/button";
+import { TextLink } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/section";
 import type { Dictionary } from "@/lib/dictionary";
 import type { Locale } from "@/lib/i18n";
@@ -49,13 +47,9 @@ export function AboutTeaser({
             >
               {about.body}
             </p>
-            <Link
-              href={route(locale, "about")}
-              className="group mt-8 inline-flex items-center gap-2 text-[0.9375rem] font-medium tracking-[-0.01em]"
-            >
-              <span className="link-underline">{about.link}</span>
-              <Arrow />
-            </Link>
+            <TextLink href={route(locale, "about")} className="mt-8">
+              {about.link}
+            </TextLink>
           </div>
         </div>
       </div>

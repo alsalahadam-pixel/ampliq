@@ -101,7 +101,7 @@ export function PackageGrid({
               )}
               <p
                 className={cn(
-                  "mt-2 text-xs",
+                  "mt-2 text-fine",
                   dark ? "text-fog" : "text-graphite",
                 )}
               >

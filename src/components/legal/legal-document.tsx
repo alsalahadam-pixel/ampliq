@@ -167,7 +167,7 @@ export function LegalDocument({
                   </span>
                   <a
                     href={`#${chapter.id}`}
-                    className="link-underline text-[0.875rem] leading-relaxed text-graphite transition-colors duration-200 hover:text-ink"
+                    className="link-underline -my-2.5 inline-block py-2.5 text-[0.875rem] leading-relaxed text-graphite transition-colors duration-200 hover:text-ink"
                   >
                     {chapter.heading}
                   </a>

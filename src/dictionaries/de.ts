@@ -509,7 +509,7 @@ export const de: Dictionary = {
   footer: {
     tagline: "Marketing, verstärkt.",
     navTitle: "Navigation",
-    socialTitle: "Social",
+    socialTitle: "Social Media",
     legalTitle: "Rechtliches",
     contactTitle: "Kontakt",
     projectLabel: "Projekte & Angebote",

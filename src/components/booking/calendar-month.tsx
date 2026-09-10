@@ -368,7 +368,7 @@ function MonthButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="flex h-9 w-9 items-center justify-center rounded-[2px] border border-rule-strong text-ink transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:border-rule disabled:text-fog disabled:hover:bg-transparent disabled:hover:text-fog"
+      className="flex h-11 w-11 items-center justify-center rounded-[2px] border border-rule-strong text-ink transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-paper focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:border-rule disabled:text-fog disabled:hover:bg-transparent disabled:hover:text-fog"
     >
       <svg
         viewBox="0 0 16 16"

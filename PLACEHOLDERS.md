@@ -4,10 +4,42 @@ Everything on the site is real except the items listed here. Nothing has been
 invented to fill a gap: where a fact was unavailable, the page either omits it
 or shows a visible placeholder.
 
+## The one command
+
+```bash
+npm run launch-check
+```
+
+It prints everything still outstanding, grouped by whether it blocks launch, and
+exits non-zero while anything required is missing — so it can gate a deploy. It
+reads the same registries the pages read (`src/lib/legal.ts`,
+`src/content/media.ts`, `src/lib/site.ts`) rather than a list kept in parallel,
+so it cannot drift from what the site actually renders. This document explains
+each item; the command tells you which ones are still open right now.
+
+## The domain
+
+**Set it in one place.** Every URL and every published address on the site is
+derived from a single constant:
+
+```bash
+NEXT_PUBLIC_SITE_DOMAIN="yourdomain.com"
+```
+
+That one line moves the canonical URLs, the hreflang pairs, the sitemap, the
+Open Graph tags, `info@`, `project@` and `help@`, and the email sender. Nothing
+else needs editing.
+
+`ampliq.net` is the working default — it is there so the build has something
+valid to render, not because the domain has been chosen. Individual mailboxes
+can still be overridden (`NEXT_PUBLIC_CONTACT_INFO_EMAIL` and friends) if one of
+them lives somewhere else, but the normal case is the single line above.
+
 ## Must be supplied
 
 | What | Where | Notes |
 | --- | --- | --- |
+| The final domain | `.env.local` → `NEXT_PUBLIC_SITE_DOMAIN` | See above. Until it is set, everything runs on the `ampliq.net` default. |
 | Legal entity: name, form, address, responsible person | `.env.local` → `NEXT_PUBLIC_LEGAL_*` | Every unset field renders as a highlighted `[PLACEHOLDER]` across all five legal pages, and is listed in the "required before launch" band at the top of each. **AMPLIQ is not a registered company** — do not enter a GmbH, UG, Handelsregister number or VAT ID that does not exist. |
 | VAT ID, tax number, register details | `.env.local` → `..._VAT_ID`, `..._TAX_NUMBER`, `..._REGISTER_*` | Only where they genuinely apply to the legal form. Shown as "if applicable" rather than as a gap. |
 | Legal review of all five documents | `/legal/*` | Impressum, privacy, terms, cancellation and cookies each carry a visible notice stating they are not yet legally reviewed. The structure follows German law and the technical descriptions match this build; the legal wording needs a qualified lawyer. |
@@ -19,6 +51,7 @@ or shows a visible placeholder.
 
 | What | Where | Notes |
 | --- | --- | --- |
+| Photography | `src/content/media.ts` → each slot's `src` | Every intended photograph is registered there with the box it will occupy and the alt text it will carry, and the sections are already built around those boxes. Adding a picture is putting the file in `public/media/` and filling in `src` — no section is re-laid out, and nothing shifts while it loads because the aspect ratio is declared up front. Until then the slot holds the DISC panel, which reads as a brand graphic rather than a missing image. **Correct the alt text to describe the actual photograph** when you add one. |
 | Social profiles | `.env.local` → `NEXT_PUBLIC_INSTAGRAM_URL`, `NEXT_PUBLIC_LINKEDIN_URL` | Links are hidden entirely while unset. |
 | Calendar connection for `/start` | `.env.local` → Google or Microsoft credentials | Until set, the booking calendar shows the published working hours and states, on the page, that no calendar was consulted. Confirm the working hours in `BOOKING_WORKING_HOURS` are the real ones — the defaults are a reasonable schedule, not your schedule. Only busy times are ever read; no event details. See `docs/booking.md`. |
 | Analytics | `.env.local` → `NEXT_PUBLIC_GTM_ID` etc. | No script loads and no tracking cookie is set while unset. **Add a consent banner before enabling any of these** — the privacy policy currently states truthfully that the site sets no tracking cookies, and that statement stops being true the moment a tag is added. |

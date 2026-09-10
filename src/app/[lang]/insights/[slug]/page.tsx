@@ -100,7 +100,7 @@ export default async function InsightPage({
                       </span>
                       <a
                         href={`#${heading.id}`}
-                        className="link-underline text-sm leading-snug text-graphite transition-colors duration-200 hover:text-ink"
+                        className="link-underline -my-3 inline-block py-3 text-sm leading-snug text-graphite transition-colors duration-200 hover:text-ink"
                       >
                         {heading.label}
                       </a>
