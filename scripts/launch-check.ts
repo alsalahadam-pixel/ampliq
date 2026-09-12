@@ -107,7 +107,7 @@ const groups: Group[] = [
         what: "Calendar connection",
         where: "GOOGLE_* (run /api/booking/google/authorize) or MICROSOFT_*",
         done:
-          (has("GOOGLE_REFRESH_TOKEN") && has("GOOGLE_CLIENT_ID")) ||
+          (has("GOOGLE_OAUTH_REFRESH_TOKEN") && has("GOOGLE_CLIENT_ID")) ||
           has("MICROSOFT_CLIENT_ID"),
         meanwhile:
           "availability is labelled provisional on the page — published hours minus bookings made here, and the page says so",

@@ -124,20 +124,45 @@ export function setupPage({
 }
 
 /**
- * What both routes answer when the setup flow is not open to this caller.
+ * What both routes answer when the connect flow has not been switched on.
  *
- * A 404 rather than a 401: an unconfigured deployment genuinely has no such
- * endpoint, and a prober should not learn that one exists behind a key.
+ * An earlier version answered 404 here, on the theory that a prober should not
+ * learn the endpoint exists. That was the wrong trade: the operator probing it
+ * is the owner, the 404 is indistinguishable from a failed deploy, and it cost
+ * real time to diagnose. The endpoint says what it is and what it needs; the
+ * secret is what protects it.
  */
-export function setupNotFound(): Response {
-  return new Response("Not found", {
-    status: 404,
-    headers: {
-      "content-type": "text/plain; charset=utf-8",
-      "cache-control": "no-store",
-      "x-robots-tag": "noindex, nofollow",
-    },
+export function setupDisabledPage(): Response {
+  return setupPage({
+    status: 503,
+    tone: "problem",
+    title: "The Google connect flow is not switched on",
+    lead: "This endpoint exists and is working. It stays closed until a setup secret is configured, so that it cannot be used by anyone who happens to find it.",
+    steps: [
+      `Set ${code("GOOGLE_OAUTH_SETUP_SECRET")} on the deployment to a long random string — ${code("openssl rand -hex 32")} produces one.`,
+      `Set ${code("GOOGLE_CLIENT_ID")}, ${code("GOOGLE_CLIENT_SECRET")} and ${code("GOOGLE_CALENDAR_ID")} if they are not set already.`,
+      "Redeploy, then open this URL again with <code>?secret=&lt;the secret&gt;</code> on the end.",
+      `Remove ${code("GOOGLE_OAUTH_SETUP_SECRET")} once the calendar is connected. This page comes back, and the booking integration keeps running on the refresh token.`,
+    ],
   });
+}
+
+/** The flow is switched on, but this caller did not present the secret. */
+export function setupUnauthorizedPage(): Response {
+  const response = setupPage({
+    status: 401,
+    tone: "problem",
+    title: "This endpoint needs the setup secret",
+    lead: "The Google connect flow is switched on, so the endpoint is here — but it will not start an OAuth grant for a caller who cannot prove they own the deployment.",
+    steps: [
+      `Append ${code("?secret=<GOOGLE_OAUTH_SETUP_SECRET>")} to this URL, or send it as the ${code("X-AMPLIQ-Setup-Secret")} header.`,
+      "The value is whatever you set on the deployment. It is compared in constant time and never logged.",
+    ],
+  });
+
+  const headers = new Headers(response.headers);
+  headers.set("www-authenticate", 'AMPLIQ-Setup realm="google-oauth"');
+  return new Response(response.body, { status: response.status, headers });
 }
 
 /** `code` for the step lists above, pre-escaped. */

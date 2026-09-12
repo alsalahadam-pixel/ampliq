@@ -64,8 +64,9 @@ is not free". Swapping Google for Outlook, or adding a third provider, touches
 `providers/` and nothing else.
 
 The two `google/` routes are operator-only and exist for a single use. They
-answer 404 unless `GOOGLE_OAUTH_SETUP_SECRET` is set, which it should not be
-except during the minutes it takes to connect a calendar.
+always answer — 503 while `GOOGLE_OAUTH_SETUP_SECRET` is unset, 401 when it is
+set but not presented — and start a grant only for a caller who presents it.
+Set the secret for the minutes it takes to connect a calendar, then remove it.
 
 ## Privacy
 
@@ -183,7 +184,7 @@ own origin plus the callback path, which is the same value. Set it explicitly
 anyway if you run the flow from a preview deployment or from localhost, because
 Vercel preview URLs change on every deploy and Google will not match them.
 
-`GOOGLE_REFRESH_TOKEN` is deliberately **not** in that table. You do not have it
+`GOOGLE_OAUTH_REFRESH_TOKEN` is deliberately **not** in that table. You do not have it
 yet — step 3 produces it.
 
 #### 3. Connect the calendar, once
@@ -208,9 +209,11 @@ The refresh token is not on that page by design. Read it from the function log
 (`vercel logs`, or the Logs tab on the deployment; locally it is in your
 terminal), then:
 
-1. Set `GOOGLE_REFRESH_TOKEN` on the deployment.
+1. Set `GOOGLE_OAUTH_REFRESH_TOKEN` on the deployment.
 2. **Remove `GOOGLE_OAUTH_SETUP_SECRET`.** Both `/api/booking/google/*` routes
-   answer 404 without it, which is where they should spend their life.
+   then answer 503 with a short page saying the flow is closed — they stay
+   reachable, which is what you want when you come back to them in a year, but
+   they will not start a grant.
 3. Redeploy.
 
 Doing the whole flow against `npm run dev` instead keeps the token in your own
@@ -252,7 +255,7 @@ what forces a fresh one.
 
 #### What is not connected
 
-With `GOOGLE_REFRESH_TOKEN` unset the provider simply does not activate. The
+With `GOOGLE_OAUTH_REFRESH_TOKEN` unset the provider simply does not activate. The
 booking flow keeps working: availability is the published working hours minus
 bookings made through the site, the page says plainly that no calendar was
 consulted, and nothing pretends otherwise.

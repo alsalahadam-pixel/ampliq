@@ -3,7 +3,7 @@
  *
  * This module exists for the one-time setup: the owner authorises AMPLIQ
  * against their own Google account, and Google hands back a refresh token that
- * is then stored as `GOOGLE_REFRESH_TOKEN`. From that point the booking
+ * is then stored as `GOOGLE_OAUTH_REFRESH_TOKEN`. From that point the booking
  * provider (`./google.ts`) only ever uses the refresh-token grant, and nothing
  * here runs again.
  *
@@ -14,10 +14,12 @@
  * to the server log and to nothing else. The confirmation page the operator
  * sees names the account and the calendar and stops there.
  *
- * **The flow is not open to the public.** Both routes are gated on
- * `GOOGLE_OAUTH_SETUP_SECRET`, and answer 404 — not 401 — when it is unset or
- * wrong, so an unconfigured deployment has no OAuth initiator at all and a
- * prober cannot tell the difference between "no such route" and "wrong key".
+ **The flow is closed, but it does not hide.** Both routes always exist. They
+ * are gated on `GOOGLE_OAUTH_SETUP_SECRET`: without it configured they answer
+ * 503 and name what to set, and with it configured but not presented they
+ * answer 401. An earlier revision answered 404 in both cases, which was
+ * indistinguishable from a failed deploy and cost more than the obscurity was
+ * worth.
  */
 
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";

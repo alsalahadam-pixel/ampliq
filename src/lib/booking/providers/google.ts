@@ -3,7 +3,7 @@
  *
  * Authenticates with OAuth 2.0: the owner authorises AMPLIQ once through
  * `/api/booking/google/authorize`, and the refresh token that comes back is
- * stored as `GOOGLE_REFRESH_TOKEN`. Every request then trades that refresh
+ * stored as `GOOGLE_OAUTH_REFRESH_TOKEN`. Every request then trades that refresh
  * token for a short-lived access token, which is cached in memory for its
  * lifetime and renewed automatically when it expires. Setup is in
  * `docs/booking.md`.
@@ -47,7 +47,12 @@ export type GoogleCredentials = {
 export function readGoogleCredentials(): GoogleCredentials | null {
   const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
-  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN?.trim();
+  // `GOOGLE_REFRESH_TOKEN` is the name an earlier revision used. Read as a
+  // fallback so an environment set up against it keeps working; everything
+  // written here, in the docs and in the setup flow uses the longer name.
+  const refreshToken = (
+    process.env.GOOGLE_OAUTH_REFRESH_TOKEN ?? process.env.GOOGLE_REFRESH_TOKEN
+  )?.trim();
   const calendarId = process.env.GOOGLE_CALENDAR_ID?.trim();
 
   if (!clientId || !clientSecret || !refreshToken || !calendarId) return null;

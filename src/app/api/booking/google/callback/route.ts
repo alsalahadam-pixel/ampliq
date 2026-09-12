@@ -14,7 +14,7 @@
  * **The refresh token never reaches the browser.** The page rendered here says
  * which account was connected and whether the calendar answered; the token
  * itself goes to stderr, which is the deployment's function log locally and in
- * Vercel. The operator copies it from there into `GOOGLE_REFRESH_TOKEN` and
+ * Vercel. The operator copies it from there into `GOOGLE_OAUTH_REFRESH_TOKEN` and
  * redeploys. Nothing persists it on this side — there is no writable disk on a
  * serverless deployment, and a token in a response body is a token in a browser
  * history, a proxy cache and a screenshot.
@@ -34,7 +34,11 @@ import {
   setupIsEnabled,
   STATE_COOKIE,
 } from "@/lib/booking/providers/google-oauth";
-import { code, setupNotFound, setupPage } from "@/app/api/booking/google/setup-page";
+import {
+  code,
+  setupDisabledPage,
+  setupPage,
+} from "@/app/api/booking/google/setup-page";
 
 /** Exchanges a one-time code against Google; never prerendered or cached. */
 export const dynamic = "force-dynamic";
@@ -111,7 +115,7 @@ async function probeCalendar(
 }
 
 export async function GET(request: Request): Promise<Response> {
-  if (!setupIsEnabled()) return setupNotFound();
+  if (!setupIsEnabled()) return setupDisabledPage();
 
   const url = new URL(request.url);
   const params = url.searchParams;
@@ -241,7 +245,7 @@ export async function GET(request: Request): Promise<Response> {
       "─".repeat(72),
       "GOOGLE CALENDAR CONNECTED — copy this into the deployment, then redeploy:",
       "",
-      `GOOGLE_REFRESH_TOKEN=${tokens.refreshToken}`,
+      `GOOGLE_OAUTH_REFRESH_TOKEN=${tokens.refreshToken}`,
       "",
       "Unset GOOGLE_OAUTH_SETUP_SECRET afterwards to close the setup flow.",
       "─".repeat(72),
@@ -271,7 +275,7 @@ export async function GET(request: Request): Promise<Response> {
       facts,
       steps: [
         "Open the function log: <code>vercel logs</code>, or the Logs tab on the deployment. Locally it is already in your terminal.",
-        `Copy the ${code("GOOGLE_REFRESH_TOKEN=…")} line into the deployment's environment variables.`,
+        `Copy the ${code("GOOGLE_OAUTH_REFRESH_TOKEN=…")} line into the deployment's environment variables.`,
         `Redeploy, then remove ${code("GOOGLE_OAUTH_SETUP_SECRET")} so this flow answers 404 again.`,
       ],
     }),

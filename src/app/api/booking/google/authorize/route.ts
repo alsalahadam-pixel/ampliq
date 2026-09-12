@@ -5,14 +5,17 @@
  * secret, mints a CSRF state, puts it in an httpOnly cookie and redirects the
  * operator to Google's consent screen.
  *
- * Nothing about this endpoint is public. With `GOOGLE_OAUTH_SETUP_SECRET`
- * unset — the state every deployment is in until the owner decides to connect
- * a calendar — it answers 404, so there is no OAuth initiator to find. With it
- * set but not supplied, it answers 404 as well: a prober learns nothing either
- * way.
+ The endpoint always exists. What it does depends on how the deployment is
+ * configured:
  *
- * Once the connection is made, unset the secret. The flow is then gone again
- * and the booking integration keeps running on the refresh token.
+ * - `GOOGLE_OAUTH_SETUP_SECRET` unset — 503 and a page naming what to set. The
+ *   flow is closed, and says so, rather than pretending to be absent.
+ * - set, but not presented — 401. No grant is started for a caller who cannot
+ *   prove they own the deployment.
+ * - set and presented — 302 to Google's consent screen.
+ *
+ * Once the connection is made, unset the secret. The flow closes again and the
+ * booking integration keeps running on the refresh token.
  */
 
 import {
@@ -23,7 +26,12 @@ import {
   setupSecretMatches,
   STATE_COOKIE,
 } from "@/lib/booking/providers/google-oauth";
-import { code, setupNotFound, setupPage } from "@/app/api/booking/google/setup-page";
+import {
+  code,
+  setupDisabledPage,
+  setupPage,
+  setupUnauthorizedPage,
+} from "@/app/api/booking/google/setup-page";
 
 /** Reads the environment and mints a nonce; never prerendered or cached. */
 export const dynamic = "force-dynamic";
@@ -50,7 +58,7 @@ function stateCookie(state: string, secure: boolean): string {
 }
 
 export function GET(request: Request): Response {
-  if (!setupIsEnabled()) return setupNotFound();
+  if (!setupIsEnabled()) return setupDisabledPage();
 
   const url = new URL(request.url);
   // The query string is the convenient way in, and safe: the site's
@@ -61,7 +69,7 @@ export function GET(request: Request): Response {
   const supplied =
     request.headers.get("x-ampliq-setup-secret") ?? url.searchParams.get("secret");
 
-  if (!setupSecretMatches(supplied)) return setupNotFound();
+  if (!setupSecretMatches(supplied)) return setupUnauthorizedPage();
 
   const app = readOAuthApp();
   if (!app) {
