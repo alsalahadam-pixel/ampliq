@@ -39,6 +39,7 @@ src/lib/booking/
     types.ts        the CalendarProvider contract
     google.ts       Google Calendar (FreeBusy + events), OAuth refresh grant
     google-oauth.ts the authorization-code half: consent URL, exchange, refresh
+    token-store.ts  where the refresh token lands: Vercel env, or .env.local
     microsoft.ts    Microsoft 365 / Outlook (Graph getSchedule + events)
     index.ts        picks one from the environment, or none
   email/
@@ -53,9 +54,10 @@ src/app/api/booking/
   availability/           the slot lookup
   route.ts                the booking itself
   google/
-    authorize/            one-time connect, step 1. 404 unless enabled
+    authorize/            one-time connect, step 1: consent redirect
     callback/             one-time connect, step 2. The registered redirect URI
-    setup-page.ts         the plain HTML those two render. Not a route
+    status/               is the calendar live? A real free/busy call
+    setup-page.ts         the plain HTML those three render. Not a route
 ```
 
 The UI talks to `/api/booking/availability` and `/api/booking`. It never sees a
@@ -63,10 +65,13 @@ provider, a credential, or anything from the owner's calendar beyond "this time
 is not free". Swapping Google for Outlook, or adding a third provider, touches
 `providers/` and nothing else.
 
-The two `google/` routes are operator-only and exist for a single use. They
-always answer — 503 while `GOOGLE_OAUTH_SETUP_SECRET` is unset, 401 when it is
-set but not presented — and start a grant only for a caller who presents it.
-Set the secret for the minutes it takes to connect a calendar, then remove it.
+The three `google/` routes are operator-only. They always answer — 503 while
+`GOOGLE_OAUTH_SETUP_SECRET` is unset, 401 when it is set but not presented — and
+act only for a caller who presents it. Set the secret for the minutes it takes
+to connect a calendar, then remove it.
+
+None of them logs a token or returns one to the browser. `qa/oauth-setup.mjs`
+asserts both, including that the callback contains no `console` call at all.
 
 ## Privacy
 
@@ -178,16 +183,25 @@ Set these on the deployment (Settings → Environment Variables), then redeploy:
 | `GOOGLE_CALENDAR_ID` | `you@example.com`, or the calendar's ID |
 | `GOOGLE_OAUTH_REDIRECT_URI` | `https://ampliq.net/api/booking/google/callback` |
 | `GOOGLE_OAUTH_SETUP_SECRET` | a long random string — `openssl rand -hex 32` |
+| `VERCEL_TOKEN` | an access token from [vercel.com/account/tokens](https://vercel.com/account/tokens) |
+| `VERCEL_PROJECT_ID` | Project Settings → General → Project ID |
+| `VERCEL_TEAM_ID` | only if the project belongs to a team |
 
-`GOOGLE_OAUTH_REDIRECT_URI` is optional in production: it defaults to the site's
-own origin plus the callback path, which is the same value. Set it explicitly
-anyway if you run the flow from a preview deployment or from localhost, because
-Vercel preview URLs change on every deploy and Google will not match them.
+`GOOGLE_OAUTH_REFRESH_TOKEN` is deliberately **not** in that table. You never
+type it: the connect flow writes it for you.
 
-`GOOGLE_OAUTH_REFRESH_TOKEN` is deliberately **not** in that table. You do not have it
-yet — step 3 produces it.
+**Why the Vercel token.** A serverless deployment has no writable disk and this
+project has no database, so the only durable place for the refresh token is the
+project's own environment. The flow writes it there through the Vercel REST
+API, which is available on the free plan. An earlier version printed the token
+to the function log instead; that fails on the free plan, where the log window
+is short and the line is gone by the time you go looking for it.
 
-#### 3. Connect the calendar, once
+`VERCEL_TOKEN` can change anything about the project. It is needed for one
+click and should be deleted immediately afterwards. If you would rather not
+create one at all, do the whole connection locally — see step 3b.
+
+#### 3a. Connect the calendar — on the deployment
 
 Open, in a browser, signed in as the account that owns the calendar:
 
@@ -199,27 +213,47 @@ Approve the consent screen. Google redirects back to the callback, which:
 
 - checks the round trip against an httpOnly, single-use state cookie,
 - exchanges the code for tokens **server-side**,
-- queries FreeBusy once to prove the token can actually read
-  `GOOGLE_CALENDAR_ID`,
-- writes the refresh token to the **server log**,
-- and shows you a page naming the account, the calendar and the free/busy
-  result — and nothing else.
+- queries FreeBusy once to prove the token can read `GOOGLE_CALENDAR_ID`,
+- writes `GOOGLE_OAUTH_REFRESH_TOKEN` into the project's environment variables,
+- and shows a page naming the account, the calendar and the free/busy result.
 
-The refresh token is not on that page by design. Read it from the function log
-(`vercel logs`, or the Logs tab on the deployment; locally it is in your
-terminal), then:
+The token is not on that page, not in any log, and nothing was handed to your
+browser. There is nothing to copy.
 
-1. Set `GOOGLE_OAUTH_REFRESH_TOKEN` on the deployment.
-2. **Remove `GOOGLE_OAUTH_SETUP_SECRET`.** Both `/api/booking/google/*` routes
-   then answer 503 with a short page saying the flow is closed — they stay
-   reachable, which is what you want when you come back to them in a year, but
-   they will not start a grant.
-3. Redeploy.
+Then:
 
-Doing the whole flow against `npm run dev` instead keeps the token in your own
-terminal rather than a cloud log. Point `GOOGLE_OAUTH_REDIRECT_URI` at
-`http://localhost:3000/api/booking/google/callback` for that run, and put the
-production value back afterwards.
+1. **Redeploy.** An environment variable only reaches the running functions on
+   the next deployment.
+2. Confirm with
+   `https://ampliq.net/api/booking/google/status?secret=<GOOGLE_OAUTH_SETUP_SECRET>`
+   — it runs a real free/busy call through the stored refresh token and says
+   whether the calendar answered.
+3. Delete `VERCEL_TOKEN` and `GOOGLE_OAUTH_SETUP_SECRET`. Neither is needed
+   again.
+
+If the authorize URL answers *"There is nowhere to put the refresh token yet"*,
+`VERCEL_TOKEN` or `VERCEL_PROJECT_ID` is missing. That check runs **before** the
+redirect on purpose: Google issues one refresh token per grant, and spending one
+with nowhere to store it means revoking the app in your Google account settings
+before it will issue another.
+
+#### 3b. Connect the calendar — locally, with no Vercel token
+
+Register `http://localhost:3000/api/booking/google/callback` in Google Cloud,
+then:
+
+```bash
+GOOGLE_OAUTH_REDIRECT_URI="http://localhost:3000/api/booking/google/callback" \
+GOOGLE_OAUTH_SETUP_SECRET="anything" npm run dev
+```
+
+Open `http://localhost:3000/api/booking/google/authorize?secret=anything` and
+approve. The callback writes `GOOGLE_OAUTH_REFRESH_TOKEN` into `.env.local` —
+which is gitignored, and chmod 600 where the platform allows it. Copy that one
+line into the production deployment's environment variables and redeploy.
+
+This path needs no Vercel token and no API access at all. The token sits on your
+own disk rather than in a cloud log.
 
 #### Scopes
 
@@ -245,8 +279,9 @@ when the refresh token is dead. Three causes, one fix:
 - access was revoked at `myaccount.google.com/permissions`,
 - the OAuth client was deleted or its secret rotated.
 
-Set `GOOGLE_OAUTH_SETUP_SECRET` again, rerun step 3, replace the token, unset
-the secret.
+Set `GOOGLE_OAUTH_SETUP_SECRET` and `VERCEL_TOKEN` again, rerun step 3a — the
+flow overwrites the stored token rather than failing on a duplicate — redeploy,
+then remove both.
 
 If Google returns no refresh token at all, the account has already authorised
 this client. Remove the app under `myaccount.google.com/permissions` and rerun —

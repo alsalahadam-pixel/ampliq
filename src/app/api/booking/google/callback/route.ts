@@ -9,15 +9,18 @@
  * Google sends the operator back here with a one-time code. This route proves
  * the round trip belongs to the authorize request that started it, exchanges
  * the code server-side, checks the resulting token can actually read the target
- * calendar, and writes the refresh token to the server log.
+ * calendar, and stores the refresh token where the deployment will find it.
  *
- * **The refresh token never reaches the browser.** The page rendered here says
- * which account was connected and whether the calendar answered; the token
- * itself goes to stderr, which is the deployment's function log locally and in
- * Vercel. The operator copies it from there into `GOOGLE_OAUTH_REFRESH_TOKEN` and
- * redeploys. Nothing persists it on this side — there is no writable disk on a
- * serverless deployment, and a token in a response body is a token in a browser
- * history, a proxy cache and a screenshot.
+ * **The refresh token never reaches the browser, and is never logged.** An
+ * earlier revision wrote it to stderr for the operator to copy out of the
+ * function log. That only works if you can still read the log — Vercel's free
+ * plan keeps a short window of runtime logs, and by the time the flow was
+ * finished the line was gone. So the token goes straight into storage instead;
+ * see `@/lib/booking/providers/token-store`. The page rendered here names the
+ * account, the calendar and where the token landed, and contains none of it.
+ *
+ * If there is nowhere to put it the grant is discarded rather than displayed,
+ * and the page says what to configure. Running the flow again costs one click.
  *
  * Authorization is the state cookie, not a second secret: the cookie is
  * httpOnly and could only have been set by a request that already passed the
@@ -34,6 +37,7 @@ import {
   setupIsEnabled,
   STATE_COOKIE,
 } from "@/lib/booking/providers/google-oauth";
+import { storeRefreshToken } from "@/lib/booking/providers/token-store";
 import {
   code,
   setupDisabledPage,
@@ -235,23 +239,9 @@ export async function GET(request: Request): Promise<Response> {
     calendarId ? probeCalendar(tokens.accessToken, calendarId) : Promise.resolve(null),
   ]);
 
-  // The one place the refresh token is written. stderr is the function log —
-  // `vercel logs` or the Logs tab on the deployment — and the local terminal
-  // when the flow is run against a dev server, which is the quieter of the two
-  // places to hand a secret over.
-  console.error(
-    [
-      "",
-      "─".repeat(72),
-      "GOOGLE CALENDAR CONNECTED — copy this into the deployment, then redeploy:",
-      "",
-      `GOOGLE_OAUTH_REFRESH_TOKEN=${tokens.refreshToken}`,
-      "",
-      "Unset GOOGLE_OAUTH_SETUP_SECRET afterwards to close the setup flow.",
-      "─".repeat(72),
-      "",
-    ].join("\n"),
-  );
+  // The token goes to storage and nowhere else — not to stderr, not into the
+  // page below. `storeRefreshToken` returns only whether it worked.
+  const stored = await storeRefreshToken(tokens.refreshToken);
 
   const facts = [
     accountEmail ? { term: "Account", detail: accountEmail } : null,
@@ -267,16 +257,28 @@ export async function GET(request: Request): Promise<Response> {
     { term: "Scopes", detail: tokens.scope || "as requested" },
   ].filter((fact) => fact !== null);
 
+  if (!stored.ok) {
+    return withClearedState(
+      setupPage({
+        status: 500,
+        tone: "problem",
+        title: "Google granted access, but there is nowhere to keep it",
+        lead: "The consent worked and the calendar answered. The refresh token has been discarded rather than shown or logged, because a token nobody can store is worse than no token at all. Configure one of the options below and run the flow again — it takes one click.",
+        facts: [...facts, { term: "Problem", detail: stored.reason }],
+        steps: stored.how,
+      }),
+    );
+  }
+
   return withClearedState(
     setupPage({
       status: 200,
       title: "Calendar connected",
-      lead: "The refresh token has been written to this deployment's server log. It is deliberately not shown here — copy it from the log, set it on the deployment, and redeploy.",
-      facts,
+      lead: `The refresh token has been stored in ${stored.where}. It was not shown here and not written to any log, so there is nothing for you to copy.`,
+      facts: [...facts, { term: "Stored in", detail: stored.where }],
       steps: [
-        "Open the function log: <code>vercel logs</code>, or the Logs tab on the deployment. Locally it is already in your terminal.",
-        `Copy the ${code("GOOGLE_OAUTH_REFRESH_TOKEN=…")} line into the deployment's environment variables.`,
-        `Redeploy, then remove ${code("GOOGLE_OAUTH_SETUP_SECRET")} so this flow answers 404 again.`,
+        ...stored.next,
+        `Check it worked at ${code("/api/booking/google/status?secret=…")} — it reports whether the booking flow is reading a live calendar, without needing a log.`,
       ],
     }),
   );

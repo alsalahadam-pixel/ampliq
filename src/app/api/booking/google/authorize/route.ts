@@ -26,6 +26,7 @@ import {
   setupSecretMatches,
   STATE_COOKIE,
 } from "@/lib/booking/providers/google-oauth";
+import { storeIsAvailable } from "@/lib/booking/providers/token-store";
 import {
   code,
   setupDisabledPage,
@@ -81,6 +82,24 @@ export function GET(request: Request): Response {
       steps: [
         `${code("GOOGLE_CLIENT_ID")} — the web application client id from Google Cloud.`,
         `${code("GOOGLE_CLIENT_SECRET")} — its secret.`,
+      ],
+    });
+  }
+
+  // Checked before the redirect, not after the consent: Google issues one
+  // refresh token per grant, and spending one with nowhere to put it means
+  // revoking the app in Google's account settings before it will issue another.
+  if (!storeIsAvailable()) {
+    return setupPage({
+      status: 500,
+      tone: "problem",
+      title: "There is nowhere to put the refresh token yet",
+      lead: "Google would grant access, and this deployment would have to throw the result away. Configure somewhere for it to live first — this check is here so you do not spend a consent for nothing.",
+      steps: [
+        `Create an access token at ${code("vercel.com/account/tokens")} and set it as ${code("VERCEL_TOKEN")} on this project. The free plan includes API access.`,
+        `Set ${code("VERCEL_PROJECT_ID")} from Project Settings → General → Project ID, plus ${code("VERCEL_TEAM_ID")} if the project belongs to a team.`,
+        "Redeploy and open this URL again.",
+        "Or run the whole flow against a local dev server instead, where the token is written to <code>.env.local</code> and needs no Vercel token at all.",
       ],
     });
   }

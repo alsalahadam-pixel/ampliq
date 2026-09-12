@@ -30,6 +30,7 @@ const TOKEN_SHAPED = [
   /"refresh_token"/,
   /"access_token"/,
   /GOCSPX-[\w-]+/, // client secret
+  /\bvercel_[\w]{20,}/i, // a Vercel access token
 ];
 
 const PROBES = [
@@ -38,18 +39,21 @@ const PROBES = [
   ["/api/booking/google/authorize?secret=guess", "authorize with a guessed secret"],
   ["/api/booking/google/callback", "the callback route"],
   ["/api/booking/google/callback?code=abc&state=abc", "callback with a forged code"],
+  ["/api/booking/google/status", "the status route"],
+  ["/api/booking/google/status?secret=guess", "status with a guessed secret"],
 ];
 
 for (const [path, label] of PROBES) {
   const response = await fetch(BASE + path, { redirect: "manual" });
   const body = await response.text();
 
-  // The route exists. An earlier revision answered 404 here to hide it, which
-  // was indistinguishable from a broken deploy; 503 means "closed, and here is
-  // what to set", 401 means "open, but prove it is you".
+  // The route exists and refuses. An earlier revision answered 404 here to hide
+  // it, which was indistinguishable from a broken deploy. 503 is "closed, and
+  // here is what to set", 401 is "open, but prove it is you", and 400 is the
+  // callback rejecting a request that carries no valid state.
   ok(
-    response.status === 503 || response.status === 401,
-    `${label} exists and is closed`,
+    [400, 401, 503].includes(response.status),
+    `${label} exists and refuses`,
     `got ${response.status}`,
   );
 
@@ -76,6 +80,18 @@ ok(
   /no-store/.test(disabled.headers.get("cache-control") ?? ""),
   "the setup pages are never stored",
   disabled.headers.get("cache-control") ?? "no header",
+);
+
+// The callback used to print the refresh token to stderr for the operator to
+// copy out of the function log. On a free plan that log is gone by the time
+// you look, so the token now goes straight to storage — and nothing anywhere
+// in the flow writes it to a console again.
+const source = await import("node:fs").then((fs) =>
+  fs.readFileSync("src/app/api/booking/google/callback/route.ts", "utf8"),
+);
+ok(
+  !/console\.(log|error|warn|info)/.test(source),
+  "the callback logs nothing at all",
 );
 
 console.log(problems.length === 0 ? "\nOAUTH SETUP CLOSED" : "\nPROBLEMS:\n- " + problems.join("\n- "));
