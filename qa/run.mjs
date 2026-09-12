@@ -31,6 +31,7 @@ const CHECKS = [
   { name: "german", what: "translation completeness, formal address, link locale" },
   { name: "legal-visibility", what: "the five documents are public, linked and whole; no draft language" },
   { name: "addresses", what: "project@ and info@ stay in their own lanes" },
+  { name: "oauth-setup", what: "the Google connect flow is closed and leaks nothing" },
   { name: "rules-probe", what: "no hairline is drawn twice" },
   { name: "mobile", what: "overflow, gutters, tap targets and text size at 7 widths" },
   { name: "contact", what: "the enquiry flow end to end" },

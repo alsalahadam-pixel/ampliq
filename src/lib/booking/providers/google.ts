@@ -1,21 +1,30 @@
 /**
  * Google Calendar provider.
  *
- * Uses a service account: no interactive OAuth, no refresh token to keep alive,
- * and the account can be given access to exactly one calendar. Setup is in
+ * Authenticates with OAuth 2.0: the owner authorises AMPLIQ once through
+ * `/api/booking/google/authorize`, and the refresh token that comes back is
+ * stored as `GOOGLE_REFRESH_TOKEN`. Every request then trades that refresh
+ * token for a short-lived access token, which is cached in memory for its
+ * lifetime and renewed automatically when it expires. Setup is in
  * `docs/booking.md`.
+ *
+ * The refresh token is a server-side secret. It is read from the environment,
+ * used only in a server-to-server POST to Google, and never serialised into a
+ * response, a log line, or anything the browser can reach.
  *
  * Availability comes from the FreeBusy endpoint, which by design returns only
  * `{ start, end }` pairs — the API itself never discloses what the owner is
  * doing, only that the time is taken. That is the behaviour we want, so the
  * privacy guarantee does not rest on this file remembering to strip fields.
  *
- * Nothing here runs unless `GOOGLE_CALENDAR_ID` and the service-account
- * credentials are set.
+ * Nothing here runs unless the client, the refresh token and the calendar id
+ * are all set.
  */
 
-import { createSign } from "node:crypto";
-
+import {
+  GoogleOAuthError,
+  refreshAccessToken,
+} from "@/lib/booking/providers/google-oauth";
 import type { BusyInterval, StoredBooking } from "@/lib/booking/types";
 import {
   type BusyQuery,
@@ -24,111 +33,75 @@ import {
   type CreatedEvent,
 } from "@/lib/booking/providers/types";
 
-const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const FREEBUSY_URL = "https://www.googleapis.com/calendar/v3/freeBusy";
 const EVENTS_URL = "https://www.googleapis.com/calendar/v3/calendars";
 
-/** Read scope is enough for availability; write is added only to book. */
-const SCOPES = "https://www.googleapis.com/auth/calendar.events";
-
-type GoogleCredentials = {
-  clientEmail: string;
-  privateKey: string;
+export type GoogleCredentials = {
+  clientId: string;
+  clientSecret: string;
+  /** The long-lived grant. Server-side only, never sent anywhere but Google. */
+  refreshToken: string;
   calendarId: string;
-  /**
-   * With domain-wide delegation the service account acts as this user. Left
-   * unset for the simpler setup where the calendar is shared with the service
-   * account directly.
-   */
-  impersonate?: string;
 };
 
-function base64Url(input: Buffer | string): string {
-  return Buffer.from(input)
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
-}
-
 export function readGoogleCredentials(): GoogleCredentials | null {
-  const clientEmail = process.env.GOOGLE_CALENDAR_CLIENT_EMAIL;
-  const rawKey = process.env.GOOGLE_CALENDAR_PRIVATE_KEY;
-  const calendarId = process.env.GOOGLE_CALENDAR_ID;
+  const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN?.trim();
+  const calendarId = process.env.GOOGLE_CALENDAR_ID?.trim();
 
-  if (!clientEmail || !rawKey || !calendarId) return null;
+  if (!clientId || !clientSecret || !refreshToken || !calendarId) return null;
 
-  return {
-    clientEmail,
-    // Env files cannot hold real newlines, so the key is stored escaped.
-    privateKey: rawKey.replace(/\\n/g, "\n"),
-    calendarId,
-    impersonate: process.env.GOOGLE_CALENDAR_IMPERSONATE || undefined,
-  };
+  return { clientId, clientSecret, refreshToken, calendarId };
 }
 
 type CachedToken = { value: string; expiresAt: number };
 let cachedToken: CachedToken | null = null;
 
+/** Forgets the cached access token. Used by the tests and the setup route. */
+export function resetGoogleTokenCache(): void {
+  cachedToken = null;
+}
+
 /**
- * Signs a JWT assertion and swaps it for an access token.
+ * A valid access token, refreshing it when the cached one is nearly out.
  *
- * Tokens last an hour; the cache stops every availability request from paying
- * for a round trip and an RSA signature.
+ * Google's access tokens last an hour. The cache means a page of availability
+ * costs one Google round trip rather than two; the minute of headroom means a
+ * token never expires mid-request.
+ *
+ * The cache is per server instance, which on Vercel means per warm function.
+ * That is correct rather than merely acceptable: a cold instance refreshes
+ * once, and there is no shared state to invalidate.
  */
-async function getAccessToken(credentials: GoogleCredentials): Promise<string> {
+export async function getAccessToken(credentials: GoogleCredentials): Promise<string> {
   if (cachedToken && cachedToken.expiresAt > Date.now() + 60_000) {
     return cachedToken.value;
   }
 
-  const issuedAt = Math.floor(Date.now() / 1000);
-  const header = base64Url(JSON.stringify({ alg: "RS256", typ: "JWT" }));
-  const claims = base64Url(
-    JSON.stringify({
-      iss: credentials.clientEmail,
-      sub: credentials.impersonate,
-      scope: SCOPES,
-      aud: TOKEN_URL,
-      iat: issuedAt,
-      exp: issuedAt + 3600,
-    }),
-  );
+  try {
+    const { accessToken, expiresIn } = await refreshAccessToken(
+      credentials.clientId,
+      credentials.clientSecret,
+      credentials.refreshToken,
+    );
 
-  const signer = createSign("RSA-SHA256");
-  signer.update(`${header}.${claims}`);
-  const signature = base64Url(signer.sign(credentials.privateKey));
+    cachedToken = { value: accessToken, expiresAt: Date.now() + expiresIn * 1000 };
+    return accessToken;
+  } catch (error) {
+    cachedToken = null;
 
-  const response = await fetch(TOKEN_URL, {
-    method: "POST",
-    headers: { "content-type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
-      assertion: `${header}.${claims}.${signature}`,
-    }),
-  });
-
-  if (!response.ok) {
+    // `invalid_grant` is the one worth naming: the refresh token was revoked,
+    // the OAuth client was deleted, or the consent screen is still in testing
+    // mode, where Google expires refresh tokens after seven days. All of them
+    // are fixed by running the authorize flow again, and none of them look
+    // like a network fault, so the message says which it is.
+    const reason = error instanceof GoogleOAuthError ? error.message : "unknown error";
     throw new CalendarProviderError(
-      `Token request failed with ${response.status}`,
+      `Could not refresh the Google access token (${reason})`,
       "google",
     );
   }
-
-  const payload = (await response.json()) as {
-    access_token?: string;
-    expires_in?: number;
-  };
-
-  if (!payload.access_token) {
-    throw new CalendarProviderError("Token response had no token", "google");
-  }
-
-  cachedToken = {
-    value: payload.access_token,
-    expiresAt: Date.now() + (payload.expires_in ?? 3600) * 1000,
-  };
-
-  return cachedToken.value;
 }
 
 export function createGoogleProvider(

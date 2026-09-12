@@ -1,0 +1,146 @@
+/**
+ * The two pages the Google setup flow can render.
+ *
+ * Deliberately plain: this is an operator utility reached once, behind a
+ * secret, not part of the site. It imports nothing from the design system and
+ * ships no JavaScript, so it cannot drift when the site's styling changes and
+ * has no surface to leak anything through.
+ *
+ * Every response carries `no-store` and `noindex`, and every interpolated value
+ * goes through `escape` — the only untrusted strings that reach here are
+ * Google's own error codes, but a page that handles OAuth is the wrong place to
+ * rely on a source being trustworthy.
+ */
+
+const PALETTE = {
+  ink: "#0f0f0e",
+  paper: "#f7f5f2",
+  graphite: "#6b6862",
+  rule: "#e3ded6",
+  accent: "#1b4dff",
+} as const;
+
+function escape(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+export type SetupSection = { term: string; detail: string };
+
+/**
+ * Renders one page.
+ *
+ * `steps` are rendered as an ordered list, `facts` as a definition list. Both
+ * are optional; a page with neither is just a heading and a sentence.
+ */
+export function setupPage({
+  status,
+  title,
+  lead,
+  facts = [],
+  steps = [],
+  tone = "ok",
+}: {
+  status: number;
+  title: string;
+  lead: string;
+  facts?: SetupSection[];
+  steps?: string[];
+  tone?: "ok" | "problem";
+}): Response {
+  const body = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>${escape(title)} — AMPLIQ setup</title>
+<style>
+  :root { color-scheme: light }
+  * { box-sizing: border-box }
+  body {
+    margin: 0; padding: 48px 24px;
+    background: ${PALETTE.paper}; color: ${PALETTE.ink};
+    font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 60ch; margin: 0 auto }
+  .eyebrow {
+    font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: ${tone === "ok" ? PALETTE.accent : "#a4552b"};
+    margin: 0 0 14px;
+  }
+  h1 { font-size: 1.6rem; line-height: 1.2; letter-spacing: -.02em; margin: 0 0 12px }
+  p { margin: 0 0 16px; color: ${PALETTE.graphite} }
+  dl { margin: 24px 0 0; border-top: 1px solid ${PALETTE.rule} }
+  div.row { display: flex; gap: 24px; padding: 12px 0; border-bottom: 1px solid ${PALETTE.rule} }
+  dt { flex: 0 0 13ch; color: ${PALETTE.graphite} }
+  dd { margin: 0; word-break: break-word }
+  ol { margin: 24px 0 0; padding-left: 1.2em; color: ${PALETTE.graphite} }
+  li { margin-bottom: 10px }
+  code {
+    font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: #fff; border: 1px solid ${PALETTE.rule};
+    border-radius: 3px; padding: 1px 5px; color: ${PALETTE.ink};
+  }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">${tone === "ok" ? "Google Calendar" : "Setup could not finish"}</p>
+  <h1>${escape(title)}</h1>
+  <p>${escape(lead)}</p>
+  ${
+    facts.length > 0
+      ? `<dl>${facts
+          .map(
+            (fact) =>
+              `<div class="row"><dt>${escape(fact.term)}</dt><dd>${escape(fact.detail)}</dd></div>`,
+          )
+          .join("")}</dl>`
+      : ""
+  }
+  ${
+    steps.length > 0
+      ? `<ol>${steps.map((step) => `<li>${step}</li>`).join("")}</ol>`
+      : ""
+  }
+</main>
+</body>
+</html>`;
+
+  return new Response(body, {
+    status,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store",
+      "x-robots-tag": "noindex, nofollow",
+    },
+  });
+}
+
+/**
+ * What both routes answer when the setup flow is not open to this caller.
+ *
+ * A 404 rather than a 401: an unconfigured deployment genuinely has no such
+ * endpoint, and a prober should not learn that one exists behind a key.
+ */
+export function setupNotFound(): Response {
+  return new Response("Not found", {
+    status: 404,
+    headers: {
+      "content-type": "text/plain; charset=utf-8",
+      "cache-control": "no-store",
+      "x-robots-tag": "noindex, nofollow",
+    },
+  });
+}
+
+/** `code` for the step lists above, pre-escaped. */
+export function code(value: string): string {
+  return `<code>${escape(value)}</code>`;
+}

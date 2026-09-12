@@ -37,7 +37,8 @@ src/lib/booking/
   ics.ts            the "add to calendar" file
   providers/
     types.ts        the CalendarProvider contract
-    google.ts       Google Calendar (FreeBusy + events)
+    google.ts       Google Calendar (FreeBusy + events), OAuth refresh grant
+    google-oauth.ts the authorization-code half: consent URL, exchange, refresh
     microsoft.ts    Microsoft 365 / Outlook (Graph getSchedule + events)
     index.ts        picks one from the environment, or none
   email/
@@ -48,13 +49,23 @@ src/lib/email/brand.ts    the shared AMPLIQ email shell
 src/lib/email/enquiry.ts  the enquiry mails, off the same shell
 
 src/components/booking/   the UI. Knows nothing about any provider.
-src/app/api/booking/      the two routes.
+src/app/api/booking/
+  availability/           the slot lookup
+  route.ts                the booking itself
+  google/
+    authorize/            one-time connect, step 1. 404 unless enabled
+    callback/             one-time connect, step 2. The registered redirect URI
+    setup-page.ts         the plain HTML those two render. Not a route
 ```
 
 The UI talks to `/api/booking/availability` and `/api/booking`. It never sees a
 provider, a credential, or anything from the owner's calendar beyond "this time
 is not free". Swapping Google for Outlook, or adding a third provider, touches
 `providers/` and nothing else.
+
+The two `google/` routes are operator-only and exist for a single use. They
+answer 404 unless `GOOGLE_OAUTH_SETUP_SECRET` is set, which it should not be
+except during the minutes it takes to connect a calendar.
 
 ## Privacy
 
@@ -107,29 +118,148 @@ scheduling detail, not something visitors need or should infer.
 
 ### Google Calendar
 
-Uses a service account, so there is no interactive OAuth and no refresh token
-to keep alive.
+Uses **OAuth 2.0**. The owner authorises AMPLIQ against their own Google account
+once; Google returns a refresh token, which the server trades for a short-lived
+access token whenever it needs one. There is no service account and no private
+key — Google Cloud blocks service-account key creation on many organisations,
+and this path does not need one.
 
-1. In Google Cloud, create a project and enable the **Google Calendar API**.
-2. Create a **service account** and download its JSON key.
-3. Either share the calendar with the service account's email address (simplest),
-   or set up domain-wide delegation and impersonate a user.
-4. Set:
+The refresh token is a server-side secret. It lives in an environment variable,
+is used only in a server-to-server POST to Google, and is never rendered,
+returned, or sent to a browser.
 
-```bash
-BOOKING_CALENDAR_PROVIDER="google"
-GOOGLE_CALENDAR_ID="you@example.com"          # or the calendar's ID
-GOOGLE_CALENDAR_CLIENT_EMAIL="…@….iam.gserviceaccount.com"
-GOOGLE_CALENDAR_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMII…\n-----END PRIVATE KEY-----\n"
-# GOOGLE_CALENDAR_IMPERSONATE="you@example.com"   # only with domain-wide delegation
-# GOOGLE_CALENDAR_SEND_INVITES="true"             # also let Google mail the invite
+#### 1. Google Cloud
+
+1. Create (or open) a project and enable the **Google Calendar API**.
+2. **APIs & Services → OAuth consent screen.** Choose **External** unless the
+   calendar belongs to a Workspace organisation, in which case **Internal** is
+   simpler and skips verification.
+   - Add your own Google account under **Test users**.
+   - Add the two scopes below under **Data access**.
+   - Leave the app in **Testing** only if you intend to reconnect regularly:
+     Google expires refresh tokens issued by an app in testing after **seven
+     days**. **Publish** the app (no verification review is needed while it is
+     used only by its owner) and the refresh token lasts until it is revoked.
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID.**
+   - Application type: **Web application**.
+   - Fill in the two fields exactly as below.
+
+**Authorized JavaScript origins** — one entry:
+
+```
+https://ampliq.net
 ```
 
-The private key holds newlines, which `.env` files cannot; keep them escaped as
-`\n` exactly as the JSON key file has them.
+**Authorized redirect URIs** — one entry for production, plus the local one if
+you intend to run the connect flow from a dev server:
+
+```
+https://ampliq.net/api/booking/google/callback
+http://localhost:3000/api/booking/google/callback
+```
+
+Google matches the redirect URI character for character: no trailing slash, no
+`www.`, `https` in production. A mismatch surfaces as `redirect_uri_mismatch`,
+and the callback page repeats the exact URI this deployment sent so the two can
+be compared side by side.
+
+Copy the **client ID** and **client secret**.
+
+#### 2. Vercel environment variables
+
+Set these on the deployment (Settings → Environment Variables), then redeploy:
+
+| Variable | Value |
+| --- | --- |
+| `BOOKING_CALENDAR_PROVIDER` | `google` |
+| `GOOGLE_CLIENT_ID` | `….apps.googleusercontent.com` |
+| `GOOGLE_CLIENT_SECRET` | `GOCSPX-…` |
+| `GOOGLE_CALENDAR_ID` | `you@example.com`, or the calendar's ID |
+| `GOOGLE_OAUTH_REDIRECT_URI` | `https://ampliq.net/api/booking/google/callback` |
+| `GOOGLE_OAUTH_SETUP_SECRET` | a long random string — `openssl rand -hex 32` |
+
+`GOOGLE_OAUTH_REDIRECT_URI` is optional in production: it defaults to the site's
+own origin plus the callback path, which is the same value. Set it explicitly
+anyway if you run the flow from a preview deployment or from localhost, because
+Vercel preview URLs change on every deploy and Google will not match them.
+
+`GOOGLE_REFRESH_TOKEN` is deliberately **not** in that table. You do not have it
+yet — step 3 produces it.
+
+#### 3. Connect the calendar, once
+
+Open, in a browser, signed in as the account that owns the calendar:
+
+```
+https://ampliq.net/api/booking/google/authorize?secret=<GOOGLE_OAUTH_SETUP_SECRET>
+```
+
+Approve the consent screen. Google redirects back to the callback, which:
+
+- checks the round trip against an httpOnly, single-use state cookie,
+- exchanges the code for tokens **server-side**,
+- queries FreeBusy once to prove the token can actually read
+  `GOOGLE_CALENDAR_ID`,
+- writes the refresh token to the **server log**,
+- and shows you a page naming the account, the calendar and the free/busy
+  result — and nothing else.
+
+The refresh token is not on that page by design. Read it from the function log
+(`vercel logs`, or the Logs tab on the deployment; locally it is in your
+terminal), then:
+
+1. Set `GOOGLE_REFRESH_TOKEN` on the deployment.
+2. **Remove `GOOGLE_OAUTH_SETUP_SECRET`.** Both `/api/booking/google/*` routes
+   answer 404 without it, which is where they should spend their life.
+3. Redeploy.
+
+Doing the whole flow against `npm run dev` instead keeps the token in your own
+terminal rather than a cloud log. Point `GOOGLE_OAUTH_REDIRECT_URI` at
+`http://localhost:3000/api/booking/google/callback` for that run, and put the
+production value back afterwards.
+
+#### Scopes
+
+Two, by default:
+
+- `https://www.googleapis.com/auth/calendar.events` — writes the booking into
+  the calendar.
+- `https://www.googleapis.com/auth/calendar.readonly` — authorises the
+  free/busy lookup.
+
+The grant is wider than the use. This code calls exactly two endpoints,
+`freebusy.query` and `events.insert`, and never reads an event body. Narrow it
+with `GOOGLE_OAUTH_SCOPES` if you prefer, but check Google's current scope list
+first: an unrecognised scope fails at the consent screen rather than at the
+request.
+
+#### When it stops working
+
+The provider reports `Could not refresh the Google access token (invalid_grant)`
+when the refresh token is dead. Three causes, one fix:
+
+- the consent screen is still in **Testing** and seven days have passed,
+- access was revoked at `myaccount.google.com/permissions`,
+- the OAuth client was deleted or its secret rotated.
+
+Set `GOOGLE_OAUTH_SETUP_SECRET` again, rerun step 3, replace the token, unset
+the secret.
+
+If Google returns no refresh token at all, the account has already authorised
+this client. Remove the app under `myaccount.google.com/permissions` and rerun —
+the flow always asks with `access_type=offline` and `prompt=consent`, which is
+what forces a fresh one.
+
+#### What is not connected
+
+With `GOOGLE_REFRESH_TOKEN` unset the provider simply does not activate. The
+booking flow keeps working: availability is the published working hours minus
+bookings made through the site, the page says plainly that no calendar was
+consulted, and nothing pretends otherwise.
 
 By default Google's own invite mail is suppressed, because the visitor already
-gets the branded AMPLIQ confirmation and two emails for one call is noise.
+gets the branded AMPLIQ confirmation and two emails for one call is noise. Set
+`GOOGLE_CALENDAR_SEND_INVITES="true"` to let Google mail them as well.
 
 ### Microsoft 365 / Outlook
 
