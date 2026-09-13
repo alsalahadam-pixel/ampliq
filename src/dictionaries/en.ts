@@ -77,18 +77,21 @@ export const en = {
     },
 
     problem: {
-      eyebrow: "The problem",
-      headline: "Strong companies deserve strong marketing.",
-      body: "Most businesses don't have a marketing problem. They have a coherence problem. The work is good and the team is good — and then everything a customer actually sees was built at a different time, by different people, to a different standard.",
+      eyebrow: "The AMPLIQ approach",
+      headline: "Your marketing hasn't reached its full potential.",
+      body: "You have something worth selling. We make sure people actually want to see it. From content that stops the scroll to campaigns that turn attention into growth, we combine creative thinking with the strategy to make it work.",
+      /* Ordered as the work is: content and social first, because that is where
+         AMPLIQ is strongest and where a visitor recognises themselves fastest.
+         The section renders the first two a step larger — see `problem.tsx`. */
       symptoms: [
-        "The website is years behind the business.",
-        "The brand looks different on every channel.",
-        "Content gets produced ad hoc, or not at all.",
-        "Photography looks bought, not made.",
-        "Ads run without a strategy behind them.",
-        "Nobody finds you when they search.",
+        "Your content isn't giving people a reason to stop scrolling.",
+        "Social media feels like posting, not marketing.",
+        "Your brand doesn't look as good online as it does in real life.",
+        "Your website isn't converting the attention you're getting.",
+        "You're not being found when people are looking for you.",
+        "Your advertising isn't turning attention into enough business.",
       ],
-      close: "None of it is fatal on its own. Together, it quietly costs customers.",
+      close: "None of these problems are impossible to fix. The problem is leaving them disconnected.",
     },
 
     system: {

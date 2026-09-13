@@ -78,18 +78,18 @@ export const de: Dictionary = {
     },
 
     problem: {
-      eyebrow: "Die Ausgangslage",
-      headline: "Starke Unternehmen verdienen starkes Marketing.",
-      body: "Die meisten Unternehmen haben kein Marketingproblem. Sie haben ein Zusammenhangsproblem. Die Arbeit ist gut, das Team ist gut — und alles, was Kundinnen und Kunden tatsächlich sehen, ist zu unterschiedlichen Zeiten, von unterschiedlichen Leuten und nach unterschiedlichen Maßstäben entstanden.",
+      eyebrow: "Der AMPLIQ-Ansatz",
+      headline: "Ihr Marketing schöpft sein Potenzial noch nicht aus.",
+      body: "Sie haben etwas, das sich zu verkaufen lohnt. Wir sorgen dafür, dass Menschen es auch sehen wollen. Von Content, der den Daumen stoppt, bis zu Kampagnen, die Aufmerksamkeit in Wachstum verwandeln: Wir verbinden kreatives Denken mit der Strategie, die es wirken lässt.",
       symptoms: [
-        "Die Website hinkt dem Unternehmen Jahre hinterher.",
-        "Die Marke sieht auf jedem Kanal anders aus.",
-        "Content entsteht nebenbei — oder gar nicht.",
-        "Die Bilder wirken gekauft, nicht gemacht.",
-        "Anzeigen laufen ohne Strategie dahinter.",
-        "Bei der Suche taucht niemand bei Ihnen auf.",
+        "Ihr Content gibt Menschen keinen Grund, mit dem Scrollen aufzuhören.",
+        "Social Media fühlt sich nach Posten an, nicht nach Marketing.",
+        "Ihre Marke wirkt online nicht so gut wie in der Wirklichkeit.",
+        "Ihre Website macht aus der Aufmerksamkeit, die Sie bekommen, keine Anfragen.",
+        "Sie werden nicht gefunden, wenn Menschen nach Ihnen suchen.",
+        "Ihre Werbung macht aus Aufmerksamkeit zu wenig Geschäft.",
       ],
-      close: "Für sich genommen ist nichts davon dramatisch. Zusammen kostet es leise Kunden.",
+      close: "Keines dieser Probleme ist unlösbar. Das Problem ist, sie getrennt voneinander stehen zu lassen.",
     },
 
     system: {
