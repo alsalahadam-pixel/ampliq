@@ -209,8 +209,8 @@ export function createMicrosoftProvider(
 
       if (!response.ok) return null;
 
-      const payload = (await response.json()) as { id?: string };
-      return payload.id ? { id: payload.id } : null;
+      const payload = (await response.json()) as { id?: string; webLink?: string };
+      return payload.id ? { id: payload.id, url: payload.webLink } : null;
     },
   };
 }

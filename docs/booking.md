@@ -42,12 +42,14 @@ src/lib/booking/
     token-store.ts  where the refresh token lands: Vercel env, or .env.local
     microsoft.ts    Microsoft 365 / Outlook (Graph getSchedule + events)
     index.ts        picks one from the environment, or none
-  email/
-    templates.ts    branded client and owner mails, EN and DE
 
 src/lib/mail.ts           the one transport the whole site sends through
 src/lib/email/brand.ts    the shared AMPLIQ email shell
-src/lib/email/enquiry.ts  the enquiry mails, off the same shell
+src/lib/email/project.ts  the two project mails — client confirmation and
+                          internal notification. One pair for both routes:
+                          the meeting block renders only when a booking
+                          was confirmed, so /api/contact sends the same
+                          confirmation without one.
 
 src/components/booking/   the UI. Knows nothing about any provider.
 src/app/api/booking/
@@ -325,7 +327,22 @@ one mailbox it needs rather than every calendar in the tenant.
 
 ### Email
 
-One transport serves both the booking confirmations and the enquiry form.
+One transport and one pair of templates serve both routes.
+
+**The client confirmation** — `We received your project — AMPLIQ`, from
+`AMPLIQ <project@ampliq.net>`, in the language the visitor used. Short by
+design. When a booking was confirmed it carries a meeting panel with the exact
+date, start–end time and timezone of the calendar event; when the visitor sent a
+written brief instead, the panel is simply absent. It is never shown for a
+booking that did not succeed, because the caller only passes a meeting for one
+that was stored.
+
+**The internal notification** — `New project inquiry — <company>`, to
+`project@ampliq.net`, with `Reply-To` set to the client so answering it goes
+straight back to them. Always English, always the same five sections in the same
+order: contact, project, project details, meeting, submitted. Where a calendar
+is connected and the event write failed, it says so in the meeting section and
+links the event when the provider returned a link.
 
 ```bash
 # Option A — Resend

@@ -30,6 +30,12 @@ export type BusyQuery = {
 export type CreatedEvent = {
   /** The provider's identifier, stored so the event can be found again. */
   id: string;
+  /**
+   * A link to the event in the provider's own UI, when it gives one. Optional
+   * because not every provider returns it, and the internal notification omits
+   * the line rather than printing a dead one.
+   */
+  url?: string;
 };
 
 export interface CalendarProvider {

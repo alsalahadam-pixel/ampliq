@@ -21,6 +21,7 @@
  * are all set.
  */
 
+import { publicBookingConfig } from "@/lib/booking/config";
 import {
   GoogleOAuthError,
   refreshAccessToken,
@@ -165,6 +166,7 @@ export function createGoogleProvider(
 
     async createEvent(booking: StoredBooking): Promise<CreatedEvent | null> {
       const token = await getAccessToken(credentials);
+      const businessTimeZone = publicBookingConfig().timeZone;
 
       // Google's own invite mail is suppressed: the visitor already receives
       // the branded AMPLIQ confirmation, and two mails for one call is noise.
@@ -194,8 +196,12 @@ export function createGoogleProvider(
           ]
             .filter((line) => line !== null)
             .join("\n"),
-          start: { dateTime: booking.start },
-          end: { dateTime: booking.end },
+          // `start`/`end` are UTC instants, so the offset already fixes *when*
+          // the event is. `timeZone` fixes which zone Google displays it in,
+          // and it is the same zone the confirmation email names — otherwise
+          // the calendar and the email can describe one instant two ways.
+          start: { dateTime: booking.start, timeZone: businessTimeZone },
+          end: { dateTime: booking.end, timeZone: businessTimeZone },
           attendees: [{ email: booking.email, displayName: booking.name }],
           reminders: { useDefault: true },
         }),
@@ -203,8 +209,8 @@ export function createGoogleProvider(
 
       if (!response.ok) return null;
 
-      const payload = (await response.json()) as { id?: string };
-      return payload.id ? { id: payload.id } : null;
+      const payload = (await response.json()) as { id?: string; htmlLink?: string };
+      return payload.id ? { id: payload.id, url: payload.htmlLink } : null;
     },
   };
 }

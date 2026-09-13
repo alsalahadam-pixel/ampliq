@@ -18,11 +18,13 @@ import { bookingConfig, publicBookingConfig } from "@/lib/booking/config";
 import { notificationAddress, sendEmail } from "@/lib/mail";
 import {
   clientConfirmation,
-  ownerNotification,
-} from "@/lib/booking/email/templates";
+  internalNotification,
+  type ProjectLead,
+} from "@/lib/email/project";
 import { CalendarProviderError, getCalendarProvider } from "@/lib/booking/providers";
 import { bookingsToBusy, getBookingStore } from "@/lib/booking/store";
 import { MINUTE, addDaysToDateKey, parseDateKey } from "@/lib/booking/time";
+import { isLocale } from "@/lib/i18n";
 import type {
   AvailabilityMode,
   AvailabilityResponse,
@@ -188,27 +190,53 @@ export async function submitBooking(
 
   const provider = getCalendarProvider();
   let calendarSynced = false;
+  let calendarUrl: string | undefined;
 
   if (provider?.createEvent) {
     try {
-      calendarSynced = (await provider.createEvent(stored)) !== null;
+      const event = await provider.createEvent(stored);
+      calendarSynced = event !== null;
+      calendarUrl = event?.url;
     } catch (error) {
-      // The booking stands; the owner is told by email either way, and the
-      // confirmation screen does not claim a calendar entry that failed.
+      // The booking stands; the owner is told by email either way, the
+      // notification says the calendar was not written, and the confirmation
+      // screen does not claim a calendar entry that failed.
       console.error("[booking] could not write the calendar event:", error);
     }
   }
 
+  // The slot is reserved and stored at this point, so the meeting is real
+  // whatever the calendar did. That is what lets the client's confirmation
+  // state the time: it is held by the booking store, not by Google.
+  const leadDetails: ProjectLead = {
+    name: stored.name,
+    firstName: stored.name.split(/\s+/)[0] || stored.name,
+    email: stored.email,
+    company: stored.company || undefined,
+    phone: stored.phone || undefined,
+    projectType: stored.projectType || undefined,
+    services: [],
+    message: stored.message,
+    locale: isLocale(stored.locale) ? stored.locale : "en",
+    businessTimeZone: config.timeZone,
+    submittedAt: stored.createdAt,
+    meeting: {
+      start: stored.start,
+      end: stored.end,
+      timeZone: stored.timeZone,
+      calendarConfigured: Boolean(provider?.createEvent),
+      calendarSynced,
+      calendarUrl,
+    },
+  };
+
   const [clientMail] = await Promise.all([
-    sendEmail(
-      request.email,
-      clientConfirmation(stored, config.timeZone, config.slotMinutes),
-    ),
+    sendEmail(request.email, clientConfirmation(leadDetails)),
     // The notification carries the enquirer as reply-to, so answering it goes
     // straight back to them instead of to our own mailbox.
     sendEmail(
       notificationAddress(),
-      ownerNotification(stored, config.timeZone, config.slotMinutes),
+      internalNotification(leadDetails),
       request.email,
     ),
   ]);

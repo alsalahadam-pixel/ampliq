@@ -13,10 +13,11 @@
 
 import { budgetRanges, labelFor, projectTypes, timelines } from "@/content/enquiry";
 import {
-  enquiryAcknowledgement,
-  enquiryNotification,
-  type Enquiry,
-} from "@/lib/email/enquiry";
+  clientConfirmation,
+  internalNotification,
+  type ProjectLead,
+} from "@/lib/email/project";
+import { publicBookingConfig } from "@/lib/booking/config";
 import { isLocale, type Locale } from "@/lib/i18n";
 import { mailIsConfigured, notificationAddress, sendEmail } from "@/lib/mail";
 
@@ -77,8 +78,28 @@ function asString(value: unknown): string {
     : "";
 }
 
+/**
+ * What the form sends, validated. The first and last name stay separate here
+ * because the form collects them separately; `ProjectLead` joins them.
+ */
+type EnquiryFields = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  company?: string;
+  phone?: string;
+  website?: string;
+  /** Readable labels, already resolved from the submitted values. */
+  projectType?: string;
+  budget?: string;
+  timeline?: string;
+  services: string[];
+  message: string;
+  locale: Locale;
+};
+
 type Parsed =
-  | { ok: true; value: Enquiry }
+  | { ok: true; value: EnquiryFields }
   | { ok: false; errors: Record<string, string> };
 
 function parse(payload: unknown): Parsed {
@@ -189,9 +210,30 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
+  // No meeting: this route is the written brief, not the booking. The client
+  // confirmation therefore carries no meeting panel at all, rather than an
+  // empty one — `/api/booking` is the only path that sets `meeting`.
+  const lead: ProjectLead = {
+    name: `${parsed.value.firstName} ${parsed.value.lastName}`.trim(),
+    firstName: parsed.value.firstName,
+    email: parsed.value.email,
+    company: parsed.value.company,
+    phone: parsed.value.phone,
+    website: parsed.value.website,
+    projectType: parsed.value.projectType,
+    budget: parsed.value.budget,
+    timeline: parsed.value.timeline,
+    services: parsed.value.services,
+    message: parsed.value.message,
+    locale: parsed.value.locale,
+    // The agency's own zone, so "submitted" reads in the time the team works in.
+    businessTimeZone: publicBookingConfig().timeZone,
+    submittedAt: new Date().toISOString(),
+  };
+
   const notification = await sendEmail(
     notificationAddress(),
-    enquiryNotification(parsed.value),
+    internalNotification(lead),
     parsed.value.email,
   );
 
@@ -199,12 +241,9 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ delivered: false, error: "failed" }, { status: 502 });
   }
 
-  // The acknowledgement is a courtesy: the enquiry is already safely delivered,
-  // so a failure here must not turn a successful send into an error.
-  const acknowledgement = await sendEmail(
-    parsed.value.email,
-    enquiryAcknowledgement(parsed.value),
-  );
+  // The client's confirmation is a courtesy: the enquiry is already safely
+  // delivered, so a failure here must not turn a successful send into an error.
+  const acknowledgement = await sendEmail(parsed.value.email, clientConfirmation(lead));
 
   return Response.json(
     { delivered: true, acknowledged: acknowledgement.sent },
