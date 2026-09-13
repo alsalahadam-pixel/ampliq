@@ -166,6 +166,20 @@
   text-transform: uppercase;
 }
 
+/* A rail scrolled by hand. The scrollbar is suppressed because the affordance
+   is the next card, half in view — a bar underneath would say the same thing
+   twice and cost a row of height on the smallest screens. Keyboard and screen
+   reader users are unaffected: the element still scrolls, and every card is
+   still in the tab order. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Underline that draws in on hover — used on text links. */
 @utility link-underline {
   background-image: linear-gradient(currentColor, currentColor);

@@ -104,8 +104,10 @@ export const en = {
 
     services: {
       eyebrow: "What we do",
-      headline: "Everything a brand needs to be seen — and nothing it doesn't.",
-      body: "Twelve disciplines, organised into three layers. Take one, or take the system.",
+      headline: "Everything you need to grow — in one place.",
+      body: "From content and social media to digital, advertising and strategy — one team bringing it all together.",
+      more: "What's included",
+      less: "Close",
     },
 
     packages: {

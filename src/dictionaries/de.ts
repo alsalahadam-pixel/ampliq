@@ -102,8 +102,10 @@ export const de: Dictionary = {
 
     services: {
       eyebrow: "Was wir machen",
-      headline: "Alles, was eine Marke sichtbar macht — und nichts darüber hinaus.",
-      body: "Zwölf Disziplinen in drei Ebenen. Einzeln buchbar, im System stärker.",
+      headline: "Alles, was Sie zum Wachsen brauchen — an einem Ort.",
+      body: "Von Content und Social Media über Digital und Werbung bis zur Strategie — ein Team, das alles zusammenführt.",
+      more: "Was enthalten ist",
+      less: "Schließen",
     },
 
     packages: {
