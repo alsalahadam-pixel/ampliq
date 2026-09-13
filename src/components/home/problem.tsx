@@ -9,10 +9,12 @@ import { cn, pad } from "@/lib/utils";
  *
  * The list is ordered content → social → brand → website → search → ads, which
  * is both the order the work happens in and the order of AMPLIQ's strengths.
- * The first two carry a step more weight — a size up, full-strength ink, a
- * solid accent numeral — because they are the two a visitor is most likely to
- * recognise themselves in. It is a shift of one step on three properties, not a
- * different treatment: the six still read as one list.
+ * The first two carry a little more weight — full-strength ink and a solid
+ * accent numeral, where the rest sit back a shade — because they are the two a
+ * visitor is most likely to recognise themselves in.
+ *
+ * Every item is the same size. Weight here is a matter of colour only: one type
+ * size keeps the six reading as one list, which is the point of the layout.
  */
 const LEAD_ITEMS = 2;
 
@@ -75,10 +77,8 @@ export function Problem({ dict }: { dict: Dictionary }) {
                       </span>
                       <span
                         className={cn(
-                          "font-display leading-snug font-medium tracking-[-0.015em] transition-colors duration-300 group-hover:text-ink",
-                          lead
-                            ? "text-[1.125rem] text-ink sm:text-[1.3125rem]"
-                            : "text-[1.0625rem] text-ink/75 sm:text-[1.1875rem]",
+                          "font-display text-[1.0625rem] leading-snug font-medium tracking-[-0.015em] transition-colors duration-300 group-hover:text-ink sm:text-[1.1875rem]",
+                          lead ? "text-ink" : "text-ink/75",
                         )}
                       >
                         {symptom}
